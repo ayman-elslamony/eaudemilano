@@ -13,9 +13,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<String> listOfTitle = ['Men', 'Woman', 'children'];
 
-  createCard({double width, double height,bool switchCard = true}) {
-    switch(switchCard) {
-      case true:
+  createCard({double width, double height, bool switchCard = true}) {
+    switch (switchCard) {
+      case false:
         return SizedBox(
           width: width * 0.55,
           child: Stack(
@@ -25,14 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: height * 0.256,
                 top: 8,
                 left: 8,
-
                 child: Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-
                   color: Colors.white,
-                  child: Text('red'),
+                  child: SizedBox(),
                 ),
               ),
               Positioned(
@@ -47,9 +45,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-
-                    color: Colors.grey[500],
-                    child: Text('front'),
+                    color: Color(0xFF8C8C8C),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "images/pinkDiamond.png",
+                          width: width * 0.29,
+                          height: height * 0.15,
+                          fit: BoxFit.fill,
+                        ),
+                        Text(
+                          '30\$',
+                          style: Theme.of(context).textTheme.headline4.copyWith(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text('Classic Black EDT',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                .copyWith(color: Colors.grey[800])),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -57,8 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
         break; // The switch statement must be told to exit, or it will execute every case.
-      case false:
-       return SizedBox(
+      case true:
+        return SizedBox(
           width: width * 0.55,
           child: Stack(
             alignment: Alignment.bottomRight,
@@ -70,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-
                   color: Colors.grey[500],
                   child: Text('red'),
                 ),
@@ -85,9 +106,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-
                     color: Colors.white,
-                    child: Text('front'),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "images/toBeMan1.png",
+                          width: width * 0.37,
+                          height: height * 0.18,
+                          fit: BoxFit.fill,
+                        ),
+                        Text(
+                          '40\$',
+                          style: Theme.of(context).textTheme.headline4.copyWith(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
+                        Text('Roberto Cavalli EDP',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                .copyWith(color: Colors.grey[800])),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -96,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
         );
         break;
     }
-
   }
 
   @override
@@ -130,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 radius: 20,
                 child: ClipOval(
                   child: Image.asset(
-                    "images/backgroundImage.png",
+                    "images/profile.png",
                     width: double.infinity,
                     fit: BoxFit.fill,
                   ),
@@ -187,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 20,
                       ),
                       Text(
-                        'See All',
+                        '${AppLocalizations.of(context).trans('see_all')}',
                         style: Theme.of(context).textTheme.headline4.copyWith(
                             color: primeColor,
                             decoration: TextDecoration.underline),
@@ -198,25 +242,103 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   color: Colors.transparent,
                   width: media.width,
-                  height: media.height*0.32,
+                  height: media.height * 0.32,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.bottomLeft,
                       child: ListView.separated(
-
-                        itemBuilder: (context, index) =>
-                            index%2==0?
-                            createCard(width: media.width, height: media.height,switchCard: true):createCard(width: media.width, height: media.height,switchCard: false),
-                        separatorBuilder: (context, index) => SizedBox(
+                        itemBuilder: (context, index) => SizedBox(
                           width: 8.0,
                         ),
+                        separatorBuilder: (context, index) => index % 2 == 0
+                            ? createCard(
+                            width: media.width,
+                            height: media.height,
+                            switchCard: true)
+                            : createCard(
+                            width: media.width,
+                            height: media.height,
+                            switchCard: false),
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
                       ),
                     ),
                   ),
-                )
+                ),
+                SizedBox(height: 8,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${AppLocalizations.of(context).trans('best_selling')}',
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                    Text(
+                      '${AppLocalizations.of(context).trans('see_all')}',
+                      style: Theme.of(context).textTheme.headline4.copyWith(
+                          color: primeColor,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10,),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 5.0,
+                  ),
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              color: Color(0xFF8C8C8C)
+                            ),
+                            child: Image.asset(
+                              "images/perfume${index+1}.png",
+                              width: media.width * 0.19,
+                              height: media.height * 0.11,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '60\$',
+                                  style: Theme.of(context).textTheme.headline4.copyWith(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 4,
+                                ),
+                                Text('Sheer Beauty EDT',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .copyWith(color: Colors.grey[800])),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  itemCount: 3,
+                ),
               ],
             ),
           ),
