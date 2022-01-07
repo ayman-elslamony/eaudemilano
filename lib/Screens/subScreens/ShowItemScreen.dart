@@ -397,6 +397,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                         itemBuilder: (context, index) => defaultCard(
                           title: '455',
                           subTitle: 'Cool Water EDT',
+                          titleContent: '',
                           context: context,
                           currentIndex: index,
                           media: media,
