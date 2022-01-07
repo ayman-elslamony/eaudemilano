@@ -8,7 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:eaudemilano/provider/changeIndexPage.dart';
+import 'CartScreen.dart';
+import 'FavouriteScreen.dart';
 import 'HomeScreen.dart';
+import 'SearchScreen.dart';
 
 class NavigationHome extends StatefulWidget {
   static const String routName = '/NavigationHome_Screen';
@@ -20,9 +23,9 @@ class NavigationHome extends StatefulWidget {
 class _NavigationHomeState extends State<NavigationHome> {
   List<Widget> mainWidgets = [
     HomeScreen(),
-    SizedBox(),
-    SizedBox(),
-    SizedBox(),
+    CartScreen(),
+    SearchScreen(),
+    FavouriteScreen(),
   ];
 
   var _locale;
@@ -99,15 +102,15 @@ class _NavigationHomeState extends State<NavigationHome> {
                       topRight: Radius.circular(12),
                       topLeft: Radius.circular(12),
                     ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
+//                    boxShadow: [
+//                      BoxShadow(
+//                        color: Color(0xFF060606).withOpacity(0.5),
+//                        spreadRadius: 5,
+//                        blurRadius: 7,
+//                        offset:
+//                            const Offset(0, 3), // changes position of shadow
+//                      ),
+//                    ],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.only(
@@ -218,6 +221,15 @@ class _NavigationHomeState extends State<NavigationHome> {
                     ),
                   ),
                 ),
+                floatingActionButton: changeIndex.index==1?FloatingActionButton(onPressed: (){
+
+                },
+                  child: ImageIcon(
+                    AssetImage('images/arrow.png'),
+                    size: 17,
+                    color: Colors.white,
+                  ),
+                ):null,
               ),
             ));
   }

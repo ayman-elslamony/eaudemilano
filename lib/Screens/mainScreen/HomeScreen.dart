@@ -1,6 +1,7 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -148,35 +149,40 @@ class _HomeScreenState extends State<HomeScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
-          title: Container(
-            child: SizedBox(
-              height: 40,
-              child: defaultFormField(
-                validate: (val) {
-                  return null;
-                },
-                onTap: () {
-                  //changeIndex.changeIndexFunction(2);
-                },
-                readOnly: true,
-                suffix: Icons.search,
-                label: '${AppLocalizations.of(context).trans('search')}',
-                isClickable: false,
-                type: TextInputType.text,
-              ),
+          leading: IconButton(onPressed: () {}, icon: ImageIcon(
+            AssetImage('images/drawer.png'),
+          ),),
+          title: SizedBox(
+            height: 40,
+            child: defaultFormField(
+              validate: (val) {
+                return null;
+              },
+              onTap: () {
+                //changeIndex.changeIndexFunction(2);
+              },
+              readOnly: true,
+              suffix: Icons.search,
+              label: '${AppLocalizations.of(context).trans('search')}',
+              isClickable: false,
+              type: TextInputType.text,
             ),
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                radius: 20,
-                child: ClipOval(
-                  child: Image.asset(
-                    "images/profile.png",
-                    width: double.infinity,
-                    fit: BoxFit.fill,
+            InkWell(
+              onTap: (){
+                navigateAndFinish(context, ProfileScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 18,
+                  child: ClipOval(
+                    child: Image.asset(
+                      "images/profile.png",
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
@@ -253,20 +259,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         separatorBuilder: (context, index) => index % 2 == 0
                             ? createCard(
-                            width: media.width,
-                            height: media.height,
-                            switchCard: true)
+                                width: media.width,
+                                height: media.height,
+                                switchCard: true)
                             : createCard(
-                            width: media.width,
-                            height: media.height,
-                            switchCard: false),
+                                width: media.width,
+                                height: media.height,
+                                switchCard: false),
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -282,7 +290,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -291,51 +301,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      color: Colors.white,
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(10.0),
-                            padding: EdgeInsets.symmetric(horizontal: 12,vertical: 5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                              color: Color(0xFF8C8C8C)
-                            ),
-                            child: Image.asset(
-                              "images/perfume${index+1}.png",
-                              width: media.width * 0.19,
-                              height: media.height * 0.11,
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '60\$',
-                                  style: Theme.of(context).textTheme.headline4.copyWith(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                                Text('Sheer Beauty EDT',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        .copyWith(color: Colors.grey[800])),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+                    child: defaultCard(
+                        titleContent: '2',
+                        title: '455',
+                        subTitle: 'Cool Water EDT',
+                        context: context, currentIndex: index, media: media),
                   ),
                   itemCount: 3,
                 ),

@@ -10,6 +10,7 @@ import 'Screens/intoScreen/LoginScreen.dart';
 import 'Screens/intoScreen/SignUpScreen.dart';
 import 'Screens/intoScreen/SplashScreen.dart';
 import 'Screens/mainScreen/NavigationHome.dart';
+import 'Screens/subScreens/ShowItemScreen.dart';
 import 'provider/changeIndexPage.dart';
 import 'provider/locale_provider.dart';
 
@@ -17,11 +18,11 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([
     SystemUiOverlay.top,
-    SystemUiOverlay.bottom,
+  SystemUiOverlay.bottom,
   ]);
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-    statusBarColor: Color(0xFF142c43), // Color for Android
-  ));
+////  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+////    statusBarColor: Color(0xFF142c43), // Color for Android
+////  ));
   runApp(const EauDeMilanoApp());
 }
 
@@ -35,7 +36,7 @@ class EauDeMilanoApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<LocaleProvider>(create: (_) => LocaleProvider()),
         ChangeNotifierProvider.value(
-          value: ChangeIndex(),
+          value: ChangeIndex()
         ),
 //        ChangeNotifierProvider<UserDataProvider>(
 //            create: (_) => UserDataProvider()),
@@ -122,19 +123,19 @@ class EauDeMilanoApp extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              dialogTheme: DialogTheme(
-                  contentTextStyle: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 19,
-                    color: Color(0xFF060606),
-                    fontWeight: FontWeight.w700,
-                  ),
-                  titleTextStyle: TextStyle(
-                    fontFamily: 'Lato',
-                    fontSize: 19,
-                    color: Color(0xFF060606),
-                    fontWeight: FontWeight.w700,
-                  )),
+//              dialogTheme: DialogTheme(
+//                  contentTextStyle: TextStyle(
+//                    fontFamily: 'Lato',
+//                    fontSize: 19,
+//                    color: Color(0xFF060606),
+//                    fontWeight: FontWeight.w700,
+//                  ),
+//                  titleTextStyle: TextStyle(
+//                    fontFamily: 'Lato',
+//                    fontSize: 19,
+//                    color: Color(0xFF060606),
+//                    fontWeight: FontWeight.w700,
+//                  )),
               textTheme: ThemeData.dark().textTheme.copyWith(
                   bodyText1: TextStyle(
                     fontFamily: 'Lato',
@@ -188,7 +189,7 @@ class EauDeMilanoApp extends StatelessWidget {
                   )),
             ),
             title: 'EAU DE MILANO',
-            home: NavigationHome(),
+            home: ShowItemScreen(),
             //SplashScreen(),
             routes: {
 //              Splash.routName: (context) => Splash(),

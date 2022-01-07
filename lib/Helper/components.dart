@@ -3,26 +3,25 @@ import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-final List<String> imgList = [
-  'https://thumbs.dreamstime.com/t/gym-24699087.jpg',
-  'https://media.istockphoto.com/photos/empty-gym-picture-id1132006407?k=20&m=1132006407&s=612x612&w=0&h=Z7nJu8jntywb9jOhvjlCS7lijbU4_hwHcxoVkxv77sg=',
-  'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX26664924.jpg',
-  'https://media.istockphoto.com/photos/muscular-trainer-writing-on-clipboard-picture-id675179390?k=20&m=675179390&s=612x612&w=0&h=7LP7-OamGu-b8XG-VKcJuamK5s80ke-4oJ5siUrjFVA=',
-  'https://www.muscleandfitness.com/wp-content/uploads/2019/11/Young-Muscular-Man-Doing-Lunges-In-Dark-Gym.jpg?w=1109&h=614&crop=1&quality=86&strip=all',
-  'https://www.giggsmeat.com/wp-content/uploads/2020/10/4wqKj5zM2a-min.jpg'
-];
+//final List<String> imgList = [
+//  'https://thumbs.dreamstime.com/t/gym-24699087.jpg',
+//  'https://media.istockphoto.com/photos/empty-gym-picture-id1132006407?k=20&m=1132006407&s=612x612&w=0&h=Z7nJu8jntywb9jOhvjlCS7lijbU4_hwHcxoVkxv77sg=',
+//  'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX26664924.jpg',
+//  'https://media.istockphoto.com/photos/muscular-trainer-writing-on-clipboard-picture-id675179390?k=20&m=675179390&s=612x612&w=0&h=7LP7-OamGu-b8XG-VKcJuamK5s80ke-4oJ5siUrjFVA=',
+//  'https://www.muscleandfitness.com/wp-content/uploads/2019/11/Young-Muscular-Man-Doing-Lunges-In-Dark-Gym.jpg?w=1109&h=614&crop=1&quality=86&strip=all',
+//  'https://www.giggsmeat.com/wp-content/uploads/2020/10/4wqKj5zM2a-min.jpg'
+//];
 
 Widget defaultButton({
   double width = double.infinity,
   Color background = primeColor,
-  bool isUpperCase = true,
   double radius = 12.0,
   @required Function function,
   @required String text,
 }) =>
     Container(
       width: width,
-      height: 48.0,
+      height: 44.0,
       child: MaterialButton(
         onPressed: function,
         child: Text(
@@ -31,7 +30,7 @@ Widget defaultButton({
             fontFamily: 'Lato',
             color: Colors.white,
             fontWeight: FontWeight.w700,
-            fontSize: 16,
+            fontSize: 15,
           ),
         ),
       ),
@@ -67,103 +66,157 @@ Widget defaultShowTime({BuildContext context, String textTime}) {
   );
 }
 
-Widget defaultCard({
-  @required Function function,
-  @required BuildContext context,
-  @required String textTitle,
-  String textSubTitleOne,
-  String textSubTitleTwo,
-  @required String imageUrl,
-  @required double cardWidth,
-  @required double containerTextWidth,
-  @required double cardHeight,
-}) =>
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: function,
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
-                imageUrl,
-                fit: BoxFit.fill,
-                height: cardHeight ?? 100,
-                width: cardWidth ?? 120,
-              ),
-            ),
-            Container(
-              height: textSubTitleOne != null ? 52 : 33,
-              width: containerTextWidth,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(10.0),
-                      topLeft: Radius.circular(28.0))),
-              child: textSubTitleOne != null
-                  ? Column(
-                      children: [
-                        Text(textTitle,
-                            style: Theme.of(context).textTheme.headline2),
-                        textSubTitleTwo != null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(textSubTitleOne,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          .copyWith(color: Colors.grey[800])),
-                                  Text(' - ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1),
-                                  Text(textSubTitleTwo,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline1
-                                          .copyWith(color: Colors.grey[800])),
-                                ],
-                              )
-                            : Text(textSubTitleOne,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1
-                                    .copyWith(
-                                        height: 1.1, color: Colors.grey[800])),
-                      ],
-                    )
-                  : Center(
-                      child: Text(textTitle,
-                          style: Theme.of(context).textTheme.bodyText1),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-Widget defaultLocationWithIcon(
-    {@required BuildContext context, String textLocation}) {
-  return InkWell(
-    onTap: () {},
-    child: Row(
+Widget defaultTextInCard(
+    {BuildContext context,
+    String title = '80\$',
+    String subTitle = 'Sheer Beauty EDT',
+    String titleContent = ''}) {
+  return Expanded(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ImageIcon(
-          AssetImage('images/locationMark.png'),
-          size: 15,
-          color: Colors.red,
-        ),
+        titleContent == ''
+            ? Text(
+                title,
+                style: Theme.of(context).textTheme.headline4.copyWith(
+                    color: Colors.black87, fontWeight: FontWeight.bold),
+              )
+            : Row(
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headline4.copyWith(
+                        color: Colors.black87, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    ' x $titleContent',
+                    style: Theme.of(context).textTheme.headline4.copyWith(
+                        color: Colors.black87, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
         SizedBox(
-          width: 5.0,
+          height: 4,
         ),
-        defaultSubtitleTextTwo(context: context, text: textLocation),
+        Text(subTitle,
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: Colors.grey[800])),
       ],
     ),
   );
 }
+
+Widget addFavouriteAndRemoveInCard(
+    {String favIconUrl, Function onFavPressed, Function onDeletePressed}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 18),
+    child: Column(
+//    crossAxisAlignment: CrossAxisAlignment.start,
+//    mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: onFavPressed,
+          child: ImageIcon(
+            AssetImage(favIconUrl),
+            size: 17,
+          ),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        InkWell(
+          onTap: onDeletePressed,
+          child: ImageIcon(
+            AssetImage('images/delete.png'),
+            size: 17,
+            color: Color(0xFF7D3030),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget defaultCard(
+        {@required int currentIndex,
+        @required BuildContext context,
+        Size media,
+        String title,
+        String subTitle,
+        String titleContent,
+        String favIconUrl = '',
+          bool justEnableDeleteIcon=false,
+        Function onFavPressed,
+        Function onDeletePressed}) =>
+    Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      color: Colors.white,
+      child: Row(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Color(0xFF8C8C8C)),
+            child: Image.asset(
+              "images/perfume${currentIndex + 1}.png",
+              width: media.width * 0.19,
+              height: media.height * 0.11,
+              fit: BoxFit.fill,
+            ),
+          ),
+          defaultTextInCard(
+              context: context,
+              subTitle: subTitle,
+              title: title,
+              titleContent: titleContent),
+          favIconUrl == ''
+              ? SizedBox()
+              : addFavouriteAndRemoveInCard(
+                  onDeletePressed: onDeletePressed,
+                  onFavPressed: onFavPressed,
+                  favIconUrl: favIconUrl),
+          justEnableDeleteIcon==true?Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Column(
+//    crossAxisAlignment: CrossAxisAlignment.start,
+//    mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: onDeletePressed,
+                  child: ImageIcon(
+                    AssetImage('images/delete.png'),
+                    size: 17,
+                    color: Color(0xFF7D3030),
+                  ),
+                ),
+              ],
+            ),
+          ):SizedBox()
+        ],
+      ),
+    );
+//
+//Widget defaultLocationWithIcon(
+//    {@required BuildContext context, String textLocation}) {
+//  return InkWell(
+//    onTap: () {},
+//    child: Row(
+//      children: [
+//      defaultSubtitleTextOne(context: context, text: text)
+//        SizedBox(
+//          width: 5.0,
+//        ),
+//        defaultSubtitleTextTwo(context: context, text: textLocation),
+//      ],
+//    ),
+//  );
+//}
 
 Widget subtitleOfHomeScreen(
     {Function function,
@@ -191,71 +244,11 @@ Widget subtitleOfHomeScreen(
   );
 }
 
-Widget defaultArticle({
-  @required Function function,
-  @required BuildContext context,
-  @required String textTitle,
-  @required String textSubTitle,
-  @required String imageUrl,
-  @required double imageHeight,
-  @required double articleWidth,
-  @required double articleHeight,
-}) =>
-    Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: function,
-        child: SizedBox(
-          height: articleHeight,
-          width: articleWidth,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              Align(
-                alignment: AlignmentDirectional.topCenter,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
-                    topRight: Radius.circular(10.0),
-                  ),
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.fill,
-                    height: imageHeight,
-                    width: articleWidth,
-                  ),
-                ),
-              ),
-              Container(
-                width: articleWidth,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey[200]),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    )),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  title: Text(textTitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.headline2),
-                  subtitle: Text(textSubTitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.subtitle2),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-
 Widget defaultTextButton({
   @required Function function,
   @required BuildContext context,
   @required String textKey,
+  Color textColor
 }) =>
     TextButton(
       style: ButtonStyle(
@@ -264,7 +257,7 @@ Widget defaultTextButton({
       onPressed: function,
       child: Text('${AppLocalizations.of(context).trans(textKey)}',
           style: Theme.of(context).textTheme.button.copyWith(
-                color: Color(0xFFBDBDBD),
+                color: textColor==null?Color(0xFFBDBDBD):textColor,
               )),
     );
 
@@ -336,203 +329,135 @@ Widget defaultSubtitleTextTwo(
               color: textColor ?? Colors.grey[700],
             ));
 
-Widget defaultTrainerCard({BuildContext context, Function onTap}) {
-  return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 11.0, left: 0.0, right: 0.0),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(11.0)),
-              border: Border.all(color: Colors.grey[300])),
-          child: Row(
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 45,
-                    child: ClipOval(
-                      child: Image.asset(
-                        "images/userProfile.png",
-                        fit: BoxFit.cover,
-                        width: 90,
-                        height: 90,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    child: CircleAvatar(
-                      radius: 15,
-                      child: ClipOval(
-                        child: Image.asset(
-                          "images/allah.png",
-                          fit: BoxFit.cover,
-                          width: 40,
-                          height: 40,
-                        ),
-                      ),
-                    ),
-                    left: 5.0,
-                    bottom: 0.0,
-                  )
-                ],
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'علاء صالح',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    defaultSubtitleTextTwo(
-                        context: context, text: 'اللياقة والعلاج الطبيعى'),
-                    const SizedBox(
-                      height: 4.0,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ));
-}
-
 Widget bottomNavigationBar(
     {@required BuildContext context,
     @required int currentIndex,
     @required Function onTap}) {
-  return  Container(
-  decoration: BoxDecoration(
-  color: Colors.white,
-  borderRadius: BorderRadius.only(
-  topRight: Radius.circular(0),
-  topLeft: Radius.circular(0),
-  ),
-  boxShadow: [
-  BoxShadow(
-  color: Colors.grey.withOpacity(0.5),
-  spreadRadius: 5,
-  blurRadius: 7,
-  offset:
-  const Offset(0, 3), // changes position of shadow
-  ),
-  ],
-  ),
-  child: ClipRRect(
-  borderRadius: BorderRadius.only(
-  topRight: Radius.circular(12),
-  topLeft: Radius.circular(12),
-  ),
-  child: BottomNavigationBar(
-  elevation: 0.0,
-  items: [
-  BottomNavigationBarItem(
-  icon: Container(
-  height: 53,
-  child: ImageIcon(
-  AssetImage('images/homeGrey.png'),
-  size: 25,
-  ),
-  ),
-  label: '',
-  activeIcon: Container(
-  height: 53,
-  decoration: BoxDecoration(
-  border: Border(top: BorderSide(color: Colors.white,width: 2))
-  ),
-  child: ImageIcon(
-  AssetImage('images/home.png'),
-  size: 25,
-  ),
-  ),
-  ),
-  BottomNavigationBarItem(
-  label: '',
-  icon: Container(
-  height: 53,
-  child: ImageIcon(
-  AssetImage('images/shoppingCartGrey.png'),
-  size: 25,
-  ),
-  ),
-  activeIcon: Container(
-  height: 53,
-  decoration: BoxDecoration(
-  border: Border(top: BorderSide(color: Colors.white,width: 2))
-  ),
-  child: ImageIcon(
-  AssetImage('images/shoppingCart.png'),
-  size: 25,
-  ),
-  ),
-  ),
-  BottomNavigationBarItem(
-  label: '',
-  icon: Container(
-  height: 53,
-  child: ImageIcon(
-  AssetImage('images/searchGrey.png'),
-  size: 25,
-  ),
-  ),
-  activeIcon: Container(
-  height: 53,
-  decoration: BoxDecoration(
-  border: Border(top: BorderSide(color: Colors.white,width: 2))
-  ),
-  child: ImageIcon(
-  AssetImage('images/search.png'),
-  size: 25,
-  ),
-  ),
-  ),
-  BottomNavigationBarItem(
-  label: '',
-  icon: Container(
-  height: 53,
-  child: ImageIcon(
-  AssetImage('images/favouriteGrey.png'),
-  size: 25,
-  ),
-  ),
-  activeIcon: Container(
-  height: 53,
-  decoration: BoxDecoration(
-  border: Border(top: BorderSide(color: Colors.white,width: 2))
-  ),
-  child: ImageIcon(
-  AssetImage('images/favourite.png'),
-  size: 25,
-  ),
-  ),
-  ),
-  ],
-  enableFeedback: true,
-  unselectedItemColor: Colors.grey,
-  selectedItemColor: Colors.white,
-  showUnselectedLabels: true,
-  currentIndex: currentIndex,
-  onTap: onTap,
-  type: BottomNavigationBarType.fixed,
-  selectedIconTheme: IconThemeData(size: 25),
-  unselectedIconTheme:
-  IconThemeData(color: Colors.grey, size: 25),
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(12),
+        topLeft: Radius.circular(12),
+      ),
+//                    boxShadow: [
+//                      BoxShadow(
+//                        color: Color(0xFF060606).withOpacity(0.5),
+//                        spreadRadius: 5,
+//                        blurRadius: 7,
+//                        offset:
+//                            const Offset(0, 3), // changes position of shadow
+//                      ),
+//                    ],
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(12),
+        topLeft: Radius.circular(12),
+      ),
+      child: BottomNavigationBar(
+        elevation: 0.0,
+        items: [
+          BottomNavigationBarItem(
+            icon: Container(
+              height: 53,
+              child: ImageIcon(
+                AssetImage('images/homeGrey.png'),
+                size: 25,
+              ),
+            ),
+            label: '',
+            activeIcon: Container(
+              height: 53,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              ),
+              child: ImageIcon(
+                AssetImage('images/home.png'),
+                size: 25,
+              ),
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: '',
+            icon: Container(
+              height: 53,
+              child: ImageIcon(
+                AssetImage('images/shoppingCartGrey.png'),
+                size: 25,
+              ),
+            ),
+            activeIcon: Container(
+              height: 53,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              ),
+              child: ImageIcon(
+                AssetImage('images/shoppingCart.png'),
+                size: 25,
+              ),
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: '',
+            icon: Container(
+              height: 53,
+              child: ImageIcon(
+                AssetImage('images/searchGrey.png'),
+                size: 25,
+              ),
+            ),
+            activeIcon: Container(
+              height: 53,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              ),
+              child: ImageIcon(
+                AssetImage('images/search.png'),
+                size: 25,
+              ),
+            ),
+          ),
+          BottomNavigationBarItem(
+            label: '',
+            icon: Container(
+              height: 53,
+              child: ImageIcon(
+                AssetImage('images/favouriteGrey.png'),
+                size: 25,
+              ),
+            ),
+            activeIcon: Container(
+              height: 53,
+              decoration: BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              ),
+              child: ImageIcon(
+                AssetImage('images/favourite.png'),
+                size: 25,
+              ),
+            ),
+          ),
+        ],
+        enableFeedback: true,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.white,
+        showUnselectedLabels: true,
+        currentIndex: currentIndex,
+        onTap: onTap,
+        type: BottomNavigationBarType.fixed,
+        selectedIconTheme: IconThemeData(size: 25),
+        unselectedIconTheme:
+        IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
-  selectedLabelStyle: TextStyle(
-  fontSize: 0,
-  ),
-  unselectedLabelStyle: TextStyle(
-  fontSize: 0,
-  ),
-  ),
-  ),
+        selectedLabelStyle: TextStyle(
+          fontSize: 0,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 0,
+        ),
+      ),
+    ),
   );
 }
 
@@ -607,64 +532,58 @@ Widget defaultFormField({
             errorStyle: TextStyle(color: primeColor),
             floatingLabelStyle: TextStyle(color: primeColor),
             contentPadding: EdgeInsets.only(bottom: 10, right: 15, left: 15),
-           border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(10),
-          ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(10),
+            ),
             suffixIconColor: primeColor,
           ),
-          style: TextStyle(
-            color: Color(0xFF060606),
-                fontSize: 16
-          ),
+          style: TextStyle(color: Color(0xFF060606), fontSize: 16),
           readOnly: readOnly,
         ),
       ),
     );
 OutlineInputBorder textFormFieldBorder = InputBorder.none;
 
-Widget defaultAppBar(
-        {@required BuildContext context,
-        String titleKey,
-        bool enableLeading = true,
-        bool isTextNotKey = false,
-        bool automaticallyImplyLeading = true,
-        List<Widget> actions,
-        Function onClickedBackButton}) =>
-    AppBar(
-      automaticallyImplyLeading: automaticallyImplyLeading,
-      leading: enableLeading == true
-          ? IconButton(
-              onPressed: onClickedBackButton == null
-                  ? () {
-                      Navigator.pop(context);
-                    }
-                  : onClickedBackButton,
-              icon: const ImageIcon(
-                AssetImage(
-                  'images/arrowLeft.png',
-                ),
-                size: 16,
-              ))
-          : null,
-      centerTitle: !enableLeading,
-      title: Text(
-        isTextNotKey
-            ? titleKey
-            : '${AppLocalizations.of(context).trans(titleKey)}',
-      ),
-      titleSpacing: 2.0,
-      actions: actions,
-    );
+//Widget defaultAppBar(
+//        {@required BuildContext context,
+//        String titleKey,
+//        bool enableLeading = true,
+//        bool isTextNotKey = false,
+//        bool automaticallyImplyLeading = true,
+//        List<Widget> actions,
+//        Function onClickedBackButton}) =>
+//    AppBar(
+//      automaticallyImplyLeading: automaticallyImplyLeading,
+//      leading: enableLeading == true
+//          ? IconButton(
+//              onPressed: onClickedBackButton == null
+//                  ? () {
+//                      Navigator.pop(context);
+//                    }
+//                  : onClickedBackButton,
+//              icon: const ImageIcon(
+//                AssetImage(
+//                  'images/arrowLeft.png',
+//                ),
+//                size: 16,
+//              ))
+//          : null,
+//      centerTitle: !enableLeading,
+//      title: Text(
+//        isTextNotKey
+//            ? titleKey
+//            : '${AppLocalizations.of(context).trans(titleKey)}',
+//      ),
+//      titleSpacing: 2.0,
+//      actions: actions,
+//    );
 
-Widget myDivider() => Padding(
-      padding: const EdgeInsetsDirectional.only(start: 30.0, end: 30.0),
-      child: Container(
-        width: double.infinity,
-        height: 1.0,
-        color: Colors.grey[300],
-      ),
-    );
+Widget myDivider() => Divider(
+  height: 30,
+  thickness: 0.15,
+  color: Colors.grey[300],
+);
 
 void navigateTo(context, Widget widget) => Navigator.push(
       context,
@@ -694,10 +613,10 @@ void showToast({
     Fluttertoast.showToast(
       msg: text,
       toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
+      gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 5,
-      backgroundColor: chooseToastColor(state),
-      textColor: Colors.white,
+      backgroundColor: Colors.red,
+      textColor: Colors.black,
       fontSize: 16.0,
     );
 
@@ -721,283 +640,3 @@ Color chooseToastColor(ToastStates state) {
 
   return color;
 }
-
-//
-//Widget buildTaskItem(Map model, context) => Dismissible(
-//      key: Key(model['id'].toString()),
-//      child: Padding(
-//        padding: const EdgeInsets.all(20.0),
-//        child: Row(
-//          children: [
-//            CircleAvatar(
-//              radius: 40.0,
-//              child: Text(
-//                '${model['time']}',
-//              ),
-//            ),
-//            SizedBox(
-//              width: 20.0,
-//            ),
-//            Expanded(
-//              child: Column(
-//                mainAxisSize: MainAxisSize.min,
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: [
-//                  Text(
-//                    '${model['title']}',
-//                    style: TextStyle(
-//                      fontSize: 18.0,
-//                      fontWeight: FontWeight.bold,
-//                    ),
-//                  ),
-//                  Text(
-//                    '${model['date']}',
-//                    style: TextStyle(
-//                      color: Colors.grey,
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ),
-//            SizedBox(
-//              width: 20.0,
-//            ),
-//            IconButton(
-//              onPressed: () {
-//                AppCubit.get(context).updateData(
-//                  status: 'done',
-//                  id: model['id'],
-//                );
-//              },
-//              icon: Icon(
-//                Icons.check_box,
-//                color: Colors.green,
-//              ),
-//            ),
-//            IconButton(
-//              onPressed: () {
-//                AppCubit.get(context).updateData(
-//                  status: 'archive',
-//                  id: model['id'],
-//                );
-//              },
-//              icon: Icon(
-//                Icons.archive,
-//                color: Colors.black45,
-//              ),
-//            ),
-//          ],
-//        ),
-//      ),
-//      onDismissed: (direction) {
-//        AppCubit.get(context).deleteData(
-//          id: model['id'],
-//        );
-//      },
-//    )
-//
-//Widget tasksBuilder({
-//  @required List<Map> tasks,
-//}) =>
-//    ConditionalBuilder(
-//      condition: tasks.length > 0,
-//      builder: (context) => ListView.separated(
-//        itemBuilder: (context, index) {
-//          return buildTaskItem(tasks[index], context);
-//        },
-//        separatorBuilder: (context, index) => myDivider(),
-//        itemCount: tasks.length,
-//      ),
-//      fallback: (context) => Center(
-//        child: Column(
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: [
-//            Icon(
-//              Icons.menu,
-//              size: 100.0,
-//              color: Colors.grey,
-//            ),
-//            Text(
-//              'No Tasks Yet, Please Add Some Tasks',
-//              style: TextStyle(
-//                fontSize: 16.0,
-//                fontWeight: FontWeight.bold,
-//                color: Colors.grey,
-//              ),
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
-//Widget buildArticleItem(article, context) => InkWell(
-//      onTap: () {
-//        navigateTo(
-//          context,
-//          WebViewScreen(article['url']),
-//        );
-//      },
-//      child: Padding(
-//        padding: const EdgeInsets.all(20.0),
-//        child: Row(
-//          children: [
-//            Container(
-//              width: 120.0,
-//              height: 120.0,
-//              decoration: BoxDecoration(
-//                borderRadius: BorderRadius.circular(
-//                  10.0,
-//                ),
-//                image: DecorationImage(
-//                  image: NetworkImage('${article['urlToImage']}'),
-//                  fit: BoxFit.cover,
-//                ),
-//              ),
-//            ),
-//            SizedBox(
-//              width: 20.0,
-//            ),
-//            Expanded(
-//              child: Container(
-//                height: 120.0,
-//                child: Column(
-//                  crossAxisAlignment: CrossAxisAlignment.start,
-//                  mainAxisAlignment: MainAxisAlignment.start,
-//                  children: [
-//                    Expanded(
-//                      child: Text(
-//                        '${article['title']}',
-//                        style: Theme.of(context).textTheme.bodyText1,
-//                        maxLines: 3,
-//                        overflow: TextOverflow.ellipsis,
-//                      ),
-//                    ),
-//                    Text(
-//                      '${article['publishedAt']}',
-//                      style: TextStyle(
-//                        color: Colors.grey,
-//                      ),
-//                    ),
-//                  ],
-//                ),
-//              ),
-//            ),
-//            SizedBox(
-//              width: 15.0,
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
-//
-//Widget articleBuilder(list, context, {isSearch = false}) => ConditionalBuilder(
-//      condition: list.length > 0,
-//      builder: (context) => ListView.separated(
-//        physics: BouncingScrollPhysics(),
-//        itemBuilder: (context, index) => buildArticleItem(list[index], context),
-//        separatorBuilder: (context, index) => myDivider(),
-//        itemCount: 10,
-//      ),
-//      fallback: (context) =>
-//          isSearch ? Container() : Center(child: CircularProgressIndicator()),
-//    );
-
-//Widget buildListProduct(
-//  model,
-//  context, {
-//  bool isOldPrice = true,
-//}) =>
-//    Padding(
-//      padding: const EdgeInsets.all(20.0),
-//      child: Container(
-//        height: 120.0,
-//        child: Row(
-//          children: [
-//            Stack(
-//              alignment: AlignmentDirectional.bottomStart,
-//              children: [
-//                Image(
-//                  image: NetworkImage(model.image),
-//                  width: 120.0,
-//                  height: 120.0,
-//                ),
-//                if (model.discount != 0 && isOldPrice)
-//                  Container(
-//                    color: Colors.red,
-//                    padding: EdgeInsets.symmetric(
-//                      horizontal: 5.0,
-//                    ),
-//                    child: Text(
-//                      'DISCOUNT',
-//                      style: TextStyle(
-//                        fontSize: 8.0,
-//                        color: Colors.white,
-//                      ),
-//                    ),
-//                  ),
-//              ],
-//            ),
-//            SizedBox(
-//              width: 20.0,
-//            ),
-//            Expanded(
-//              child: Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: [
-//                  Text(
-//                    model.name,
-//                    maxLines: 2,
-//                    overflow: TextOverflow.ellipsis,
-//                    style: TextStyle(
-//                      fontSize: 14.0,
-//                      height: 1.3,
-//                    ),
-//                  ),
-//                  Spacer(),
-//                  Row(
-//                    children: [
-//                      Text(
-//                        model.price.toString(),
-//                        style: TextStyle(
-//                          fontSize: 12.0,
-//                          color: defaultColor,
-//                        ),
-//                      ),
-//                      SizedBox(
-//                        width: 5.0,
-//                      ),
-//                      if (model.discount != 0 && isOldPrice)
-//                        Text(
-//                          model.oldPrice.toString(),
-//                          style: TextStyle(
-//                            fontSize: 10.0,
-//                            color: Colors.grey,
-//                            decoration: TextDecoration.lineThrough,
-//                          ),
-//                        ),
-//                      Spacer(),
-//                      IconButton(
-//                        onPressed: () {
-//                          ShopCubit.get(context).changeFavorites(model.id);
-//                        },
-//                        icon: CircleAvatar(
-//                          radius: 15.0,
-//                          backgroundColor:
-//                              ShopCubit.get(context).favorites[model.id]
-//                                  ? defaultColor
-//                                  : Colors.grey,
-//                          child: Icon(
-//                            Icons.favorite_border,
-//                            size: 14.0,
-//                            color: Colors.white,
-//                          ),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                ],
-//              ),
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
