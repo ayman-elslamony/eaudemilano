@@ -1,0 +1,22 @@
+{
+  "user_name": "Username",
+  "password": "Password",
+  "invalid_pass": "Please Enter Password",
+  "invalid_email": "Please Enter Email",
+  "sign_up": "Sign Up",
+  "have_no_acc_register": "Don't have an account?",
+  "forgot_pass": "Forgot Password?",
+  "email": "Email",
+  "login": "Login",
+"have_an_account": "Have an account?",
+  "cart": "Cart",
+  "search": "Search...",
+  "popular": "Popular",
+
+
+  "phone_num": "Phone Number",
+  "invalid_name": "Please Enter User Name",
+  "invalid_phone_num": "Please Enter Phone Number",
+  "regist": "Register"
+
+}
