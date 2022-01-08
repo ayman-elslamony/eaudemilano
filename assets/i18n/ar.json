@@ -34,16 +34,52 @@
   "choose": "اختر:",
   "add_to": "اضافة إلى",
   "add_to_card": "تم الإضافة إلى عربة التسوق بنجاح",
+  "home": "الصفحة الرئيسية",
+  "exclusive_for_woman": "حصرياً للنساء",
+  "exclusive_for_man": "حصرياً للرجال",
+  "partners": "المشاركين",
+  "checkout": "الدفع",
+  "finish": "إنهاء",
 
 
-
-
-
-
-
-
+  "billing_details": "تفاصيل الفاتورة",
+  "name": "اسم",
+  "surname": "لقب",
+  "company_name": "اسم الشركة (اختياري)",
+  "country_region": "الدولة / المنطقة",
+  "zip": "رمز بريدي",
+  "city": "مدينة",
+  "province": "المحافظة",
+  "telephone": "هاتف",
+  "email_address": "عنوان البريد الالكترونى",
+  "invoice_receipt": "الفاتورة والإيصال",
+  "fiscal_code": "الكود المالي",
+  "back": "عودة",
+  "next": "التالي",
+  "payment_details": "بيانات الدفع",
+  "paypal_credit card": "باي بال / بطاقة الائتمان",
+  "pay_with_paypal": "الدفع باستخدام paypal: يمكنك الدفع ببطاقتك الائتمانية إذا لم يكن لديك حساب paypal.",
+  "your_personal_data": "سيتم استخدام بياناتك الشخصية لمعالجة طلبك لدعم تجربتك على هذا الموقع ولأغراض أخرى موصوفة في سياسة الخصوصية الخاصة بنا.",
+  "your_order": "طلبك",
+  "subtotal": "المجموع الفرعي",
+  "expedition": "التوصيل",
+  "done": "تم",
+  "you_made_payment_successfully": "قمت بالدفع بنجاح!",
+  "go_back_shopping": "العودة للتسوق",
+"pay": "دفع",
   "phone_num": "رقم الجوال",
   "invalid_phone_num": "من فضلك اخل رقم جوال صحيح",
   "regist": "التسجيل"
 
 }
+
+
+
+
+
+
+
+
+
+
+

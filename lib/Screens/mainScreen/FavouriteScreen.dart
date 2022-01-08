@@ -6,6 +6,8 @@ import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'NavigationHome.dart';
+
 class FavouriteScreen extends StatefulWidget {
   @override
   _FavouriteScreenState createState() => _FavouriteScreenState();
@@ -18,7 +20,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: ImageIcon(
+        leading: IconButton(onPressed: () {openDrawer();}, icon: ImageIcon(
           AssetImage('images/drawer.png'),
         ),),
         title: Row(

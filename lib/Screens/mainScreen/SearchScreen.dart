@@ -6,6 +6,8 @@ import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'NavigationHome.dart';
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -21,7 +23,9 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            openDrawer();
+          },
           icon: ImageIcon(
             AssetImage('images/drawer.png'),
           ),

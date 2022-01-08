@@ -6,6 +6,8 @@ import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'NavigationHome.dart';
+
 class CartScreen extends StatefulWidget {
   @override
   _CartScreenState createState() => _CartScreenState();
@@ -18,7 +20,9 @@ class _CartScreenState extends State<CartScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(onPressed: () {}, icon: ImageIcon(
+          leading: IconButton(onPressed: () {
+            openDrawer();
+          }, icon: ImageIcon(
             AssetImage('images/drawer.png'),
           ),),
           title: Row(

@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {openDrawer();},
           icon: ImageIcon(
             AssetImage('images/drawer.png'),
           ),
