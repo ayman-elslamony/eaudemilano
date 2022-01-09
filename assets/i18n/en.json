@@ -43,6 +43,7 @@
   "surname": "Surname",
   "company_name": "Company Name (Optional)",
   "country_region": "Country / Region",
+  "street_number": "Street and Number",
   "zip": "ZIP",
   "city": "City",
   "province": "Province",

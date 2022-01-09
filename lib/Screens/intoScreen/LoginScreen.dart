@@ -1,5 +1,6 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -187,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           text:
                           '${AppLocalizations.of(context).trans('login')}',
                           function: () {
-                           // navigateTo(context, NavigationHome());
+                            navigateTo(context, NavigationHome());
                             // if (formKey.currentState.validate()) {
                             //   print(phoneController.text);
                             //   print(passwordController.text);

@@ -1,4 +1,5 @@
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Screens/subScreens/ShowItemScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -150,73 +151,62 @@ Widget defaultCard(
           bool justEnableDeleteIcon=false,
         Function onFavPressed,
         Function onDeletePressed}) =>
-    Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: Colors.white,
-      child: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Color(0xFF8C8C8C)),
-            child: Image.asset(
-              "images/perfume${currentIndex + 1}.png",
-              width: media.width * 0.19,
-              height: media.height * 0.11,
-              fit: BoxFit.fill,
+    InkWell(
+      onTap: (){
+        navigateTo(context, ShowItemScreen());
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        color: Colors.white,
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.all(10.0),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  color: Color(0xFF8C8C8C)),
+              child: Image.asset(
+                "images/perfume${currentIndex + 1}.png",
+                width: media.width * 0.19,
+                height: media.height * 0.11,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          defaultTextInCard(
-              context: context,
-              subTitle: subTitle,
-              title: title,
-              titleContent: titleContent),
-          favIconUrl == ''
-              ? SizedBox()
-              : addFavouriteAndRemoveInCard(
-                  onDeletePressed: onDeletePressed,
-                  onFavPressed: onFavPressed,
-                  favIconUrl: favIconUrl),
-          justEnableDeleteIcon==true?Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: Column(
+            defaultTextInCard(
+                context: context,
+                subTitle: subTitle,
+                title: title,
+                titleContent: titleContent),
+            favIconUrl == ''
+                ? SizedBox()
+                : addFavouriteAndRemoveInCard(
+                    onDeletePressed: onDeletePressed,
+                    onFavPressed: onFavPressed,
+                    favIconUrl: favIconUrl),
+            justEnableDeleteIcon==true?Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: Column(
 //    crossAxisAlignment: CrossAxisAlignment.start,
 //    mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                InkWell(
-                  onTap: onDeletePressed,
-                  child: ImageIcon(
-                    AssetImage('images/delete.png'),
-                    size: 17,
-                    color: Color(0xFF7D3030),
+                children: [
+                  InkWell(
+                    onTap: onDeletePressed,
+                    child: ImageIcon(
+                      AssetImage('images/delete.png'),
+                      size: 17,
+                      color: Color(0xFF7D3030),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ):SizedBox()
-        ],
+                ],
+              ),
+            ):SizedBox()
+          ],
+        ),
       ),
     );
-//
-//Widget defaultLocationWithIcon(
-//    {@required BuildContext context, String textLocation}) {
-//  return InkWell(
-//    onTap: () {},
-//    child: Row(
-//      children: [
-//      defaultSubtitleTextOne(context: context, text: text)
-//        SizedBox(
-//          width: 5.0,
-//        ),
-//        defaultSubtitleTextTwo(context: context, text: textLocation),
-//      ],
-//    ),
-//  );
-//}
 
 Widget subtitleOfHomeScreen(
     {Function function,
@@ -268,57 +258,6 @@ Widget defaultSubtitleTextOne(
             .textTheme
             .headline5
             .copyWith(color: color ?? Colors.white));
-
-Widget showTextWithIcon(
-    {@required BuildContext context,
-    String iconUrl,
-    String titleText,
-    Color colorOfWidget = Colors.red}) {
-  return Row(
-    children: [
-      ImageIcon(
-        AssetImage(iconUrl),
-        size: 15,
-        color: colorOfWidget,
-      ),
-      SizedBox(
-        width: 5.0,
-      ),
-      defaultSubtitleTextTwo(
-          context: context,
-          text: titleText,
-          textColor: colorOfWidget != Colors.red ? colorOfWidget : null),
-    ],
-  );
-}
-
-Widget showAvilableTimeInOneDay(
-    {BuildContext context, String dayName, String startTime, String endTime}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
-    child: Column(
-      children: [
-        Container(
-          height: 35,
-          padding: const EdgeInsets.symmetric(horizontal: 35.0),
-          decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
-          child: Center(
-              child: defaultSubtitleTextTwo(
-                  context: context,
-                  text: dayName ?? 'الأحد',
-                  textColor: Colors.white)),
-        ),
-        SizedBox(
-          height: 8.0,
-        ),
-        defaultShowTime(context: context, textTime: startTime ?? 'من 30 10 ص'),
-        defaultShowTime(context: context, textTime: endTime ?? 'إلى 50 11 ص'),
-      ],
-    ),
-  );
-}
 
 Widget defaultSubtitleTextTwo(
         {@required BuildContext context,
@@ -489,6 +428,7 @@ Widget defaultFormField({
   bool isPassword = false,
   @required Function validate,
   String label,
+  String hintText,
   IconData prefix,
   IconData suffix,
   Color suffixColor,
@@ -512,11 +452,13 @@ Widget defaultFormField({
           cursorColor: primeColor,
           decoration: InputDecoration(
             labelText: label,
+            hintText: hintText,
             prefixIcon: prefix != null
                 ? Icon(
                     prefix,
                   )
                 : null,
+            hintStyle: TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
             labelStyle: TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
             suffixIcon: suffix != null
                 ? IconButton(
@@ -545,42 +487,9 @@ Widget defaultFormField({
     );
 OutlineInputBorder textFormFieldBorder = InputBorder.none;
 
-//Widget defaultAppBar(
-//        {@required BuildContext context,
-//        String titleKey,
-//        bool enableLeading = true,
-//        bool isTextNotKey = false,
-//        bool automaticallyImplyLeading = true,
-//        List<Widget> actions,
-//        Function onClickedBackButton}) =>
-//    AppBar(
-//      automaticallyImplyLeading: automaticallyImplyLeading,
-//      leading: enableLeading == true
-//          ? IconButton(
-//              onPressed: onClickedBackButton == null
-//                  ? () {
-//                      Navigator.pop(context);
-//                    }
-//                  : onClickedBackButton,
-//              icon: const ImageIcon(
-//                AssetImage(
-//                  'images/arrowLeft.png',
-//                ),
-//                size: 16,
-//              ))
-//          : null,
-//      centerTitle: !enableLeading,
-//      title: Text(
-//        isTextNotKey
-//            ? titleKey
-//            : '${AppLocalizations.of(context).trans(titleKey)}',
-//      ),
-//      titleSpacing: 2.0,
-//      actions: actions,
-//    );
 
-Widget myDivider() => Divider(
-  height: 30,
+Widget myDivider({double height=30}) => Divider(
+  height: height,
   thickness: 0.15,
   color: Colors.grey[300],
 );

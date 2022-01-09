@@ -8,6 +8,7 @@ import 'package:eaudemilano/provider/changeIndexPage.dart';
 import 'package:eaudemilano/provider/locale_provider.dart';
 import 'package:flutter/services.dart';
 
+import 'Screens/intoScreen/SplashScreen.dart';
 import 'Screens/mainScreen/NavigationHome.dart';
 
 const domain = "https://wekala.greencodet.com";
@@ -150,8 +151,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme: themeApp,
             title: 'Eau De Milano',
-            home: NavigationHome(),
-            // home: OrderDetailes(),
+            home: SplashScreen(),
 //            routes: {
 //              Splash.routName: (context) => Splash(),
 //              NavigationHome.routName: (context) => NavigationHome(),

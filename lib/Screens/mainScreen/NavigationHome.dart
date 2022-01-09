@@ -117,6 +117,7 @@ class _NavigationHomeState extends State<NavigationHome> {
         builder: (context, changeIndex, child) => WillPopScope(
             onWillPop: () async {
               SystemNavigator.pop();
+              changeIndex.current;
               return false;
             },
             child: SafeArea(

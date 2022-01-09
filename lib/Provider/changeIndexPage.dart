@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class ChangeIndex with ChangeNotifier {
   int index =0;
-
+    int current;
   void changeIndexFunction(int index) {
     this.index = index;
     notifyListeners();
