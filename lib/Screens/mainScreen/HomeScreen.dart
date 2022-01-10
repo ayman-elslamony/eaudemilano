@@ -3,8 +3,7 @@
 
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
-import 'package:eaudemilano/Provider/changeIndexPage.dart';
-import 'package:eaudemilano/Provider/locale_provider.dart';
+
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';

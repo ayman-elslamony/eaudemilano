@@ -2,17 +2,10 @@
 
 import 'dart:async';
 import 'package:eaudemilano/Helper/components.dart';
-import 'package:eaudemilano/styles/colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:eaudemilano/Helper/Helper.dart';
 
-import 'package:eaudemilano/provider/locale_provider.dart';
-
-//import 'package:eaudemilano/screens/IntroScreens/LoginScreen.dart';
-//import 'package:eaudemilano/screens/IntroScreens/Verification.dart';
-//import 'package:eaudemilano/screens/MainScreens/NavigationHome.dart';
-import 'package:provider/provider.dart';
 
 import 'LoginScreen.dart';
 
@@ -71,18 +64,14 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                     width: media.width * 0.4,
                     height: media.height * 0.2,
                     child: Image.asset('images/logoEauDeMilano.png')),
                 SizedBox(
                   height: media.height * 0.05,
                 ),
-                SpinKitSpinningLines(
-                  color: Colors.black87,
-                  lineWidth: 4,
-                  size: 60,
-                ),
+                loaderApp()
               ],
             )),
       ),

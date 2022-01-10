@@ -1,6 +1,7 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/changeIndexPage.dart';
+
 import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -49,7 +50,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return SizedBox(
       height: 28,
       child: ListTile(
-        contentPadding: EdgeInsets.all(0.0),
+        contentPadding:const EdgeInsets.all(0.0),
         isThreeLine: false,
         title: Text(
           'Sheer Beauty',
@@ -563,49 +564,48 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           .copyWith(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(
+                   const SizedBox(
                       height: 50,
                     ),
-//                    Consumer<ChangeIndex>(
-//                      builder: (context, changeIndex, child) => ,
-//                    ),
-                    InkWell(
-                      onTap: () {
-                       // changeIndex.changeIndexFunction(0);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation1, animation2) =>
-                                  NavigationHome(),
-                              transitionDuration: Duration(seconds: 0),
-                            ),
-                                (Route<dynamic> route) => false);
-                      },
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 44.0,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                                '${AppLocalizations.of(context).trans('go_back_shopping')}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .button
-                                    .copyWith(
-                                  height: 0.7,
-                                  color: primeColor,
-                                )),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            ImageIcon(
-                              AssetImage('images/arrow.png'),
-                              size: 14,
-                              color: primeColor,
-                            ),
-                          ],
+                    Consumer<ChangeIndex>(
+                      builder: (context, changeIndex, child) => InkWell(
+                        onTap: () {
+                          changeIndex.changeIndexFunction(0);
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation1, animation2) =>
+                                    NavigationHome(),
+                                transitionDuration: Duration(seconds: 0),
+                              ),
+                                  (Route<dynamic> route) => false);
+                        },
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 44.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                  '${AppLocalizations.of(context).trans('go_back_shopping')}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .button
+                                      .copyWith(
+                                    height: 0.7,
+                                    color: primeColor,
+                                  )),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              ImageIcon(
+                                AssetImage('images/arrow.png'),
+                                size: 14,
+                                color: primeColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -703,7 +703,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   context: context,
                                   textKey: 'back'),
                             ),
-                            SizedBox(
+                          const  SizedBox(
                               width: 8,
                             ),
                             Expanded(
@@ -741,7 +741,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         .headline4
                         .copyWith(color: Colors.white),
                   ),
-            content: SizedBox(
+            content: const SizedBox(
               height: 0.0,
               width: 0.0,
             )),
@@ -751,7 +751,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 : StepState.complete,
             isActive: _activeCurrentStep >= 1,
             title: _activeCurrentStep != 1
-                ? SizedBox()
+                ?const  SizedBox()
                 : Text(
                     '${AppLocalizations.of(context).trans('payment_details')}',
                     style: Theme.of(context)
@@ -759,7 +759,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         .headline4
                         .copyWith(color: Colors.white),
                   ),
-            content: SizedBox(
+            content: const SizedBox(
               height: 0.0,
               width: 0.0,
             )),
@@ -769,7 +769,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 : StepState.complete,
             isActive: _activeCurrentStep >= 2,
             title: _activeCurrentStep != 2
-                ? SizedBox()
+                ? const SizedBox()
                 : Text(
                     _showDoneWidget
                         ? '${AppLocalizations.of(context).trans('done')}'
@@ -779,7 +779,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         .headline4
                         .copyWith(color: Colors.white),
                   ),
-            content: SizedBox(
+            content: const SizedBox(
               height: 0.0,
               width: 0.0,
             )),
@@ -808,51 +808,51 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){
-          if(_showDoneWidget==true){
-            Navigator.pushAndRemoveUntil(
-                context,
-                PageRouteBuilder(
-                  pageBuilder:
-                      (context, animation1, animation2) =>
-                      NavigationHome(),
-                  transitionDuration: Duration(seconds: 0),
-                ),
-                    (Route<dynamic> route) => false);
-          }
-          if(_activeCurrentStep !=0 &&_showDoneWidget == false){
-            backToPreviousStep();
-          }else {
-            if(_showDoneWidget == false){
-              Navigator.of(context).pop();
-            }
-
-          }
-        },  icon: ImageIcon(
-              AssetImage('images/back.png'),
-            ),),
-//        leading: Consumer<ChangeIndex>(
-//          builder: (context, changeIndex, child) => IconButton(
-//            onPressed: () {
-//              if (_showDoneWidget) {
-//                changeIndex.changeIndexFunction(0);
-//                Navigator.pushAndRemoveUntil(
-//                    context,
-//                    PageRouteBuilder(
-//                      pageBuilder: (context, animation1, animation2) =>
-//                          NavigationHome(),
-//                      transitionDuration: Duration(seconds: 0),
-//                    ),
+//        leading: IconButton(onPressed: (){
+//          if(_showDoneWidget==true){
+//            Navigator.pushAndRemoveUntil(
+//                context,
+//                PageRouteBuilder(
+//                  pageBuilder:
+//                      (context, animation1, animation2) =>
+//                      NavigationHome(),
+//                  transitionDuration:const Duration(seconds: 0),
+//                ),
 //                    (Route<dynamic> route) => false);
-//              } else {
-//                Navigator.of(context).pop();
-//              }
-//            },
-//            icon: ImageIcon(
+//          }
+//          if(_activeCurrentStep !=0 &&_showDoneWidget == false){
+//            backToPreviousStep();
+//          }else {
+//            if(_showDoneWidget == false){
+//              Navigator.of(context).pop();
+//            }
+//
+//          }
+//        },  icon:const ImageIcon(
 //              AssetImage('images/back.png'),
-//            ),
-//          ),
-//        ),
+//            ),),
+        leading: Consumer<ChangeIndex>(
+          builder: (context, changeIndex, child) => IconButton(
+            onPressed: () {
+              if (_showDoneWidget) {
+                changeIndex.changeIndexFunction(0);
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation1, animation2) =>
+                          NavigationHome(),
+                      transitionDuration:const Duration(seconds: 0),
+                    ),
+                    (Route<dynamic> route) => false);
+              } else {
+                Navigator.of(context).pop();
+              }
+            },
+            icon:const ImageIcon(
+              AssetImage('images/back.png'),
+            ),
+          ),
+        ),
         title: Text(
           '${AppLocalizations.of(context).trans('checkout')}',
           style: Theme.of(context)
@@ -863,12 +863,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         bottom: PreferredSize(
             child: Theme(
                 data: ThemeData(
-                    canvasColor: Color(0xFF060606),
+                    canvasColor:const  Color(0xFF060606),
                     colorScheme: ColorScheme.light(
                       //background: Colors.transparent,
-                      primary: _showDoneWidget ? Color(0xFF27AE60) : primeColor,
+                      primary: _showDoneWidget ?const  Color(0xFF27AE60) : primeColor,
                       onSurface: _showDoneWidget
-                          ? Color(0xFF27AE60)
+                          ? const Color(0xFF27AE60)
                           : Colors.grey[600],
                     )),
                 child: SizedBox(
@@ -895,7 +895,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         width: media.width,
         height: media.height * 0.8,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        decoration: BoxDecoration(
+        decoration:const  BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,

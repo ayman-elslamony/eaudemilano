@@ -1,6 +1,6 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
-import 'package:eaudemilano/Provider/changeIndexPage.dart';
+
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +22,8 @@ class _CartScreenState extends State<CartScreen> {
         appBar: AppBar(
           leading: IconButton(onPressed: () {
             openDrawer();
-          }, icon: ImageIcon(
-            AssetImage('images/drawer.png'),
+          }, icon: const ImageIcon(
+             AssetImage('images/drawer.png'),
           ),),
           title: Row(
             children: [
@@ -31,7 +31,7 @@ class _CartScreenState extends State<CartScreen> {
                 '${AppLocalizations.of(context).trans('cart')}',
                 style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 8.0,
               ),
               Text(
@@ -64,11 +64,11 @@ class _CartScreenState extends State<CartScreen> {
           ],
           bottom: PreferredSize(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     Text(
@@ -78,7 +78,7 @@ class _CartScreenState extends State<CartScreen> {
                           .headline3
                           .copyWith(color: Colors.grey[600]),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     Text(
@@ -96,8 +96,8 @@ class _CartScreenState extends State<CartScreen> {
           width: media.width,
           height: media.height*0.8,
           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
+          decoration: const BoxDecoration(
+            gradient: const LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
@@ -111,8 +111,8 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 ListView.separated(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => SizedBox(
+                  physics: const NeverScrollableScrollPhysics(),
+                  separatorBuilder: (context, index) => const SizedBox(
                     height: 5.0,
                   ),
                   itemBuilder: (context, index) => Padding(
@@ -131,15 +131,15 @@ class _CartScreenState extends State<CartScreen> {
                               style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.black87,fontWeight: FontWeight.bold),
                               textAlign: TextAlign.start,
                             ),
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(25.0))),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 18),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 18),
                             content: SizedBox(
                               height:80,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox()
+                                  const SizedBox()
                                   ,defaultTextButton(function: (){
                                     Navigator.of(context).pop();
                                   }, textKey: 'cancel',context: context),

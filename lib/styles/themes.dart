@@ -13,7 +13,7 @@ ThemeData themeApp = ThemeData(
   scaffoldBackgroundColor: Colors.black54,
   cardColor: secondaryColor,
   visualDensity: VisualDensity.adaptivePlatformDensity,
-  appBarTheme: AppBarTheme(
+  appBarTheme:const  AppBarTheme(
 //    titleSpacing: 20.0,
     elevation: 0.0,
     color: Color(0xFF060606),
@@ -30,10 +30,10 @@ ThemeData themeApp = ThemeData(
     ),
     iconTheme: IconThemeData(color: primeColor, size: 16.0),
   ),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme:const  FloatingActionButtonThemeData(
     backgroundColor: primeColor,
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme:const  BottomNavigationBarThemeData(
     type: BottomNavigationBarType.fixed,
     selectedItemColor: primeColor,
     unselectedItemColor: Colors.grey,
@@ -54,14 +54,14 @@ ThemeData themeApp = ThemeData(
       fontWeight: FontWeight.w400,
     ),
   ),
-  tabBarTheme: TabBarTheme(
-    labelStyle: TextStyle(
+  tabBarTheme:const  TabBarTheme(
+    labelStyle:  TextStyle(
       fontFamily: 'Lato', color: Colors.white,
       fontSize: 15.0,
 //      height: 16.8,
       fontWeight: FontWeight.w400,
     ),
-    unselectedLabelStyle: TextStyle(
+    unselectedLabelStyle:  TextStyle(
       fontFamily: 'CairoBold', color: Colors.white,
       fontSize: 15.0,
 //      height: 16.8,
@@ -87,32 +87,32 @@ ThemeData themeApp = ThemeData(
         fontSize: 15,
         color: Colors.grey[800],
       ),
-      subtitle1: TextStyle(
+      subtitle1:const  TextStyle(
         fontFamily: 'Lato',
         fontSize: 80,
         fontWeight: FontWeight.w700,
         color: Color(0xFFFAFAFA),
       ),
-      button: TextStyle(
+      button:const  TextStyle(
         fontFamily: 'Lato',
         color: textButtonColor,
         fontSize: 15,
         fontWeight: FontWeight.w700,
       ),
-      headline1: TextStyle(
+      headline1:const  TextStyle(
         fontFamily: 'Lato',
         fontSize: 19,
         fontWeight: FontWeight.w700,
         color: Colors.white,
       ),
-      headline2: TextStyle(
+      headline2:const  TextStyle(
         fontFamily: 'Lato',
         fontWeight: FontWeight.w700,
         fontSize: 18,
         color: Colors.white,
         // fontWeight: FontWeight.bold,
       ),
-      headline3: TextStyle(
+      headline3:const  TextStyle(
         fontFamily: 'Lato',
         fontSize: 16,
         color: Colors.white,
@@ -127,7 +127,7 @@ ThemeData themeApp = ThemeData(
         fontSize: 13,
         color: Colors.grey[800],
       ),
-      headline6: TextStyle(
+      headline6:const  TextStyle(
         fontFamily: 'Lato',
         color: textButtonColor,
         fontSize: 12,

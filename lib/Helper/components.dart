@@ -2,6 +2,7 @@ import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Screens/subScreens/ShowItemScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //final List<String> imgList = [
@@ -27,7 +28,7 @@ Widget defaultButton({
         onPressed: function,
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Lato',
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -52,14 +53,14 @@ Widget defaultShowTime({BuildContext context, String textTime}) {
               color: Colors.red[500],
             ),
             color: Colors.red,
-            borderRadius: BorderRadius.all(
+            borderRadius: const BorderRadius.all(
               Radius.circular(20),
             ),
           ),
           width: 11,
           height: 11,
-          child: SizedBox()),
-      SizedBox(
+          child: const SizedBox()),
+      const SizedBox(
         width: 5.0,
       ),
       defaultSubtitleTextTwo(context: context, text: textTime),
@@ -96,7 +97,7 @@ Widget defaultTextInCard(
                   )
                 ],
               ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Text(subTitle,
@@ -124,13 +125,13 @@ Widget addFavouriteAndRemoveInCard(
             size: 17,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10.0,
         ),
         InkWell(
           onTap: onDeletePressed,
-          child: ImageIcon(
-            AssetImage('images/delete.png'),
+          child: const ImageIcon(
+             AssetImage('images/delete.png'),
             size: 17,
             color: Color(0xFF7D3030),
           ),
@@ -163,9 +164,9 @@ Widget defaultCard(
         child: Row(
           children: [
             Container(
-              margin: EdgeInsets.all(10.0),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+              decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   color: Color(0xFF8C8C8C)),
               child: Image.asset(
@@ -181,7 +182,7 @@ Widget defaultCard(
                 title: title,
                 titleContent: titleContent),
             favIconUrl == ''
-                ? SizedBox()
+                ? const SizedBox()
                 : addFavouriteAndRemoveInCard(
                     onDeletePressed: onDeletePressed,
                     onFavPressed: onFavPressed,
@@ -194,15 +195,15 @@ Widget defaultCard(
                 children: [
                   InkWell(
                     onTap: onDeletePressed,
-                    child: ImageIcon(
-                      AssetImage('images/delete.png'),
+                    child: const ImageIcon(
+                       AssetImage('images/delete.png'),
                       size: 17,
-                      color: Color(0xFF7D3030),
+                      color:  Color(0xFF7D3030),
                     ),
                   ),
                 ],
               ),
-            ):SizedBox()
+            ):const SizedBox()
           ],
         ),
       ),
@@ -222,13 +223,13 @@ Widget subtitleOfHomeScreen(
           '${AppLocalizations.of(context).trans(textKey)}',
           style: Theme.of(context).textTheme.headline4,
         ),
-        isEnableSpaceBeforeArrow == true ? Spacer() : SizedBox(),
+        isEnableSpaceBeforeArrow == true ? const Spacer() : const SizedBox(),
         Icon(
           Icons.arrow_forward_ios,
           size: 18.0,
           color: isHomeScreen == true ? Colors.grey[800] : Colors.grey[300],
         ),
-        isEnableSpaceBeforeArrow == false ? Spacer() : SizedBox()
+        isEnableSpaceBeforeArrow == false ? const Spacer() : const SizedBox()
       ],
     ),
   );
@@ -247,7 +248,7 @@ Widget defaultTextButton({
       onPressed: function,
       child: Text('${AppLocalizations.of(context).trans(textKey)}',
           style: Theme.of(context).textTheme.button.copyWith(
-                color: textColor==null?Color(0xFFBDBDBD):textColor,
+                color: textColor==null?const Color(0xFFBDBDBD):textColor,
               )),
     );
 
@@ -273,9 +274,9 @@ Widget bottomNavigationBar(
     @required int currentIndex,
     @required Function onTap}) {
   return Container(
-    decoration: BoxDecoration(
+    decoration: const BoxDecoration(
       color: Colors.transparent,
-      borderRadius: BorderRadius.only(
+      borderRadius:  BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),
@@ -290,9 +291,9 @@ Widget bottomNavigationBar(
 //                    ],
     ),
     child: ClipRRect(
-      borderRadius: BorderRadius.only(
-        topRight: Radius.circular(12),
-        topLeft: Radius.circular(12),
+      borderRadius: const BorderRadius.only(
+        topRight:  Radius.circular(12),
+        topLeft:  Radius.circular(12),
       ),
       child: BottomNavigationBar(
         elevation: 0.0,
@@ -300,19 +301,19 @@ Widget bottomNavigationBar(
           BottomNavigationBarItem(
             icon: Container(
               height: 53,
-              child: ImageIcon(
-                AssetImage('images/homeGrey.png'),
+              child: const ImageIcon(
+                 AssetImage('images/homeGrey.png'),
                 size: 25,
               ),
             ),
             label: '',
             activeIcon: Container(
               height: 53,
-              decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              decoration: const BoxDecoration(
+                  border: Border(top:  BorderSide(color: Colors.white,width: 2))
               ),
-              child: ImageIcon(
-                AssetImage('images/home.png'),
+              child: const ImageIcon(
+                 AssetImage('images/home.png'),
                 size: 25,
               ),
             ),
@@ -321,58 +322,58 @@ Widget bottomNavigationBar(
             label: '',
             icon: Container(
               height: 53,
-              child: ImageIcon(
-                AssetImage('images/shoppingCartGrey.png'),
+              child: const ImageIcon(
+                 AssetImage('images/shoppingCartGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              decoration: const BoxDecoration(
+                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
               ),
-              child: ImageIcon(
-                AssetImage('images/shoppingCart.png'),
+              child: const ImageIcon(
+                 AssetImage('images/shoppingCart.png'),
                 size: 25,
               ),
             ),
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: Container(
+            icon: const SizedBox(
               height: 53,
-              child: ImageIcon(
-                AssetImage('images/searchGrey.png'),
+              child:  ImageIcon(
+                 AssetImage('images/searchGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              decoration: const BoxDecoration(
+                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
               ),
-              child: ImageIcon(
-                AssetImage('images/search.png'),
+              child: const ImageIcon(
+                 AssetImage('images/search.png'),
                 size: 25,
               ),
             ),
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: Container(
+            icon: const  SizedBox(
               height: 53,
               child: ImageIcon(
-                AssetImage('images/favouriteGrey.png'),
+                 AssetImage('images/favouriteGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration: BoxDecoration(
-                  border: Border(top: BorderSide(color: Colors.white,width: 2))
+              decoration: const BoxDecoration(
+                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
               ),
-              child: ImageIcon(
-                AssetImage('images/favourite.png'),
+              child: const ImageIcon(
+                 AssetImage('images/favourite.png'),
                 size: 25,
               ),
             ),
@@ -385,14 +386,14 @@ Widget bottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
-        selectedIconTheme: IconThemeData(size: 25),
+        selectedIconTheme: const IconThemeData(size: 25),
         unselectedIconTheme:
-        IconThemeData(color: Colors.grey, size: 25),
+        const IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
-        selectedLabelStyle: TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 0,
         ),
-        unselectedLabelStyle: TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 0,
         ),
       ),
@@ -458,8 +459,8 @@ Widget defaultFormField({
                     prefix,
                   )
                 : null,
-            hintStyle: TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
-            labelStyle: TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
+            hintStyle: const TextStyle(color:  Color(0xFF4F4F4F), fontSize: 14),
+            labelStyle: const TextStyle(color:  Color(0xFF4F4F4F), fontSize: 14),
             suffixIcon: suffix != null
                 ? IconButton(
                     onPressed: suffixPressed,
@@ -469,18 +470,18 @@ Widget defaultFormField({
                     ),
                   )
                 : null,
-            fillColor: Color(0xFF8C8C8C),
+            fillColor: const Color(0xFF8C8C8C),
             filled: true,
-            errorStyle: TextStyle(color: primeColor),
-            floatingLabelStyle: TextStyle(color: primeColor),
-            contentPadding: EdgeInsets.only(bottom: 10, right: 15, left: 15),
+            errorStyle: const TextStyle(color: primeColor),
+            floatingLabelStyle: const TextStyle(color: primeColor),
+            contentPadding: const EdgeInsets.only(bottom: 10, right: 15, left: 15),
             border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(10),
             ),
             suffixIconColor: primeColor,
           ),
-          style: TextStyle(color: Color(0xFF060606), fontSize: 16),
+          style: const TextStyle(color:  Color(0xFF060606), fontSize: 16),
           readOnly: readOnly,
         ),
       ),
@@ -528,6 +529,52 @@ void showToast({
       textColor: Colors.black,
       fontSize: 16.0,
     );
+Widget loaderApp(){
+  return const SpinKitSpinningLines(
+    color: Colors.black87,
+    lineWidth: 4,
+    size: 60,
+  );
+}
+showAlertDialog(BuildContext context,
+    {Widget alertTitle, String content, onOk}) {
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text(
+      AppLocalizations.of(context).trans("ok"),
+      style: TextStyle(
+          color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
+    ),
+    onPressed: onOk ??
+            () {
+          Navigator.pop(context);
+        },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    shape:const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(25.0))),
+    contentPadding:const  EdgeInsets.symmetric(horizontal: 12.0,vertical: 8.0),
+    title: alertTitle ?? const SizedBox(),
+    content: Text(
+      content,
+      textAlign: TextAlign.center,
+      style:  Theme.of(context).textTheme.headline3.copyWith(color: Colors.black87,fontWeight: FontWeight.bold),
+    ),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
 // enum
 enum ToastStates { SUCCESS, ERROR, WARNING }

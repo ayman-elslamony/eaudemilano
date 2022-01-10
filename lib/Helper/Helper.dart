@@ -8,7 +8,7 @@ class Helper {
   static String userPhone = '';
   static String userAvatar= '';
   static String token='';
-  static String userType='';
+
   static bool is_verified=false;
   static bool is_active=false;
   static String dialCode;
@@ -25,7 +25,6 @@ class Helper {
   static String sharedPreferencesUserPhoneInKey = 'UserPhone';
   static String sharedPreferencesUserAvatarInKey = 'UserAvatar';
   static String sharedPreferencesUserTokenInKey = 'UserToken';
-  static String sharedPreferencesUserTypeInKey = 'UserType';
   static String sharedPreferencesIsVerifiedInKey = 'IsVerified';
   static String sharedPreferencesIsActiveInKey = 'IsActive';
   static String sharedPreferencesDialCodeInKey = 'DialCode';
@@ -191,18 +190,7 @@ class Helper {
     return await prefs.get(sharedPreferencesUserAvatarInKey );
   }
 
-  // UserType key
-  static Future<bool> saveUserTypeInSharedPreferences(String userType)async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
 
-    return await prefs.setString(sharedPreferencesUserTypeInKey,userType);
-  }
-
-  static Future<String> getUserTypeInSharedPreferences()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.get(sharedPreferencesUserTypeInKey);
-  }
 
 
 }

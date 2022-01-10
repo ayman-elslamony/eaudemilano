@@ -36,15 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         width: media.width,
         height: media.height,
-        constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
+        constraints:const BoxConstraints.expand(),
+        decoration:const  BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/backgroundImage.png'),
             fit: BoxFit.fill,
           ),
         ),
         child: Container(
-            decoration: BoxDecoration(
+            decoration:const  BoxDecoration(
               color: Colors.white60,
             ),
             width: media.width,
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: media.height * 0.1,
                 ),
-                Container(
+                SizedBox(
                     width: media.width * 0.38,
                     height: media.height * 0.2,
                     child: Image.asset('images/logoEauDeMilano.png')),
@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     width: media.width,
                     padding: EdgeInsets.symmetric(horizontal: 25),
-                    decoration: BoxDecoration(
+                    decoration:const  BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
@@ -173,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: defaultSubtitleTextTwo(
                                   context: context,
                                   text: '${AppLocalizations.of(context).trans('forgot_pass')}',
-                                  textColor: Color(0xFFBDBDBD)),
+                                  textColor:const Color(0xFFBDBDBD)),
                               onTap: () {
                                // navigateTo(context,ForgetPasswordScreen());
 
@@ -195,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             // }
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10.0,
                         ),
                         Row(
@@ -203,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           children: [
                             defaultSubtitleTextOne(
                                 context: context,
-                                color: Color(0xFFBDBDBD),
+                                color:const  Color(0xFFBDBDBD),
                                 text: '${AppLocalizations.of(context).trans('have_no_acc_register')}'),
                             defaultTextButton(
                                 function: () {

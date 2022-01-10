@@ -1,12 +1,13 @@
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/changeIndexPage.dart';
 import 'package:eaudemilano/Screens/subScreens/CheckoutScreen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:eaudemilano/provider/changeIndexPage.dart';
 import 'CartScreen.dart';
 import 'FavouriteScreen.dart';
 import 'HomeScreen.dart';
@@ -141,7 +142,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12.0, vertical: 8.0),
-                        decoration: BoxDecoration(
+                        decoration:const  BoxDecoration(
                           gradient: LinearGradient(
                             transform: GradientRotation(20),
                             begin: Alignment.topRight,
@@ -187,7 +188,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                     body: mainWidgets[changeIndex.index],
                     extendBody: true,
                     bottomNavigationBar: Container(
-                      decoration: BoxDecoration(
+                      decoration:const  BoxDecoration(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.only(
                           topRight: Radius.circular(12),
@@ -222,11 +223,11 @@ class _NavigationHomeState extends State<NavigationHome> {
                               label: '',
                               activeIcon: Container(
                                 height: 53,
-                                decoration: BoxDecoration(
+                                decoration:const  BoxDecoration(
                                     border: Border(
                                         top: BorderSide(
                                             color: Colors.white, width: 2))),
-                                child: ImageIcon(
+                                child:const  ImageIcon(
                                   AssetImage('images/home.png'),
                                   size: 25,
                                 ),
@@ -243,11 +244,11 @@ class _NavigationHomeState extends State<NavigationHome> {
                               ),
                               activeIcon: Container(
                                 height: 53,
-                                decoration: BoxDecoration(
+                                decoration:const  BoxDecoration(
                                     border: Border(
                                         top: BorderSide(
                                             color: Colors.white, width: 2))),
-                                child: ImageIcon(
+                                child:const  ImageIcon(
                                   AssetImage('images/shoppingCart.png'),
                                   size: 25,
                                 ),
@@ -257,18 +258,18 @@ class _NavigationHomeState extends State<NavigationHome> {
                               label: '',
                               icon: Container(
                                 height: 53,
-                                child: ImageIcon(
+                                child: const ImageIcon(
                                   AssetImage('images/searchGrey.png'),
                                   size: 25,
                                 ),
                               ),
                               activeIcon: Container(
                                 height: 53,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     border: Border(
                                         top: BorderSide(
                                             color: Colors.white, width: 2))),
-                                child: ImageIcon(
+                                child: const ImageIcon(
                                   AssetImage('images/search.png'),
                                   size: 25,
                                 ),
@@ -278,14 +279,14 @@ class _NavigationHomeState extends State<NavigationHome> {
                               label: '',
                               icon: Container(
                                 height: 53,
-                                child: ImageIcon(
+                                child:const  ImageIcon(
                                   AssetImage('images/favouriteGrey.png'),
                                   size: 25,
                                 ),
                               ),
                               activeIcon: Container(
                                 height: 53,
-                                decoration: BoxDecoration(
+                                decoration:const  BoxDecoration(
                                     border: Border(
                                         top: BorderSide(
                                             color: Colors.white, width: 2))),
@@ -303,14 +304,14 @@ class _NavigationHomeState extends State<NavigationHome> {
                           currentIndex: changeIndex.index,
                           onTap: changeIndex.changeIndexFunction,
                           type: BottomNavigationBarType.fixed,
-                          selectedIconTheme: IconThemeData(size: 25),
+                          selectedIconTheme:const  IconThemeData(size: 25),
                           unselectedIconTheme:
-                              IconThemeData(color: Colors.grey, size: 25),
+                          const  IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
-                          selectedLabelStyle: TextStyle(
+                          selectedLabelStyle:const  TextStyle(
                             fontSize: 0,
                           ),
-                          unselectedLabelStyle: TextStyle(
+                          unselectedLabelStyle:const  TextStyle(
                             fontSize: 0,
                           ),
                         ),
@@ -321,7 +322,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                             onPressed: () {
                               navigateTo(context, CheckoutScreen());
                             },
-                            child: ImageIcon(
+                            child:const  ImageIcon(
                               AssetImage('images/arrow.png'),
                               size: 17,
                               color: Colors.white,

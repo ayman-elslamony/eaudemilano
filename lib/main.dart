@@ -1,17 +1,22 @@
 import 'package:eaudemilano/styles/themes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:eaudemilano/Localization/app_localization_delegate.dart';
-import 'package:eaudemilano/provider/changeIndexPage.dart';
-import 'package:eaudemilano/provider/locale_provider.dart';
+
 import 'package:flutter/services.dart';
 
+import 'Provider/UserProvider.dart';
+import 'Provider/changeIndexPage.dart';
+import 'Provider/locale_provider.dart';
 import 'Screens/intoScreen/SplashScreen.dart';
 import 'Screens/mainScreen/NavigationHome.dart';
 
-const domain = "https://wekala.greencodet.com";
+const domain = "https://home-sleem.com/milano";
+const apiPassword = "123456";
 const photosPreUrl = "https://wekala.greencodet.com/storage/";
 
 //Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -28,9 +33,13 @@ const photosPreUrl = "https://wekala.greencodet.com/storage/";
 //FlutterLocalNotificationsPlugin();
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-//  await Firebase.initializeApp();
-//  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  WidgetsFlutterBinding.ensureInitialized(
+
+  );
+  await Firebase.initializeApp(
+  );
+
+  //  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 //  _firebaseMessaging.requestPermission(
 //      sound: true, badge: true, alert: true
 //  );
@@ -41,7 +50,10 @@ void main() async {
 //      AndroidFlutterLocalNotificationsPlugin>()
 //      ?.createNotificationChannel(channel);
 
-  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top,SystemUiOverlay.bottom,]);
+  SystemChrome.setEnabledSystemUIOverlays([
+    SystemUiOverlay.top,
+    SystemUiOverlay.bottom,
+  ]);
   runApp(MyApp());
 }
 
@@ -133,25 +145,27 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider.value(
           value: ChangeIndex(),
         ),
+        ChangeNotifierProvider<UserDataProvider>(
+            create: (_) => UserDataProvider()),
       ],
       child: Consumer<LocaleProvider>(builder:
           (BuildContext context, LocaleProvider localeProvider, Widget child) {
         return MaterialApp(
-            localizationsDelegates: const [
-              AppLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate
-            ],
-            supportedLocales: const [
-              Locale('ar'),
-              Locale('en'),
-            ],
-            locale: localeProvider.locale,
-            debugShowCheckedModeBanner: false,
-            theme: themeApp,
-            title: 'Eau De Milano',
-            home: SplashScreen(),
+          localizationsDelegates: const [
+            AppLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate
+          ],
+          supportedLocales: const [
+            Locale('ar'),
+            Locale('en'),
+          ],
+          locale: localeProvider.locale,
+          debugShowCheckedModeBanner: false,
+          theme: themeApp,
+          title: 'Eau De Milano',
+          home: SplashScreen(),
 //            routes: {
 //              Splash.routName: (context) => Splash(),
 //              NavigationHome.routName: (context) => NavigationHome(),
@@ -185,7 +199,7 @@ class _MyAppState extends State<MyApp> {
 //              Verification.routName:(context)=>Verification(),
 //              CarDetails.routName:(context)=>CarDetails(),
 //            }
-            );
+        );
       }),
     );
   }

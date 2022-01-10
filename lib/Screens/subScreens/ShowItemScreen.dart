@@ -1,6 +1,6 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
-import 'package:eaudemilano/Provider/changeIndexPage.dart';
+
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
   Widget _createIncrementDicrementButton(IconData icon, Function onPressed) {
     return RawMaterialButton(
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      constraints: BoxConstraints(minWidth: 32.0, minHeight: 44.0),
+      constraints: const BoxConstraints(minWidth: 32.0, minHeight: 44.0),
       onPressed: onPressed,
       elevation: 2.0,
       child: Icon(
@@ -42,7 +42,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
         color: Colors.white,
         size: 15.0,
       ),
-      shape: CircleBorder(),
+      shape: const CircleBorder(),
     );
   }
 
@@ -55,7 +55,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
           width: media.width,
           height: media.height,
           padding: const EdgeInsets.all(0.0),
-          decoration: BoxDecoration(
+          decoration:const  BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
@@ -81,7 +81,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           color: Colors.grey[500],
-                          child: SizedBox(),
+                          child: const SizedBox(),
                         ),
                       ),
                       Align(
@@ -97,22 +97,22 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                             color: Colors.white,
                             child: Column(
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 30,
                                 ),
                                 Row(
                                   children: [
                                     IconButton(
                                       onPressed: () {},
-                                      icon: ImageIcon(
+                                      icon:const  ImageIcon(
                                         AssetImage('images/back.png'),
                                         color: primeColor,
                                       ),
                                     ),
-                                    Spacer(),
+                                    const  Spacer(),
                                     IconButton(
                                       onPressed: () {},
-                                      icon: ImageIcon(
+                                      icon: const ImageIcon(
                                         AssetImage('images/share.png'),
                                         color: primeColor,
                                       ),
@@ -125,7 +125,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 50,
                                       ),
                                       Expanded(
@@ -146,12 +146,12 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                               });
                                             },
                                             child: Container(
-                                              margin: EdgeInsets.symmetric(
+                                              margin:const  EdgeInsets.symmetric(
                                                   horizontal: 10.0,
                                                   vertical: 5.0),
-                                              padding: EdgeInsets.symmetric(
+                                              padding:const  EdgeInsets.symmetric(
                                                   horizontal: 2, vertical: 5),
-                                              decoration: BoxDecoration(
+                                              decoration:const  BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.circular(12)),
@@ -170,12 +170,12 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Row(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 16,
                                     ),
                                     Column(
@@ -191,7 +191,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                                   color: Colors.black87,
                                                   fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 4,
                                         ),
                                         Text('Roberto Cavalli EDP',
@@ -202,11 +202,11 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                                     color: Colors.grey[800])),
                                       ],
                                     ),
-                                    Spacer(),
+                                    const  Spacer(),
                                     IconButton(
                                       onPressed: () {},
                                       icon: ImageIcon(
-                                        AssetImage('images/fav.png'),
+                                        const AssetImage('images/fav.png'),
                                         color: Colors.grey[600],
                                       ),
                                     )
@@ -238,10 +238,10 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                           Container(
                             width: 75,
                             height: 30.0,
-                            margin: EdgeInsets.symmetric(horizontal: 8.0),
+                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
                             child: MaterialButton(
                               onPressed: () {},
-                              child: Text(
+                              child:const  Text(
                                 '100ml',
                                 style: TextStyle(
                                   fontFamily: 'Lato',
@@ -255,7 +255,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                               borderRadius: BorderRadius.circular(
                                 12,
                               ),
-                              color: Color(0xFF8C8C8C),
+                              color: const Color(0xFF8C8C8C),
                             ),
                           ),
                           Container(
@@ -263,9 +263,9 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                             height: 30.0,
                             child: MaterialButton(
                               onPressed: () {},
-                              child: Text(
+                              child: const Text(
                                 '50ml',
-                                style: TextStyle(
+                                style:  TextStyle(
                                   fontFamily: 'Lato',
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
@@ -277,7 +277,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                               borderRadius: BorderRadius.circular(
                                 12,
                               ),
-                              border: Border.all(color: Color(0xFF8C8C8C)),
+                              border: Border.all(color:const  Color(0xFF8C8C8C)),
                             ),
                           )
                         ],
@@ -314,7 +314,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                     borderRadius: BorderRadius.circular(
                                       12,
                                     ),
-                                    border: Border.all(color: Color(0xFF8C8C8C)),
+                                    border: Border.all(color: const Color(0xFF8C8C8C)),
                                   ),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -328,7 +328,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 8,),
+                              const SizedBox(width: 8,),
                               Expanded(
                                 flex: 2
                                 ,
@@ -347,7 +347,7 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                                     },
                                     child: Text(
                                         '${AppLocalizations.of(context).trans('add_to')}',
-                                      style: TextStyle(
+                                      style:const  TextStyle(
                                         fontFamily: 'Lato',
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
@@ -385,13 +385,13 @@ class _ShowItemScreenState extends State<ShowItemScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       ListView.separated(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        separatorBuilder: (context, index) => SizedBox(
+                        physics:const  NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) =>const  SizedBox(
                           height: 5.0,
                         ),
                         itemBuilder: (context, index) => defaultCard(

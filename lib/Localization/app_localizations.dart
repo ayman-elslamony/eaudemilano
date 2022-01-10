@@ -19,7 +19,7 @@ class AppLocalizations {
     String data = await rootBundle.loadString('assets/i18n/${this.locale.languageCode}.json');
     Map<String, dynamic> _result = json.decode(data);
 
-    this._sentences = new Map();
+    this._sentences =  Map();
     _result.forEach((String key, dynamic value) {
       this._sentences[key] = value.toString();
     });

@@ -1,6 +1,6 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
-import 'package:eaudemilano/Provider/changeIndexPage.dart';
+
 import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return  SizedBox(
       height: 45,
       child: ListTile(
-        contentPadding: EdgeInsets.all( 0.0),
+        contentPadding: const EdgeInsets.all( 0.0),
         isThreeLine: false,
         dense: true,
         horizontalTitleGap: -5,
@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AssetImage(imgUrl),
           color: Colors.white,
         ),
-        trailing: ImageIcon(
+        trailing: const ImageIcon(
           AssetImage('images/show.png'),
           color: primeColor,
         ),
@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {openDrawer();},
-          icon: ImageIcon(
+          icon:const  ImageIcon(
             AssetImage('images/drawer.png'),
           ),
         ),
@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         width: media.width,
         height: media.height * 0.8,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-        decoration: BoxDecoration(
+        decoration:const  BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -95,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                       child: Image.asset(
                         'images/profile.png',
                         fit: BoxFit.fill,
@@ -103,7 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: media.width * 0.25,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 12.0,
                     ),
                     Column(
@@ -114,7 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: Theme.of(context).textTheme.headline4.copyWith(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 3.0,
                         ),
                         Text('ahmed@gmail.com',
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ,showScreenComponent(titleKey: 'addresses',imgUrl: 'images/addresses.png')
                 ,showScreenComponent(titleKey: 'account_details',imgUrl: 'images/accountDetails.png')
              ,myDivider(),
-                defaultTextButton(function: (){}, context: context, textKey: 'logout',textColor: Color(0xFF7D3030))
+                defaultTextButton(function: (){}, context: context, textKey: 'logout',textColor: const Color(0xFF7D3030))
               ],
             ),
           ),
