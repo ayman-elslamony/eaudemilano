@@ -9,6 +9,9 @@ import 'package:eaudemilano/Localization/app_localization_delegate.dart';
 
 import 'package:flutter/services.dart';
 
+import 'Provider/CartProvider.dart';
+import 'Provider/FavouriteProvider.dart';
+import 'Provider/HomeProvider.dart';
 import 'Provider/UserProvider.dart';
 import 'Provider/changeIndexPage.dart';
 import 'Provider/locale_provider.dart';
@@ -147,6 +150,12 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider<UserDataProvider>(
             create: (_) => UserDataProvider()),
+        ChangeNotifierProvider<HomeProvider>(
+            create: (_) => HomeProvider()),
+        ChangeNotifierProvider<CartProvider>(
+            create: (_) => CartProvider()),
+        ChangeNotifierProvider<FavouriteProvider>(
+            create: (_) => FavouriteProvider()),
       ],
       child: Consumer<LocaleProvider>(builder:
           (BuildContext context, LocaleProvider localeProvider, Widget child) {

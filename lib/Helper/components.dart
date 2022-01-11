@@ -14,6 +14,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 //  'https://www.giggsmeat.com/wp-content/uploads/2020/10/4wqKj5zM2a-min.jpg'
 //];
 
+//Shimmer.fromColors(
+//baseColor: Colors.black12.withOpacity(0.1),
+//highlightColor: Colors.black.withOpacity(0.2),
+//child: Padding(
+//padding: const EdgeInsets.only(top: 6),
+//child: Container(
+//decoration: BoxDecoration(
+//borderRadius: BorderRadius.circular(10),
+//color: Colors.blue[100],
+//),
+//height: infoWidget.screenHeight * 0.15,
+//),
+//),
+//)
 Widget defaultButton({
   double width = double.infinity,
   Color background = primeColor,
@@ -131,7 +145,7 @@ Widget addFavouriteAndRemoveInCard(
         InkWell(
           onTap: onDeletePressed,
           child: const ImageIcon(
-             AssetImage('images/delete.png'),
+            AssetImage('images/delete.png'),
             size: 17,
             color: Color(0xFF7D3030),
           ),
@@ -147,13 +161,14 @@ Widget defaultCard(
         Size media,
         String title,
         String subTitle,
+        String imgUrl = '',
         String titleContent,
         String favIconUrl = '',
-          bool justEnableDeleteIcon=false,
+        bool justEnableDeleteIcon = false,
         Function onFavPressed,
         Function onDeletePressed}) =>
     InkWell(
-      onTap: (){
+      onTap: () {
         navigateTo(context, ShowItemScreen());
       },
       child: Card(
@@ -169,17 +184,24 @@ Widget defaultCard(
               decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
                   color: Color(0xFF8C8C8C)),
-              child: Image.asset(
-                "images/perfume${currentIndex + 1}.png",
-                width: media.width * 0.19,
-                height: media.height * 0.11,
-                fit: BoxFit.fill,
-              ),
+              child: imgUrl != ''
+                  ? Image.network(
+                      imgUrl,
+                      width: media.width * 0.19,
+                      height: media.height * 0.11,
+                      fit: BoxFit.fill,
+                    )
+                  : Image.asset(
+                      "images/perfume${currentIndex + 1}.png",
+                      width: media.width * 0.19,
+                      height: media.height * 0.11,
+                      fit: BoxFit.fill,
+                    ),
             ),
             defaultTextInCard(
                 context: context,
                 subTitle: subTitle,
-                title: title,
+                title: '$title \$',
                 titleContent: titleContent),
             favIconUrl == ''
                 ? const SizedBox()
@@ -187,23 +209,25 @@ Widget defaultCard(
                     onDeletePressed: onDeletePressed,
                     onFavPressed: onFavPressed,
                     favIconUrl: favIconUrl),
-            justEnableDeleteIcon==true?Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
+            justEnableDeleteIcon == true
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Column(
 //    crossAxisAlignment: CrossAxisAlignment.start,
 //    mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  InkWell(
-                    onTap: onDeletePressed,
-                    child: const ImageIcon(
-                       AssetImage('images/delete.png'),
-                      size: 17,
-                      color:  Color(0xFF7D3030),
+                      children: [
+                        InkWell(
+                          onTap: onDeletePressed,
+                          child: const ImageIcon(
+                            AssetImage('images/delete.png'),
+                            size: 17,
+                            color: Color(0xFF7D3030),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            ):const SizedBox()
+                  )
+                : const SizedBox()
           ],
         ),
       ),
@@ -235,12 +259,11 @@ Widget subtitleOfHomeScreen(
   );
 }
 
-Widget defaultTextButton({
-  @required Function function,
-  @required BuildContext context,
-  @required String textKey,
-  Color textColor
-}) =>
+Widget defaultTextButton(
+        {@required Function function,
+        @required BuildContext context,
+        @required String textKey,
+        Color textColor}) =>
     TextButton(
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -248,7 +271,7 @@ Widget defaultTextButton({
       onPressed: function,
       child: Text('${AppLocalizations.of(context).trans(textKey)}',
           style: Theme.of(context).textTheme.button.copyWith(
-                color: textColor==null?const Color(0xFFBDBDBD):textColor,
+                color: textColor == null ? const Color(0xFFBDBDBD) : textColor,
               )),
     );
 
@@ -276,7 +299,7 @@ Widget bottomNavigationBar(
   return Container(
     decoration: const BoxDecoration(
       color: Colors.transparent,
-      borderRadius:  BorderRadius.only(
+      borderRadius: BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),
@@ -292,8 +315,8 @@ Widget bottomNavigationBar(
     ),
     child: ClipRRect(
       borderRadius: const BorderRadius.only(
-        topRight:  Radius.circular(12),
-        topLeft:  Radius.circular(12),
+        topRight: Radius.circular(12),
+        topLeft: Radius.circular(12),
       ),
       child: BottomNavigationBar(
         elevation: 0.0,
@@ -302,7 +325,7 @@ Widget bottomNavigationBar(
             icon: Container(
               height: 53,
               child: const ImageIcon(
-                 AssetImage('images/homeGrey.png'),
+                AssetImage('images/homeGrey.png'),
                 size: 25,
               ),
             ),
@@ -310,10 +333,10 @@ Widget bottomNavigationBar(
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border: Border(top:  BorderSide(color: Colors.white,width: 2))
-              ),
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
-                 AssetImage('images/home.png'),
+                AssetImage('images/home.png'),
                 size: 25,
               ),
             ),
@@ -323,17 +346,17 @@ Widget bottomNavigationBar(
             icon: Container(
               height: 53,
               child: const ImageIcon(
-                 AssetImage('images/shoppingCartGrey.png'),
+                AssetImage('images/shoppingCartGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
-              ),
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
-                 AssetImage('images/shoppingCart.png'),
+                AssetImage('images/shoppingCart.png'),
                 size: 25,
               ),
             ),
@@ -342,38 +365,38 @@ Widget bottomNavigationBar(
             label: '',
             icon: const SizedBox(
               height: 53,
-              child:  ImageIcon(
-                 AssetImage('images/searchGrey.png'),
+              child: ImageIcon(
+                AssetImage('images/searchGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
-              ),
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
-                 AssetImage('images/search.png'),
+                AssetImage('images/search.png'),
                 size: 25,
               ),
             ),
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: const  SizedBox(
+            icon: const SizedBox(
               height: 53,
               child: ImageIcon(
-                 AssetImage('images/favouriteGrey.png'),
+                AssetImage('images/favouriteGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border:  Border(top:  BorderSide(color: Colors.white,width: 2))
-              ),
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
-                 AssetImage('images/favourite.png'),
+                AssetImage('images/favourite.png'),
                 size: 25,
               ),
             ),
@@ -387,8 +410,7 @@ Widget bottomNavigationBar(
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
         selectedIconTheme: const IconThemeData(size: 25),
-        unselectedIconTheme:
-        const IconThemeData(color: Colors.grey, size: 25),
+        unselectedIconTheme: const IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
         selectedLabelStyle: const TextStyle(
           fontSize: 0,
@@ -441,59 +463,75 @@ Widget defaultFormField({
       height: 55.0,
       child: InkWell(
         onTap: isClickable == false ? onTap : null,
-        child: TextFormField(
-          controller: controller,
-          keyboardType: type,
-          obscureText: isPassword,
-          enabled: isClickable,
-          onFieldSubmitted: onSubmit,
-          onChanged: onChange,
-          onTap: onTap ?? () {},
-          validator: validate,
-          cursorColor: primeColor,
-          decoration: InputDecoration(
-            labelText: label,
-            hintText: hintText,
-            prefixIcon: prefix != null
-                ? Icon(
-                    prefix,
-                  )
-                : null,
-            hintStyle: const TextStyle(color:  Color(0xFF4F4F4F), fontSize: 14),
-            labelStyle: const TextStyle(color:  Color(0xFF4F4F4F), fontSize: 14),
-            suffixIcon: suffix != null
-                ? IconButton(
-                    onPressed: suffixPressed,
-                    icon: Icon(
-                      suffix,
-                      color: suffixColor,
-                    ),
-                  )
-                : null,
-            fillColor: const Color(0xFF8C8C8C),
-            filled: true,
-            errorStyle: const TextStyle(color: primeColor),
-            floatingLabelStyle: const TextStyle(color: primeColor),
-            contentPadding: const EdgeInsets.only(bottom: 10, right: 15, left: 15),
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            suffixIconColor: primeColor,
+        child: Container(
+          width: double.infinity,
+          padding:
+              const EdgeInsets.only(top: 15, bottom: 12, left: 5, right: 5),
+          decoration: BoxDecoration(
+            color: const Color(0xFF8C8C8C),
+            borderRadius: BorderRadius.circular(15),
           ),
-          style: const TextStyle(color:  Color(0xFF060606), fontSize: 16),
-          readOnly: readOnly,
+          child: TextFormField(
+            controller: controller,
+            keyboardType: type,
+            obscureText: isPassword,
+            enabled: isClickable,
+            onFieldSubmitted: onSubmit,
+            onChanged: onChange,
+            onTap: onTap ?? () {},
+            validator: validate,
+            cursorColor: primeColor,
+            decoration: InputDecoration(
+              labelText: label,
+              hintText: hintText,
+              prefixIcon: prefix != null
+                  ? Icon(
+                      prefix,
+                    )
+                  : null,
+              hintStyle:
+                  const TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
+              labelStyle:
+                  const TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
+              suffixIcon: suffix != null
+                  ? IconButton(
+                      padding: EdgeInsets.only(bottom: 7),
+                      onPressed: suffixPressed,
+                      icon: Icon(
+                        suffix,
+                        color: suffixColor,
+                      ),
+                    )
+                  : null,
+              fillColor: const Color(0xFF8C8C8C),
+              filled: true,
+              errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
+              floatingLabelStyle: const TextStyle(color: Color(0xFF4F4F4F)),
+              contentPadding: const EdgeInsets.only(
+                  bottom: 10, right: 15, left: 15, top: 12),
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              suffixIconColor: primeColor,
+            ),
+            style: TextStyle(
+              fontFamily: 'Lato',
+              color: Colors.grey[900],
+              fontSize: 16,
+            ),
+            readOnly: readOnly,
+          ),
         ),
       ),
     );
 OutlineInputBorder textFormFieldBorder = InputBorder.none;
 
-
-Widget myDivider({double height=30}) => Divider(
-  height: height,
-  thickness: 0.15,
-  color: Colors.grey[300],
-);
+Widget myDivider({double height = 30}) => Divider(
+      height: height,
+      thickness: 0.15,
+      color: Colors.grey[300],
+    );
 
 void navigateTo(context, Widget widget) => Navigator.push(
       context,
@@ -529,13 +567,15 @@ void showToast({
       textColor: Colors.black,
       fontSize: 16.0,
     );
-Widget loaderApp(){
+
+Widget loaderApp() {
   return const SpinKitSpinningLines(
     color: Colors.black87,
     lineWidth: 4,
     size: 60,
   );
 }
+
 showAlertDialog(BuildContext context,
     {Widget alertTitle, String content, onOk}) {
   // set up the button
@@ -546,21 +586,24 @@ showAlertDialog(BuildContext context,
           color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
     ),
     onPressed: onOk ??
-            () {
+        () {
           Navigator.pop(context);
         },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    shape:const RoundedRectangleBorder(
+    shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25.0))),
-    contentPadding:const  EdgeInsets.symmetric(horizontal: 12.0,vertical: 8.0),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
     title: alertTitle ?? const SizedBox(),
     content: Text(
       content,
       textAlign: TextAlign.center,
-      style:  Theme.of(context).textTheme.headline3.copyWith(color: Colors.black87,fontWeight: FontWeight.bold),
+      style: Theme.of(context)
+          .textTheme
+          .headline3
+          .copyWith(color: Colors.black87, fontWeight: FontWeight.bold),
     ),
     actions: [
       okButton,

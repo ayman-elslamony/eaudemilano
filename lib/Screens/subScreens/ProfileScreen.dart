@@ -1,5 +1,7 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/UserProvider.dart';
+import 'package:eaudemilano/Provider/locale_provider.dart';
 
 import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -12,7 +14,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var _locale;
 
+
+  @override
+  void initState() {
+    super.initState();
+    _locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+  }
   Widget showScreenComponent({String titleKey,String imgUrl}){
     return  SizedBox(
       height: 45,
@@ -131,7 +140,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ,showScreenComponent(titleKey: 'addresses',imgUrl: 'images/addresses.png')
                 ,showScreenComponent(titleKey: 'account_details',imgUrl: 'images/accountDetails.png')
              ,myDivider(),
-                defaultTextButton(function: (){}, context: context, textKey: 'logout',textColor: const Color(0xFF7D3030))
+                defaultTextButton(function: (){
+                  Provider.of<UserDataProvider>(context, listen: false)
+                  .logout(context: context,locale: _locale);
+
+                }, context: context, textKey: 'logout',textColor: const Color(0xFF7D3030))
               ],
             ),
           ),

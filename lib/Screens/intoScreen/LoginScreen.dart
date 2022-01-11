@@ -1,8 +1,12 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/UserProvider.dart';
+import 'package:eaudemilano/Provider/locale_provider.dart';
 import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'SignUpScreen.dart';
 
@@ -16,18 +20,45 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var formKey = GlobalKey<FormState>();
-  bool isPassword = false;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  String fcmToken;
+  var _locale;
+  bool isPassword = true;
   bool _emailValidator = false;
   bool _passwordValidator = false;
 
-
+  @override
+  void initState() {
+    super.initState();
+    _locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    firebaseMessaging.getToken().then((token){
+      fcmToken = token;
+    });
+  }
   void changePasswordVisibility()
   {
     setState(() {
       isPassword = !isPassword;
     });
   }
+  void _submit() async {
 
+    final form = formKey.currentState;
+    print(form.validate());
+    print(emailController.text);
+
+    if (form.validate()==true && emailController.text.isNotEmpty&& passwordController.text.isNotEmpty) {
+      form.save();
+      Provider.of<UserDataProvider>(context, listen: false)
+          .login(
+          context: context,
+          locale: _locale,
+          email: emailController.text,
+          password: passwordController.text,
+          fcmToken: fcmToken
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
@@ -78,145 +109,149 @@ class _LoginScreenState extends State<LoginScreen> {
                       topLeft: Radius.circular(15),
                     )),
                     child: SingleChildScrollView(
-                  child: SizedBox(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: media.height * 0.05,
-                        ),
-                        Text(
-                          '${AppLocalizations.of(context).trans('login')}',
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                        SizedBox(height: 50,),
-                        defaultFormField(
-                          label: '${AppLocalizations.of(context).trans('email')}',
-                          onTap: (){
-                            setState(() {
-                              _emailValidator =false;
-                            });
-                          },
-                          controller: emailController,
-                          type: TextInputType.emailAddress,
-                          validate: (String val) {
-                            if(val == null || val.isEmpty){
-                              setState(() {
-                                _emailValidator =true;
-                              });
-                            }
-                            else{
+                  child: Consumer<UserDataProvider>(
+                    builder: (context, userDataState, child) =>  Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: media.height * 0.05,
+                          ),
+                          Text(
+                            '${AppLocalizations.of(context).trans('login')}',
+                            style: Theme.of(context).textTheme.headline1,
+                          ),
+                          SizedBox(height: 50,),
+                          defaultFormField(
+                            label: '${AppLocalizations.of(context).trans('email')}',
+                            onTap: (){
                               setState(() {
                                 _emailValidator =false;
                               });
-                            }
-                            return null;
-                          },
-                        ),
-                        _emailValidator ? Align(
-                          alignment: AppLocalizations.of(context).locale.languageCode == "en" ? Alignment.centerRight : Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                            child: Text('${AppLocalizations.of(context).trans('invalid_email')}',style: TextStyle(color: Colors.red[300],fontSize: 11),),
+                            },
+                            controller: emailController,
+                            type: TextInputType.emailAddress,
+                            validate: (String val) {
+                              if(val == null || val.isEmpty){
+                                setState(() {
+                                  _emailValidator =true;
+                                });
+                              }
+                              else{
+                                setState(() {
+                                  _emailValidator =false;
+                                });
+                              }
+                              return null;
+                            },
                           ),
-                        )
-                            :
-                        const SizedBox(),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                        defaultFormField(
-                          validate: (val){
-                            if(val == null || val.isEmpty){
-                              setState(() {
-                                _passwordValidator =true;
-                              });
-                            }
-                            else{
+                          _emailValidator ? Align(
+                            alignment: AppLocalizations.of(context).locale.languageCode == "en" ? Alignment.centerRight : Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              child: Text('${AppLocalizations.of(context).trans('invalid_email')}',style: TextStyle(color: Colors.red[300],fontSize: 11),),
+                            ),
+                          )
+                              :
+                          const SizedBox(),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          defaultFormField(
+                            validate: (val){
+                              if(val == null || val.isEmpty){
+                                setState(() {
+                                  _passwordValidator =true;
+                                });
+                              }
+                              else{
+                                setState(() {
+                                  _passwordValidator =false;
+                                });
+                              }
+                              return null;
+                            },
+                            onTap: (){
                               setState(() {
                                 _passwordValidator =false;
                               });
-                            }
-                            return null;
-                          },
-                          onTap: (){
-                            setState(() {
-                              _passwordValidator =false;
-                            });
-                          },
+                            },
 
-                          label: '${AppLocalizations.of(context).trans('password')}',
-                          isPassword: isPassword,
-                          suffixPressed: changePasswordVisibility,
-                          suffix: isPassword==true ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                          suffixColor: isPassword==true? Colors.black87:primeColor,
-                          controller: passwordController,
-                          type: TextInputType.text,
-                        ),
-                        _passwordValidator ? Align(
-                          alignment: AppLocalizations.of(context).locale.languageCode == "en" ? Alignment.centerRight : Alignment.centerRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                            child: Text('${AppLocalizations.of(context).trans('invalid_pass')}',style: TextStyle(color: Colors.red[300],fontSize: 11),),
+                            label: '${AppLocalizations.of(context).trans('password')}',
+                            isPassword: isPassword,
+                            suffixPressed: changePasswordVisibility,
+                            suffix: isPassword==true ? Icons.visibility : Icons.visibility_off,
+                            suffixColor:  Colors.black87,
+                            controller: passwordController,
+                            type: TextInputType.text,
                           ),
-                        )
-                            :
-                        const SizedBox(),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Row(
-                          children: [
-                            InkWell(
-                              focusColor: Colors.transparent,
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: defaultSubtitleTextTwo(
-                                  context: context,
-                                  text: '${AppLocalizations.of(context).trans('forgot_pass')}',
-                                  textColor:const Color(0xFFBDBDBD)),
-                              onTap: () {
-                               // navigateTo(context,ForgetPasswordScreen());
-
-                              },
+                          _passwordValidator ? Align(
+                            alignment: AppLocalizations.of(context).locale.languageCode == "en" ? Alignment.centerRight : Alignment.centerRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                              child: Text('${AppLocalizations.of(context).trans('invalid_pass')}',style: TextStyle(color: Colors.red[300],fontSize: 11),),
                             ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20.0,
-                        ),
-                        defaultButton(
-                          text:
-                          '${AppLocalizations.of(context).trans('login')}',
-                          function: () {
-                            navigateTo(context, NavigationHome());
-                            // if (formKey.currentState.validate()) {
-                            //   print(phoneController.text);
-                            //   print(passwordController.text);
-                            // }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            defaultSubtitleTextOne(
-                                context: context,
-                                color:const  Color(0xFFBDBDBD),
-                                text: '${AppLocalizations.of(context).trans('have_no_acc_register')}'),
-                            defaultTextButton(
-                                function: () {
-                                  navigateAndFinish(context, SignUpScreen());
+                          )
+                              :
+                          const SizedBox(),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
+                                focusColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                child: defaultSubtitleTextTwo(
+                                    context: context,
+                                    text: '${AppLocalizations.of(context).trans('forgot_pass')}',
+                                    textColor:const Color(0xFFBDBDBD)),
+                                onTap: userDataState.stage ==
+                                    UserDataProviderStage.LOADING
+                                    ?null:() {
+                                  // navigateTo(context,ForgetPasswordScreen());
+
                                 },
-                                context: context,
-                                textKey: 'sign_up'),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15.0,
-                        ),
-                      ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          userDataState.stage ==
+                              UserDataProviderStage.LOADING
+                              ? loaderApp()
+                              :defaultButton(
+                            text:
+                            '${AppLocalizations.of(context).trans('login')}',
+                            function: _submit,
+                          ),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              defaultSubtitleTextOne(
+                                  context: context,
+                                  color:const  Color(0xFFBDBDBD),
+                                  text: '${AppLocalizations.of(context).trans('have_no_acc_register')}'),
+                              defaultTextButton(
+                                  function:  userDataState.stage ==
+                                      UserDataProviderStage.LOADING
+                                      ?null:() {
+                                    navigateAndFinish(context, SignUpScreen());
+                                  },
+                                  context: context,
+                                  textKey: 'sign_up'),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                     ),

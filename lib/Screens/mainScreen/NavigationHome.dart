@@ -1,7 +1,11 @@
 //import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/CartProvider.dart';
+import 'package:eaudemilano/Provider/FavouriteProvider.dart';
+import 'package:eaudemilano/Provider/HomeProvider.dart';
 import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Provider/locale_provider.dart';
 import 'package:eaudemilano/Screens/subScreens/CheckoutScreen.dart';
 
 import 'package:flutter/material.dart';
@@ -35,7 +39,7 @@ class _NavigationHomeState extends State<NavigationHome> {
     FavouriteScreen(),
   ];
 
-  var _locale;
+  String _locale;
   Map passedData = {};
   var _isInit = true;
   var products;
@@ -62,29 +66,22 @@ class _NavigationHomeState extends State<NavigationHome> {
 //    }
 //  }
 
-  var homeData;
 
-//  @override
-//  void initState() {
-//    super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-//    _locale =
-//        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-//
+    _locale =
+        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+
 //    Provider.of<HomeProvider>(context, listen: false)
-//        .getHomeData(context: context, locale: _locale)
-//        .then((value) {
-//      homeData = Provider.of<HomeProvider>(context, listen: false).homeData;
+//        .getHomeData(context: context, locale: _locale);
 //      Provider.of<CartProvider>(context, listen: false)
-//          .getCartData(context, _locale)
-//          .then((value) {
-//        products = Provider.of<CartProvider>(context, listen: false)
-//            .cart
-//            .products
-//            .length;
+//          .getAllProductsInCartFunction(context: context,locale: _locale).then((value){
+//
 //      });
-//    });
-//  }
+
+  }
   Widget drawerText(
       {BuildContext context,
       String textKey,

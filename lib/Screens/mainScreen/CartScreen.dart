@@ -1,5 +1,8 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/CartProvider.dart';
+import 'package:eaudemilano/Provider/FavouriteProvider.dart';
+import 'package:eaudemilano/Provider/locale_provider.dart';
 
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -14,114 +17,137 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<int> countList = [1,2,3];
+  String _locale;
+
+  @override
+  void initState() {
+    _locale =
+        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    Provider.of<CartProvider>(context, listen: false)
+        .getAllProductsInCartFunction(context: context, locale: _locale);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
-    return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(onPressed: () {
-            openDrawer();
-          }, icon: const ImageIcon(
-             AssetImage('images/drawer.png'),
-          ),),
-          title: Row(
-            children: [
-              Text(
-                '${AppLocalizations.of(context).trans('cart')}',
-                style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                width: 8.0,
-              ),
-              Text(
-                '(3 ${AppLocalizations.of(context).trans('items')})',
-                style: Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.grey[600]
+    return Consumer<CartProvider>(
+      builder: (context, cartProvider, child) => Scaffold(
+          appBar: AppBar(
+            leading: IconButton(onPressed: () {
+              openDrawer();
+            }, icon: const ImageIcon(
+               AssetImage('images/drawer.png'),
+            ),),
+            title: Row(
+              children: [
+                Text(
+                  '${AppLocalizations.of(context).trans('cart')}',
+                  style: Theme.of(context).textTheme.headline3.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  width: 8.0,
+                ),
+                 Text(
+                    cartProvider.allProductsInCartStage ==
+                        GetAllProductsInCartStage.LOADING
+                        ? ''
+                        : '(${cartProvider.getAllProductsInCart.specificProduct.length} ${AppLocalizations.of(context).trans('items')})',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        .copyWith(color: Colors.grey[600]),
+                  ),
+
+              ],
+            ),
+            actions: [
+              InkWell(
+                onTap: (){
+                  navigateAndFinish(context, ProfileScreen());
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                    radius: 18,
+                    child: ClipOval(
+                      child: Image.asset(
+                        "images/profile.png",
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
-          ),
-          actions: [
-            InkWell(
-              onTap: (){
-                navigateAndFinish(context, ProfileScreen());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius: 18,
-                  child: ClipOval(
-                    child: Image.asset(
-                      "images/profile.png",
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
+            bottom: PreferredSize(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        '${AppLocalizations.of(context).trans('total')}:',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3
+                            .copyWith(color: Colors.grey[600]),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        cartProvider.allProductsInCartStage ==
+                            GetAllProductsInCartStage.LOADING
+                            ? ''
+                            :'${cartProvider.totalPrice}\$',
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                              color: Colors.grey[600],
+                            ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-          ],
-          bottom: PreferredSize(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      '${AppLocalizations.of(context).trans('total')}:',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3
-                          .copyWith(color: Colors.grey[600]),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text(
-                      '95\$',
-                      style: Theme.of(context).textTheme.headline4.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              preferredSize: Size(media.width, 38)),
-        ),
-        body: Container(
-          width: media.width,
-          height: media.height*0.8,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          decoration: const BoxDecoration(
-            gradient: const LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color(0xFF060606),
-                Color(0xFF747474),
-              ],
-            ),
+                preferredSize: Size(media.width, 38)),
           ),
-          child: SingleChildScrollView(
-            child: Column(
+          body: Container(
+            width: media.width,
+            height: media.height*0.8,
+            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            decoration: const BoxDecoration(
+              gradient:  LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  Color(0xFF060606),
+                  Color(0xFF747474),
+                ],
+              ),
+            ),
+            child: cartProvider.allProductsInCartStage ==
+                GetAllProductsInCartStage.LOADING?Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 5.0,
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: defaultCard(
-                      titleContent: '2',
-                        title: '455',
-                        subTitle: 'Cool Water EDT',
-                        context: context, currentIndex: index, media: media,
+                loaderApp()
+              ],
+            ): ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => const SizedBox(
+                height: 5.0,
+              ),
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: defaultCard(
+                    titleContent: cartProvider.getAllProductsInCart.specificProduct[index].quantity,
+                    title: cartProvider.getAllProductsInCart.specificProduct[index].price,
+                    subTitle: cartProvider.getAllProductsInCart.specificProduct[index].product.title,
+                    imgUrl: cartProvider.getAllProductsInCart.specificProduct[index].product.image,
+                    context: context, currentIndex: index, media: media,
                     onDeletePressed: (){
                       showDialog(
                           context: context,
@@ -144,10 +170,11 @@ class _CartScreenState extends State<CartScreen> {
                                     Navigator.of(context).pop();
                                   }, textKey: 'cancel',context: context),
                                   defaultButton(function: (){
-                                    setState(() {
-                                      countList.removeAt(index);
-                                      Navigator.of(context).pop();
-                                    });
+//                                    cartProvider.getAllProductsInCart.specificProduct[index].product.id
+//                                    setState(() {
+//                                      countList.removeAt(index);
+//                                      Navigator.of(context).pop();
+//                                    });
 
                                   }, text: '${AppLocalizations.of(context).trans('remove')}',width: 120,)
                                 ],
@@ -155,17 +182,17 @@ class _CartScreenState extends State<CartScreen> {
                             ),
                           ));
                     },
-                    favIconUrl: 'images/fav.png'
-
-                    ),
-                  ),
-                  itemCount: countList.length ,
+                    favIconUrl: cartProvider.getAllProductsInCart.specificProduct[index].favorite=='no'?'images/fav.png':'images/favWithColor.png',
+                  onFavPressed:(){
+                    cartProvider.addToFavouriteOrDelete(locale: _locale,context: context,index: index,);
+                  }
                 ),
-              ],
+              ),
+              itemCount: cartProvider.getAllProductsInCart.specificProduct.length ,
             ),
           ),
-        ),
 
+      ),
     );
   }
 }

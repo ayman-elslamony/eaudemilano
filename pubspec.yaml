@@ -48,6 +48,7 @@ dependencies:
   simple_animations: any
   firebase_messaging: any
   firebase_core: any
+  shimmer: any
 
 dev_dependencies:
   flutter_test:

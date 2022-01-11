@@ -8,12 +8,13 @@ class Helper {
   static String userPhone = '';
   static String userAvatar= '';
   static String token='';
+  static String status='';
 
-  static bool is_verified=false;
-  static bool is_active=false;
-  static String dialCode;
-  static String wallet_balance;
-  static String confirmation_code;
+//  static bool is_verified=false;
+//  static bool is_active=false;
+//  static String dialCode;
+//  static String wallet_balance;
+//  static String confirmation_code;
   static bool is_loggedIn=false;
 
 
@@ -25,13 +26,13 @@ class Helper {
   static String sharedPreferencesUserPhoneInKey = 'UserPhone';
   static String sharedPreferencesUserAvatarInKey = 'UserAvatar';
   static String sharedPreferencesUserTokenInKey = 'UserToken';
-  static String sharedPreferencesIsVerifiedInKey = 'IsVerified';
-  static String sharedPreferencesIsActiveInKey = 'IsActive';
-  static String sharedPreferencesDialCodeInKey = 'DialCode';
-  static String sharedPreferencesConfirmationCodeInKey = 'ConfirmationCode';
-  static String sharedPreferencesNationalitiesInKey = 'Nationalities';
-  static String sharedPreferencesPaymentMethodsInKey = 'PaymentMethods';
-  static String sharedPreferencesWalletBalanceInKey = 'WalletBalance';
+//  static String sharedPreferencesIsVerifiedInKey = 'IsVerified';
+//  static String sharedPreferencesIsActiveInKey = 'IsActive';
+  static String sharedPreferencesUserStatusInKey = 'status';
+//  static String sharedPreferencesConfirmationCodeInKey = 'ConfirmationCode';
+//  static String sharedPreferencesNationalitiesInKey = 'Nationalities';
+//  static String sharedPreferencesPaymentMethodsInKey = 'PaymentMethods';
+//  static String sharedPreferencesWalletBalanceInKey = 'WalletBalance';
 
 
   static Future<bool> saveUserLoggedInSharedPreferences(bool isLoggedIn)async{
@@ -45,31 +46,31 @@ class Helper {
     return await prefs.get(sharedPreferencesUserLoggedInKey);
   }
 
-  // is_verified key
-  static Future<bool> saveUserIsVerifiedInSharedPreferences(bool isVerified)async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
+//  // is_verified key
+//  static Future<bool> saveUserIsVerifiedInSharedPreferences(bool isVerified)async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.setBool(sharedPreferencesIsVerifiedInKey,isVerified);
+//  }
+//
+//  static Future<bool> getUserIsVerifiedInSharedPreferences()async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.get(sharedPreferencesIsVerifiedInKey);
+//  }
 
-    return await prefs.setBool(sharedPreferencesIsVerifiedInKey,isVerified);
-  }
-
-  static Future<bool> getUserIsVerifiedInSharedPreferences()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.get(sharedPreferencesIsVerifiedInKey);
-  }
-
-  // is_active key
-  static Future<bool> saveUserIsActiveInSharedPreferences(bool isActive)async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.setBool(sharedPreferencesIsActiveInKey,isActive);
-  }
-
-  static Future<bool> getUserIsActiveInSharedPreferences()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.get(sharedPreferencesIsActiveInKey);
-  }
+//  // is_active key
+//  static Future<bool> saveUserIsActiveInSharedPreferences(bool isActive)async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.setBool(sharedPreferencesIsActiveInKey,isActive);
+//  }
+//
+//  static Future<bool> getUserIsActiveInSharedPreferences()async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.get(sharedPreferencesIsActiveInKey);
+//  }
 
   // user_id
   static Future<bool> saveUserIdInSharedPreferences(int userId)async{
@@ -84,44 +85,44 @@ class Helper {
     return await prefs.get(sharedPreferencesUserIdInKey);
   }
 
-  // DialCode key
-  static Future<bool> saveDialCodeInSharedPreferences(String dialCode)async{
+  // userStatus key
+  static Future<bool> saveUserStatusInSharedPreferences(String status)async{
     SharedPreferences prefs= await SharedPreferences.getInstance();
 
-    return await prefs.setString(sharedPreferencesDialCodeInKey,dialCode);
+    return await prefs.setString(sharedPreferencesUserStatusInKey,status);
   }
 
-  static Future<String> getDialCodeInSharedPreferences()async{
+  static Future<String> getUserStatusInSharedPreferences()async{
     SharedPreferences prefs= await SharedPreferences.getInstance();
 
-    return await prefs.get(sharedPreferencesDialCodeInKey);
+    return await prefs.get(sharedPreferencesUserStatusInKey);
   }
 
-  // wallet_balance key
-  static Future<bool> saveWalletBalanceInSharedPreferences(String balance)async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.setString(sharedPreferencesWalletBalanceInKey,balance);
-  }
-
-  static Future<String> getWalletBalanceInSharedPreferences()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.get(sharedPreferencesWalletBalanceInKey);
-  }
+//  // wallet_balance key
+//  static Future<bool> saveWalletBalanceInSharedPreferences(String balance)async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.setString(sharedPreferencesWalletBalanceInKey,balance);
+//  }
+//
+//  static Future<String> getWalletBalanceInSharedPreferences()async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.get(sharedPreferencesWalletBalanceInKey);
+//  }
 
  // Confirmation code key
-  static Future<bool> saveConfirmationCodeInSharedPreferences(String code)async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.setString(sharedPreferencesConfirmationCodeInKey,code);
-  }
-
-  static Future<String> getConfirmationCodeInSharedPreferences()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-
-    return await prefs.get(sharedPreferencesConfirmationCodeInKey);
-  }
+//  static Future<bool> saveConfirmationCodeInSharedPreferences(String code)async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.setString(sharedPreferencesConfirmationCodeInKey,code);
+//  }
+//
+//  static Future<String> getConfirmationCodeInSharedPreferences()async{
+//    SharedPreferences prefs= await SharedPreferences.getInstance();
+//
+//    return await prefs.get(sharedPreferencesConfirmationCodeInKey);
+//  }
 
   // user_token
   static Future<bool> saveUserTokenInSharedPreferences(String token)async{

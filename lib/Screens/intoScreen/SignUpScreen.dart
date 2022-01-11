@@ -22,7 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var confirmPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   var _locale;
-  bool isPassword = false;
+  bool isPassword = true;
   bool _nameValidator = false;
   bool _emailValidator = false;
   bool _mobileValidator = false;
@@ -50,10 +50,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _submit() async {
     final form = formKey.currentState;
-    if (form.validate()) {
+    if (form.validate() &&
+        emailController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        mobileController.text.isNotEmpty &&
+        confirmPasswordController.text.isNotEmpty) {
       form.save();
-      Provider.of<UserDataProvider>(context, listen: false)
-          .register(
+      Provider.of<UserDataProvider>(context, listen: false).register(
           context: context,
           locale: _locale,
           name: nameController.text,
@@ -61,9 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: emailController.text,
           fcmToken: fcmToken,
           password: passwordController.text,
-        password_confirmation: confirmPasswordController.text
-         );
-
+          password_confirmation: confirmPasswordController.text);
     }
   }
 
@@ -294,11 +295,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   isPassword: isPassword,
                                   suffixPressed: changePasswordVisibility,
                                   suffix: isPassword == true
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
-                                  suffixColor: isPassword == true
-                                      ? Colors.black87
-                                      : primeColor,
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  suffixColor: Colors.black87,
                                   controller: passwordController,
                                   type: TextInputType.text,
                                 ),
@@ -327,7 +326,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 defaultFormField(
                                   validate: (val) {
-                                    if (val == null || val.isEmpty || val != passwordController.text) {
+                                    if (val == null ||
+                                        val.isEmpty ||
+                                        val != passwordController.text) {
                                       setState(() {
                                         _confirmPasswordValidator = true;
                                       });

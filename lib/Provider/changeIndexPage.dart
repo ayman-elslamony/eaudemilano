@@ -5,7 +5,7 @@ import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:provider/provider.dart';
 
 class ChangeIndex with ChangeNotifier {
-  int index =0;
+  int index =3;
     int current;
   void changeIndexFunction(int index) {
     this.index = index;

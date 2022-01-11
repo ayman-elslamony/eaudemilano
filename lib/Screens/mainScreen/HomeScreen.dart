@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           InkWell(
             onTap: () {
-              navigateAndFinish(context, ProfileScreen());
+              navigateTo(context, ProfileScreen());
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
