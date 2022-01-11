@@ -1,5 +1,6 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/CartProvider.dart';
 import 'package:eaudemilano/Provider/FavouriteProvider.dart';
 import 'package:eaudemilano/Provider/locale_provider.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
@@ -17,13 +18,21 @@ class FavouriteScreen extends StatefulWidget {
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
   String _locale;
-
+  var cartProvider;
   @override
   void initState() {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-    Provider.of<FavouriteProvider>(context, listen: false)
-        .getAllProductsInFavouriteFunction(context: context, locale: _locale);
+
+    if( Provider.of<FavouriteProvider>(context, listen: false)
+        .getAllProductsInFavourite == null) {
+      Provider.of<FavouriteProvider>(context, listen: false)
+          .getAllProductsInFavouriteFunction(context: context, locale: _locale);
+    }
+
+    cartProvider = Provider.of<CartProvider>(
+        context,
+        listen: false);
     super.initState();
   }
 
@@ -102,107 +111,106 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             ),
           ),
           child: Consumer<FavouriteProvider>(
-            builder: (context, favouriteProvider, child) =>  favouriteProvider.allProductsInFavouriteStage ==
-                          GetAllProductsInFavouriteStage.LOADING
-                      ?Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                loaderApp()
-              ],
-            ): ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 5.0,
-                          ),
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: defaultCard(
-                                titleContent: '',
-                                imgUrl: favouriteProvider
-                                    .getAllProductsInFavourite
-                                    .products[index]
-                                    .productDetails
-                                    .image,
-                                title: favouriteProvider
-                                    .getAllProductsInFavourite
-                                    .products[index]
-                                    .productDetails
-                                    .price,
-                                subTitle: favouriteProvider
-                                    .getAllProductsInFavourite
-                                    .products[index]
-                                    .productDetails
-                                    .title,
+            builder: (context, favouriteProvider, child) => favouriteProvider
+                        .allProductsInFavouriteStage ==
+                    GetAllProductsInFavouriteStage.LOADING
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [loaderApp()],
+                  )
+                : ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 5.0,
+                    ),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: defaultCard(
+                          titleContent: '',
+                          imgUrl: favouriteProvider.getAllProductsInFavourite
+                              .products[index].productDetails.image,
+                          title: favouriteProvider.getAllProductsInFavourite
+                              .products[index].productDetails.price,
+                          subTitle: favouriteProvider.getAllProductsInFavourite
+                              .products[index].productDetails.title,
+                          context: context,
+                          currentIndex: index,
+                          media: media,
+                          justEnableDeleteIcon: true,
+                          isEnabledReload: favouriteProvider
+                              .getAllProductsInFavourite
+                              .products[index]
+                              .productDetails
+                              .enableLoader,
+                          onDeletePressed: () {
+                            showDialog(
                                 context: context,
-                                currentIndex: index,
-                                media: media,
-                                justEnableDeleteIcon: true,
-                                onDeletePressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                            title: Text(
-                                              '${AppLocalizations.of(context).trans('remove_item')}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline3
-                                                  .copyWith(
-                                                      color: Colors.black87,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(25.0))),
-                                            contentPadding:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 18),
-                                            content: SizedBox(
-                                              height: 80,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const SizedBox(),
-                                                  defaultTextButton(
-                                                      function: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      textKey: 'cancel',
-                                                      context: context),
-                                                  defaultButton(
-                                                    function: () {
-//                                      favouriteProvider.getAllProductsInFavourite.products[index].productDetails.
-//                                                      setState(() {
-//                                                        countList
-//                                                            .removeAt(index);
-//                                                        Navigator.of(context)
-//                                                            .pop();
-//                                                      });
-                                                    },
-                                                    text:
-                                                        '${AppLocalizations.of(context).trans('remove')}',
-                                                    width: 120,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ));
-                                },
-                              ),
-                            );
+                                builder: (context) => AlertDialog(
+                                      title: Text(
+                                        '${AppLocalizations.of(context).trans('remove_item')}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            .copyWith(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(25.0))),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 18),
+                                      content: SizedBox(
+                                        height: 80,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const SizedBox(),
+                                            defaultTextButton(
+                                                function: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                textKey: 'cancel',
+                                                context: context),
+                                            defaultButton(
+                                              function: () async {
+                                                Navigator.of(context).pop();
+                                                int id =  favouriteProvider
+                                                    .getAllProductsInFavourite
+                                                    .products[index]
+                                                    .productDetails
+                                                    .id;
+                                                await favouriteProvider
+                                                    .removeFromFavourite(
+                                                        locale: _locale,
+                                                        context: context,
+                                                        index: index,
+                                                        id: id);
+                                                cartProvider.removeFavouriteProductInCart(
+                                                  id:id
+                                                        );
+                                              },
+                                              text:
+                                                  '${AppLocalizations.of(context).trans('remove')}',
+                                              width: 120,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ));
                           },
-                          itemCount: favouriteProvider
-                              .getAllProductsInFavourite.products.length,
                         ),
+                      );
+                    },
+                    itemCount: favouriteProvider
+                        .getAllProductsInFavourite.products.length,
+                  ),
           ),
         ));
   }

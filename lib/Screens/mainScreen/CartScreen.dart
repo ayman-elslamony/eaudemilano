@@ -23,8 +23,11 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-    Provider.of<CartProvider>(context, listen: false)
-        .getAllProductsInCartFunction(context: context, locale: _locale);
+    if( Provider.of<CartProvider>(context, listen: false)
+        .getAllProductsInCart== null) {
+      Provider.of<CartProvider>(context, listen: false)
+          .getAllProductsInCartFunction(context: context, locale: _locale);
+    }
     super.initState();
   }
   @override

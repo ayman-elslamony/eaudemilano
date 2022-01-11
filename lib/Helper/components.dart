@@ -166,6 +166,7 @@ Widget defaultCard(
         String favIconUrl = '',
         bool justEnableDeleteIcon = false,
         Function onFavPressed,
+          bool isEnabledReload=false,
         Function onDeletePressed}) =>
     InkWell(
       onTap: () {
@@ -211,16 +212,16 @@ Widget defaultCard(
                     favIconUrl: favIconUrl),
             justEnableDeleteIcon == true
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 12),
                     child: Column(
 //    crossAxisAlignment: CrossAxisAlignment.start,
 //    mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        InkWell(
+                        isEnabledReload? loaderApp(loaderSize: 35):InkWell(
                           onTap: onDeletePressed,
                           child: const ImageIcon(
                             AssetImage('images/delete.png'),
-                            size: 17,
+                            size: 18,
                             color: Color(0xFF7D3030),
                           ),
                         ),
@@ -568,11 +569,11 @@ void showToast({
       fontSize: 16.0,
     );
 
-Widget loaderApp() {
-  return const SpinKitSpinningLines(
+Widget loaderApp({double loaderSize=60}) {
+  return  SpinKitSpinningLines(
     color: Colors.black87,
     lineWidth: 4,
-    size: 60,
+    size: loaderSize,
   );
 }
 

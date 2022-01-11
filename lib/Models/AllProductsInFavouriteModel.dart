@@ -7,8 +7,8 @@ class AllProductsInFavourite {
 
   AllProductsInFavourite.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
+    products = <SpecificProductInFav>[];
     if (json['data'] != null) {
-      products = <SpecificProductInFav>[];
       json['data'].forEach((v) {
         products.add(SpecificProductInFav.fromJson(v));
       });
@@ -35,6 +35,7 @@ class SpecificProductInFav {
 
 class ProductDetails {
   int  id;
+  bool enableLoader;
   String  title;
   String  priceBeforeDiscount;
   String  price;
@@ -49,6 +50,7 @@ class ProductDetails {
         this.price,
         this.sizeId,
         this.image,
+        this.enableLoader = false,
         this.sizeName});
 
   ProductDetails.fromJson(Map<String, dynamic> json) {
@@ -59,6 +61,7 @@ class ProductDetails {
     sizeId = json['size_id'];
     image = json['image'];
     sizeName = json['size_name'];
+    enableLoader = false;
   }
   
 }

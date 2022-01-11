@@ -7,8 +7,10 @@ import 'package:eaudemilano/Models/AllBestSellingModel.dart';
 import 'package:eaudemilano/Models/AllProductsInCartModel.dart';
 import 'package:eaudemilano/Models/AllProductsInFavouriteModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
+import 'CartProvider.dart';
 
 enum GetAllProductsInFavouriteStage { ERROR, LOADING, DONE }
 
@@ -27,6 +29,7 @@ class FavouriteProvider extends ChangeNotifier {
   AllProductsInFavourite get getAllProductsInFavourite => _allProductsInFavourite;
 
   Future<void> getAllProductsInFavouriteFunction({context, locale}) async {
+
     this.allProductsInFavouriteStage = GetAllProductsInFavouriteStage.LOADING;
    // notifyListeners();
     String url = '$domain/api/user/favorite';
@@ -53,6 +56,12 @@ class FavouriteProvider extends ChangeNotifier {
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _allProductsInFavourite = AllProductsInFavourite.fromJson(responseJson['data']);
+        }else{
+          _allProductsInFavourite = AllProductsInFavourite(
+            products:[],
+            currentPage: 0,
+            totalProducts: 0
+          );
         }
         print(_allProductsInFavourite.products.length.toString());
         this.allProductsInFavouriteStage = GetAllProductsInFavouriteStage.DONE;
@@ -73,4 +82,50 @@ class FavouriteProvider extends ChangeNotifier {
   }
 
 
+  checkIsFavourite(int index){
+    if(_allProductsInFavourite.products[index].productDetails.enableLoader == false ){
+      _allProductsInFavourite.products[index].productDetails.enableLoader = true;
+    }else{
+      _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+    }
+  }
+
+  Future<void> removeFromFavourite({context, locale,int index,int id})async{
+    _allProductsInFavourite.products[index].productDetails.enableLoader = true;
+    notifyListeners();
+    String url = '$domain/api/user/add-to-favorite/$id';
+    await getUserToken();
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'api_password': apiPassword,
+      'Authorization': 'Bearer $_token',
+      'language': locale.toString()
+    };
+    try {
+      Dio dio = Dio();
+      Response response = await dio.get(url,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print('responseJson');
+      print(responseJson);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+        print('ddcf');
+        _allProductsInFavourite.products.removeAt(index);
+        notifyListeners();
+      }
+      else {
+        _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+      notifyListeners();
+      print(e);
+      throw e;
+    }
+  }
 }

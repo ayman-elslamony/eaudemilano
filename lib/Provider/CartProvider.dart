@@ -25,50 +25,71 @@ class CartProvider extends ChangeNotifier {
   GetAllProductsInCartStage allProductsInCartStage;
   AllProductsInCart _allProductsInCart;
 
+  Future<void> removeFavouriteProductInCart({int id})async {
+    print(id);
+
+    if(_allProductsInCart!=null){
+      if(_allProductsInCart.specificProduct.isNotEmpty){
+    print('1');
+    for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
+      print('2');
+      if (_allProductsInCart.specificProduct[i].id == id) {
+        _allProductsInCart.specificProduct[i].favorite = 'no';
+        notifyListeners();
+      }
+    }
+  }}
+
+  }
+
+
   AllProductsInCart get getAllProductsInCart => _allProductsInCart;
 
   Future<void> getAllProductsInCartFunction({context, locale}) async {
-    this.allProductsInCartStage = GetAllProductsInCartStage.LOADING;
-    String url = '$domain/api/user/cart';
-    await getUserToken();
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'api_password': apiPassword,
-      'Authorization': 'Bearer $_token',
-      'language': locale.toString()
-    };
-    try {
-      Dio dio = Dio();
-      Response response = await dio.get(url,
-          options: Options(
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: headers));
-      var responseJson = response.data;
-      print('responseJson');
-      print(responseJson['data']);
-      if (response.statusCode == 200 && responseJson["status"] == true) {
-        if (responseJson['data'] != null) {
-          _allProductsInCart = AllProductsInCart.fromJson(responseJson['data']);
+
+      this.allProductsInCartStage = GetAllProductsInCartStage.LOADING;
+      String url = '$domain/api/user/cart';
+      await getUserToken();
+      var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api_password': apiPassword,
+        'Authorization': 'Bearer $_token',
+        'language': locale.toString()
+      };
+      try {
+        Dio dio = Dio();
+        Response response = await dio.get(url,
+            options: Options(
+                followRedirects: false,
+                validateStatus: (status) => true,
+                headers: headers));
+        var responseJson = response.data;
+        print('responseJson');
+        print(responseJson['data']);
+        if (response.statusCode == 200 && responseJson["status"] == true) {
+          if (responseJson['data'] != null) {
+            _allProductsInCart =
+                AllProductsInCart.fromJson(responseJson['data']);
+          }
+          print(_allProductsInCart.specificProduct.length.toString());
+          await getTotalPrice();
+          this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
+          notifyListeners();
+        } else {
+          print('D');
+          this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
+          var errors = responseJson['message'];
+          showAlertDialog(context, content: '$errors');
+          notifyListeners();
         }
-        print(_allProductsInCart.specificProduct.length.toString());
-        await getTotalPrice();
-        this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
-        notifyListeners();
-      } else {
-        print('D');
+      } catch (e) {
         this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
-        var errors = responseJson['message'];
-        showAlertDialog(context, content: '$errors');
         notifyListeners();
+        print(e);
+        throw e;
       }
-    } catch (e) {
-      this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
-      notifyListeners();
-      print(e);
-      throw e;
-    }
+
   }
 
   double _totalPrice=0;
