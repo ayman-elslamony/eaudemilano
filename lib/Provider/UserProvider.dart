@@ -22,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum UserDataProviderStage { ERROR, LOADING, DONE }
+enum GetUpdateUserDataStage { ERROR, LOADING, DONE }
 
 class UserDataProvider extends ChangeNotifier {
   UserDataProviderStage stage;
@@ -112,7 +113,46 @@ class UserDataProvider extends ChangeNotifier {
   }
 
 
+  verifyUser({String locale, context,token})async{
+    String url = '$domain/api/verify-user';
 
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'api_password': apiPassword,
+      'Authorization': 'Bearer $token',
+      'language': locale.toString()
+    };
+    var formData = FormData.fromMap({
+      'code': '123456',
+    });
+    try {
+      Dio dio = Dio();
+      Response response = await dio.post(url,
+          data: formData,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print('responseJson');
+        print(responseJson);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+        print('success');
+      }
+//      else {
+//        print('D');
+//        this.stage = UserDataProviderStage.ERROR;
+//        var errors = responseJson['message'];
+//        showAlertDialog(context,
+//            content: '$errors' );
+//        notifyListeners();
+//      }
+    } catch (e) {
+      print(e);
+//      throw e;
+    }
+  }
 // Register Request
   Future<void> register({
     context,
@@ -156,7 +196,12 @@ class UserDataProvider extends ChangeNotifier {
 
       if (response.statusCode == 200 && responseJson["status"] == true) {
 
+       // if(responseJson["message"]== "تم تسجيل عضوية بنجاح برجاء فحص البريد الألكتروني لتاكيد عضويتك" ){
 
+
+       // }
+         await verifyUser(context: context,locale: locale,token: responseJson['user']["api_token"]);
+         print('uuuuuuuuuuu');
         Helper.saveUserLoggedInSharedPreferences(true);
         Helper.saveUserIdInSharedPreferences(
             responseJson['user']["id"]);
@@ -213,6 +258,92 @@ class UserDataProvider extends ChangeNotifier {
 
   }
 
+
+  GetUpdateUserDataStage updateUserDataStage;
+  // Update Profile Request
+  Future<void> UpdateProfile({
+    context,
+    locale,
+    name,
+    email,
+    phone,
+    password,
+    fcmToken,
+  }) async {
+    this.updateUserDataStage = GetUpdateUserDataStage.LOADING;
+    notifyListeners();
+    String url = '$domain/api/update-profile';
+    String token='';
+    if (token == '') {
+      token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
+    }
+    print(token);
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+      'api_password': apiPassword,
+      'language': locale.toString()
+    };
+
+    var formData = FormData.fromMap({
+      'name': name,
+      'email': email,
+      'mobile': phone,
+      'password': password,
+      'fcm_token': fcmToken,
+    });
+
+    try {
+      Dio dio = Dio();
+      Response response = await dio.post(url,
+          data: formData,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print(responseJson);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+        Helper.saveUsernameInSharedPreferences(
+            responseJson['user']["name"]);
+        Helper.saveUserEmailInSharedPreferences(
+            responseJson['user']["email"]);
+        Helper.saveUserPhoneInSharedPreferences(
+            responseJson['user']["mobile"]);
+        Helper.saveUserTokenInSharedPreferences(
+            responseJson['user']["api_token"]);
+            if(responseJson['user']["api_token"]==token){
+              print('Is Ok');
+            }
+        await Provider.of<UserDataProvider>(context, listen: false)
+            .getUserData();
+        await showAlertDialog(context,
+            onOk: ()async{
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            content: responseJson['message'] );
+
+        this.updateUserDataStage = GetUpdateUserDataStage.DONE;
+        notifyListeners();
+      } else {
+        print('D');
+        this.updateUserDataStage = GetUpdateUserDataStage.ERROR;
+        var errors = responseJson['message'];
+        showAlertDialog(context,
+            content: '$errors' );
+        notifyListeners();
+      }
+    } catch (e) {
+      this.updateUserDataStage = GetUpdateUserDataStage.ERROR;
+      notifyListeners();
+      print(e);
+      throw e;
+    }
+
+  }
+
 // Logout
   logout({context, locale,}) async {
     this.stage = UserDataProviderStage.LOADING;
@@ -247,7 +378,6 @@ class UserDataProvider extends ChangeNotifier {
         this.stage = UserDataProviderStage.DONE;
         navigateAndFinish(context,LoginScreen());
       } else {
-
         await prefs.clear();
         this.stage = UserDataProviderStage.DONE;
         navigateAndFinish(context,LoginScreen());
@@ -601,5 +731,7 @@ class UserDataProvider extends ChangeNotifier {
 //    // }
 //    notifyListeners();
 //  }
+
+
 
 }

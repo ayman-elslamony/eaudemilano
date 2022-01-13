@@ -69,23 +69,25 @@ class _CartScreenState extends State<CartScreen> {
             ),
             actions: [
               InkWell(
-                onTap: (){
-                  navigateAndFinish(context, ProfileScreen());
+                onTap: () {
+                  navigateTo(context, ProfileScreen());
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(12.0),
                   child: CircleAvatar(
+                    backgroundColor: Colors.transparent,
                     radius: 18,
                     child: ClipOval(
                       child: Image.asset(
-                        "images/profile.png",
-                        width: double.infinity,
+                        'images/user.png',
+                        color: primeColor,
+                        width: 24,
                         fit: BoxFit.fill,
                       ),
                     ),
                   ),
                 ),
-              ),
+              )
             ],
             bottom: PreferredSize(
                 child: Padding(

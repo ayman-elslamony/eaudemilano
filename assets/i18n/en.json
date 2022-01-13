@@ -14,7 +14,7 @@
   "login": "Login",
   "ok": "ok",
   "similar_product": "There are no similar products",
-
+  "language_switch": "Change To Arabic Language",
   "There_is_no_result": "There is no result",
   "have_an_account": "Have an account?",
   "cart": "Cart",
@@ -35,7 +35,7 @@
   "profile": "Profile",
   "orders": "Orders",
   "addresses": "Addresses",
-  "account_details": "Account Details",
+  "edit_profile": "Update Profile",
   "logout": "Logout",
   "similar_products": "Similar Products",
   "choose": "Choose:",
@@ -76,5 +76,7 @@
   "phone_num": "Phone Number",
   "invalid_name": "Please Enter User Name",
   "invalid_phone_num": "Please Enter Phone Number",
-  "regist": "Register"
+  "regist": "Register",
+  "edit_profile_now": "Update Now"
+
 }

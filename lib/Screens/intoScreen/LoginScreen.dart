@@ -197,27 +197,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(
                             height: 10.0,
                           ),
-                          Row(
-                            children: [
-                              InkWell(
-                                focusColor: Colors.transparent,
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                child: defaultSubtitleTextTwo(
-                                    context: context,
-                                    text: '${AppLocalizations.of(context).trans('forgot_pass')}',
-                                    textColor:const Color(0xFFBDBDBD)),
-                                onTap: userDataState.stage ==
-                                    UserDataProviderStage.LOADING
-                                    ?null:() {
-                                  // navigateTo(context,ForgetPasswordScreen());
-
-                                },
-                              ),
-                            ],
-                          ),
+//                          Row(
+//                            children: [
+//                              InkWell(
+//                                focusColor: Colors.transparent,
+//                                splashColor: Colors.transparent,
+//                                highlightColor: Colors.transparent,
+//                                child: defaultSubtitleTextTwo(
+//                                    context: context,
+//                                    text: '${AppLocalizations.of(context).trans('forgot_pass')}',
+//                                    textColor:const Color(0xFFBDBDBD)),
+//                                onTap: userDataState.stage ==
+//                                    UserDataProviderStage.LOADING
+//                                    ?null:() {
+//                                  // navigateTo(context,ForgetPasswordScreen());
+//
+//                                },
+//                              ),
+//                            ],
+//                          ),
                           const SizedBox(
-                            height: 20.0,
+                            height: 25.0,
                           ),
                           userDataState.stage ==
                               UserDataProviderStage.LOADING

@@ -12,11 +12,12 @@ import 'FavouriteProvider.dart';
 
 enum GetProductViewStage { ERROR, LOADING, DONE }
 enum GetProductViewSize { NOTSELECTED, SIZEONE, SIZEtWO}
+enum GetAddProductToCartStage { ERROR, LOADING, DONE }
 
 
 class ViewProductProvider extends ChangeNotifier {
   String _token = '';
-  String idOfSelectedSizeProduct;
+  String idOfSelectedSizeProduct='';
 List<bool> isSelectedSizeOFProduct=[];
   Future<void> getUserToken() async {
     if (_token == '') {
@@ -114,6 +115,62 @@ List<bool> isSelectedSizeOFProduct=[];
     }
   }
 
+
+  GetAddProductToCartStage addProductToCartStage;
+  Future<void> addProductToCart({context, locale,int productId})async{
+    this.addProductToCartStage = GetAddProductToCartStage.LOADING;
+    notifyListeners();
+    String url = '$domain/api/user/add-to-cart';
+    await getUserToken();
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'api_password': apiPassword,
+      'Authorization': 'Bearer $_token',
+      'language': locale.toString()
+    };
+
+    var formData = FormData.fromMap({
+      'product_id': productId.toString(),
+      'size_id': idOfSelectedSizeProduct,
+      'quantity': _currentCount.toString(),
+    });
+    try {
+      Dio dio = Dio();
+      Response response = await dio.post(url,
+          data: formData,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print('responseJson');
+      print(responseJson['data']);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+        showAlertDialog(context, content: responseJson['message']);
+//        if (responseJson['message'] != null) {
+//
+//
+//        }
+//        print(_allProductsInCart.specificProduct.length.toString());
+//        await getAllProductsInCartFunction(locale: locale,context: context);
+//        await getTotalPrice();
+        this.addProductToCartStage = GetAddProductToCartStage.DONE;
+        notifyListeners();
+      } else {
+        print('D');
+        var errors = responseJson['message'];
+        showAlertDialog(context, content: '$errors');
+        this.addProductToCartStage = GetAddProductToCartStage.ERROR;
+        notifyListeners();
+      }
+    } catch (e) {
+      this.addProductToCartStage = GetAddProductToCartStage.ERROR;
+      notifyListeners();
+      print(e);
+      throw e;
+    }
+  }
 void selectProductSize(int index,) {
   idOfSelectedSizeProduct = _productView.productDetailsSizes[index].sizeId;
     int length = isSelectedSizeOFProduct.length;

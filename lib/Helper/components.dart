@@ -319,7 +319,7 @@ Widget bottomNavigationBar(
     @required int currentIndex,
     @required Function onTap}) {
   return Container(
-    decoration: const BoxDecoration(
+    decoration:const  BoxDecoration(
       color: Colors.transparent,
       borderRadius: BorderRadius.only(
         topRight: Radius.circular(12),
@@ -336,7 +336,7 @@ Widget bottomNavigationBar(
 //                    ],
     ),
     child: ClipRRect(
-      borderRadius: const BorderRadius.only(
+      borderRadius:const BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),
@@ -344,9 +344,9 @@ Widget bottomNavigationBar(
         elevation: 0.0,
         items: [
           BottomNavigationBarItem(
-            icon: Container(
+            icon: const SizedBox(
               height: 53,
-              child: const ImageIcon(
+              child: ImageIcon(
                 AssetImage('images/homeGrey.png'),
                 size: 25,
               ),
@@ -354,10 +354,11 @@ Widget bottomNavigationBar(
             label: '',
             activeIcon: Container(
               height: 53,
-              decoration: const BoxDecoration(
-                  border:
-                      Border(top: BorderSide(color: Colors.white, width: 2))),
-              child: const ImageIcon(
+              decoration:const  BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: Colors.white, width: 2))),
+              child:const  ImageIcon(
                 AssetImage('images/home.png'),
                 size: 25,
               ),
@@ -365,19 +366,20 @@ Widget bottomNavigationBar(
           ),
           BottomNavigationBarItem(
             label: '',
-            icon: Container(
+            icon: const SizedBox(
               height: 53,
-              child: const ImageIcon(
+              child: ImageIcon(
                 AssetImage('images/shoppingCartGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration: const BoxDecoration(
-                  border:
-                      Border(top: BorderSide(color: Colors.white, width: 2))),
-              child: const ImageIcon(
+              decoration:const  BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: Colors.white, width: 2))),
+              child:const  ImageIcon(
                 AssetImage('images/shoppingCart.png'),
                 size: 25,
               ),
@@ -395,8 +397,9 @@ Widget bottomNavigationBar(
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border:
-                      Border(top: BorderSide(color: Colors.white, width: 2))),
+                  border: Border(
+                      top: BorderSide(
+                          color: Colors.white, width: 2))),
               child: const ImageIcon(
                 AssetImage('images/search.png'),
                 size: 25,
@@ -407,16 +410,17 @@ Widget bottomNavigationBar(
             label: '',
             icon: const SizedBox(
               height: 53,
-              child: ImageIcon(
+              child:  ImageIcon(
                 AssetImage('images/favouriteGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration: const BoxDecoration(
-                  border:
-                      Border(top: BorderSide(color: Colors.white, width: 2))),
+              decoration:const  BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: Colors.white, width: 2))),
               child: const ImageIcon(
                 AssetImage('images/favourite.png'),
                 size: 25,
@@ -431,13 +435,14 @@ Widget bottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
-        selectedIconTheme: const IconThemeData(size: 25),
-        unselectedIconTheme: const IconThemeData(color: Colors.grey, size: 25),
+        selectedIconTheme:const  IconThemeData(size: 25),
+        unselectedIconTheme:
+        const  IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
-        selectedLabelStyle: const TextStyle(
+        selectedLabelStyle:const  TextStyle(
           fontSize: 0,
         ),
-        unselectedLabelStyle: const TextStyle(
+        unselectedLabelStyle:const  TextStyle(
           fontSize: 0,
         ),
       ),
@@ -560,8 +565,10 @@ Widget myDivider({double height = 30}) => Divider(
 
 void navigateTo(context, Widget widget) => Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => widget,
+  PageRouteBuilder(
+    pageBuilder: (context,animation1, animation2) => widget,
+    transitionDuration:
+    const Duration(milliseconds: 1000),
       ),
     );
 
@@ -571,8 +578,10 @@ void navigateAndFinish(
 ) =>
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (context) => widget,
+      PageRouteBuilder(
+        pageBuilder: (context,animation1, animation2) => widget,
+        transitionDuration:
+        const Duration(milliseconds: 1000),
       ),
       (route) {
         return false;

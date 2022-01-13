@@ -96,58 +96,8 @@ class CartProvider extends ChangeNotifier {
   }}
 
   }
-  Future<void> addProductToCart({context, locale,SpecificProductInCart product})async{
-    String url = '$domain/api/user/add-to-cart';
-    await getUserToken();
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'api_password': apiPassword,
-      'Authorization': 'Bearer $_token',
-      'language': locale.toString()
-    };
 
-    var formData = FormData.fromMap({
-      'product_id': product.id,
-      'size_id': product.sizeId,
-      'quantity': product.quantity,
-    });
-    try {
-      Dio dio = Dio();
-      Response response = await dio.post(url,
-          data: formData,
-          options: Options(
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: headers));
-      var responseJson = response.data;
-      print('responseJson');
-      print(responseJson['data']);
-      if (response.statusCode == 200 && responseJson["status"] == true) {
-        showAlertDialog(context, content: responseJson['message']);
-//        if (responseJson['message'] != null) {
-//
-//
-//        }
-//        print(_allProductsInCart.specificProduct.length.toString());
-//        await getAllProductsInCartFunction(locale: locale,context: context);
-//        await getTotalPrice();
-        this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
-        notifyListeners();
-      } else {
-        print('D');
-        this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
-        var errors = responseJson['message'];
-        showAlertDialog(context, content: '$errors');
-        notifyListeners();
-      }
-    } catch (e) {
-      this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
-      notifyListeners();
-      print(e);
-      throw e;
-    }
-  }
+
 Future<void> removeProductFromCart({context, locale,int ProductId})async{
     String url = '$domain/api/user/remove-from-cart/$ProductId';
     await getUserToken();

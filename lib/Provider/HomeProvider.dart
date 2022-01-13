@@ -22,15 +22,16 @@ enum GetCategorieDetailsStage { ERROR, LOADING, DONE }
 enum GetPopularCategoriesStageStage { ERROR, LOADING, DONE }
 enum GetSomeBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllBestSellingStage { ERROR, LOADING, DONE }
+enum GetAllOrdersStage { ERROR, LOADING, DONE }
 
 class HomeProvider extends ChangeNotifier {
 
   GetHomeStage homeStage;
 
-  String token = '';
+  String _token = '';
   Future<void> getUserToken() async {
-    if (token == '') {
-      token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
+    if (_token == '') {
+      _token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
     }
   }
 
@@ -72,7 +73,7 @@ if(enableNotify) {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'api_password': apiPassword,
-        'Authorization': token,
+        'Authorization': 'Bearer $_token',
         'language': locale.toString()
       };
       try {
@@ -125,7 +126,7 @@ if(enableNotify) {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'api_password': apiPassword,
-      'Authorization': token,
+      'Authorization': 'Bearer $_token',
       'language': locale.toString()
     };
     try {
@@ -172,7 +173,7 @@ if(enableNotify) {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'api_password': apiPassword,
-      'Authorization': token,
+      'Authorization': 'Bearer $_token',
       'language': locale.toString()
     };
     try {
@@ -224,7 +225,7 @@ if(enableNotify) {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'api_password': apiPassword,
-      'Authorization': token,
+      'Authorization': 'Bearer $_token',
       'language': locale.toString()
     };
     try {
@@ -276,7 +277,7 @@ if(enableNotify) {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
       'api_password': apiPassword,
-      'Authorization': token,
+      'Authorization': 'Bearer $_token',
       'language': locale.toString()
     };
     try {
@@ -302,6 +303,50 @@ if(enableNotify) {
       }
     } catch (e) {
       this.allBestSellingStage = GetAllBestSellingStage.ERROR;
+      notifyListeners();
+      print(e);
+      throw e;
+    }
+  }
+
+  GetAllOrdersStage allOrdersStage;
+  AllBestSelling _allOrders;
+  AllBestSelling get getAllOrders => _allOrders;
+
+  Future<void> getAllOrdersFunction({context, locale}) async {
+    this.allOrdersStage = GetAllOrdersStage.LOADING;
+    String url = '$domain/api/user/orders';
+    await getUserToken();
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'api_password': apiPassword,
+      'Authorization': 'Bearer $_token',
+      'language': locale.toString()
+    };
+    try {
+      Dio dio = Dio();
+      Response response = await dio.get(url,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print(responseJson);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+//        _allBestSelling = AllBestSelling.fromJson(responseJson['data']);
+//        print(_allBestSelling.bestSellingContent.length.toString());
+        this.allOrdersStage = GetAllOrdersStage.DONE;
+        notifyListeners();
+      } else {
+        print('D');
+        this.allOrdersStage = GetAllOrdersStage.ERROR;
+        var errors = responseJson['message'];
+        showAlertDialog(context, content: '$errors');
+        notifyListeners();
+      }
+    } catch (e) {
+      this.allOrdersStage = GetAllOrdersStage.ERROR;
       notifyListeners();
       print(e);
       throw e;

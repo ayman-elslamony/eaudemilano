@@ -1,3 +1,4 @@
+import 'package:eaudemilano/Helper/Helper.dart';
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/UserProvider.dart';
@@ -8,6 +9,10 @@ import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'OrdersScreen.dart';
+import 'UpdateProfile.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -17,17 +22,19 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   var _locale;
 
-
   @override
   void initState() {
     super.initState();
-    _locale = Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
+    _locale =
+        Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
   }
-  Widget showScreenComponent({String titleKey,String imgUrl}){
-    return  SizedBox(
+
+  Widget showScreenComponent({String titleKey, String imgUrl, Function onTap}) {
+    return SizedBox(
       height: 45,
       child: ListTile(
-        contentPadding: const EdgeInsets.all( 0.0),
+        onTap: onTap,
+        contentPadding: const EdgeInsets.all(0.0),
         isThreeLine: false,
         dense: true,
         horizontalTitleGap: -5,
@@ -35,31 +42,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AssetImage(imgUrl),
           color: Colors.white,
         ),
-        trailing: const ImageIcon(
-          AssetImage('images/show.png'),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 18,
           color: primeColor,
         ),
         title: Text(
           '${AppLocalizations.of(context).trans(titleKey)}',
-          style: Theme.of(context).textTheme.headline4.copyWith(
-              color: Colors.white, fontWeight: FontWeight.bold),
+          style: Theme.of(context)
+              .textTheme
+              .headline4
+              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading:  Consumer<ChangeIndex>(
-        builder: (context, changeIndex, child) => IconButton(onPressed: () {
-      changeIndex.openDrawer();
-    },
-          icon:const  ImageIcon(
-            AssetImage('images/drawer.png'),
+        centerTitle: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          iconSize: 19,
+          icon: const Icon(
+            Icons.arrow_back_ios,
           ),
-        ),
         ),
         title: Text(
           '${AppLocalizations.of(context).trans('profile')}',
@@ -68,27 +80,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .headline3
               .copyWith(fontWeight: FontWeight.bold),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 18,
-              child: ClipOval(
-                child: Image.asset(
-                  "images/profile.png",
-                  width: double.infinity,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
       body: Container(
         width: media.width,
-        height: media.height * 0.8,
+        height: media.height,
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-        decoration:const  BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -108,68 +105,106 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(10.0)),
                       child: Image.asset(
-                        'images/profile.png',
+                        'images/user.png',
+                        color: secondaryColor,
                         fit: BoxFit.fill,
-                        height: media.height * 0.13,
+                        height: media.height * 0.12,
                         width: media.width * 0.25,
                       ),
                     ),
                     const SizedBox(
                       width: 12.0,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Ahmed',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        Text('ahmed@gmail.com',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5
-                                .copyWith(color: Colors.white70)),
-                      ],
+                    Consumer<UserDataProvider>(
+                      builder: (context, userData, child) =>userData.updateUserDataStage==GetUpdateUserDataStage.LOADING?loaderApp():Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            Helper.userName,
+                            style: Theme.of(context).textTheme.headline4.copyWith(
+                                color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 3.0,
+                          ),
+                          Text(Helper.userEmail,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline5
+                                  .copyWith(color: Colors.white70)),
+                        ],
+                      ),
                     ),
                   ],
                 ),
                 myDivider(),
-                showScreenComponent(titleKey: 'orders',imgUrl: 'images/orders.png')
-                ,showScreenComponent(titleKey: 'addresses',imgUrl: 'images/addresses.png')
-                ,showScreenComponent(titleKey: 'account_details',imgUrl: 'images/accountDetails.png')
-             ,myDivider(),
-                defaultTextButton(function: (){
-                  Provider.of<UserDataProvider>(context, listen: false)
-                  .logout(context: context,locale: _locale);
-
-                }, context: context, textKey: 'logout',textColor: const Color(0xFF7D3030))
+                showScreenComponent(
+                    titleKey: 'orders',
+                    imgUrl: 'images/orders.png',
+                    onTap: () {
+                      navigateTo(context, OrdersScreen());
+                    })
+                ,showScreenComponent(titleKey: 'language_switch',imgUrl: 'images/language.png',
+                onTap: ()async{
+                  final prefs =
+                      await SharedPreferences
+                      .getInstance();
+                  String currentLanguage='en';
+                  if(_locale=='en'){
+                    currentLanguage='ar';
+                  }else{
+                    currentLanguage='en';
+                  }
+                  Provider.of<LocaleProvider>(
+                      context,
+                      listen: false)
+                      .setLocale(Locale(currentLanguage
+                      ));
+                  prefs.setString('language',
+                      currentLanguage);
+                })
+                ,
+                showScreenComponent(
+                    titleKey: 'edit_profile',
+                    imgUrl: 'images/accountDetails.png',
+                    onTap: () {
+                      navigateTo(context, UpdateProfile());
+                    }),
+                myDivider(),
+                defaultTextButton(
+                    function: () {
+                      Provider.of<UserDataProvider>(context, listen: false)
+                          .logout(context: context, locale: _locale);
+                    },
+                    context: context,
+                    textKey: 'logout',
+                    textColor: primeColor)
               ],
             ),
           ),
         ),
       ),
-//        bottomNavigationBar: bottomNavigationBar(
-//            context: context,
-//            onTap: (index) {
-//              setState(() {
-//                changeIndex.index = index;
-//              });
-//              Navigator.pushAndRemoveUntil(
-//                  context,
-//                  PageRouteBuilder(
-//                    pageBuilder: (context, animation1, animation2) =>
-//                        NavigationHome(),
-//                    transitionDuration: Duration(seconds: 0),
-//                  ),
-//                  (Route<dynamic> route) => false);
-//            },
-//            currentIndex: changeIndex.index),
+//        bottomNavigationBar:Consumer<ChangeIndex>(
+//          builder: (context, changeIndex, child) => bottomNavigationBar(
+//              context: context,
+//              onTap: (index) {
+//                setState(() {
+//                  changeIndex.index = index;
+//                });
+//                Navigator.pushAndRemoveUntil(
+//                    context,
+//                    PageRouteBuilder(
+//                      pageBuilder: (context, animation1, animation2) =>
+//                          NavigationHome(),
+//                      transitionDuration:const Duration(seconds: 0),
+//                    ),
+//                    (Route<dynamic> route) => false);
+//              },
+//              currentIndex: changeIndex.index),
+//        ),
     );
   }
 }

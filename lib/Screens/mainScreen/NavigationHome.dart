@@ -192,7 +192,7 @@ class _NavigationHomeState extends State<NavigationHome> {
 //                    ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius:const BorderRadius.only(
                           topRight: Radius.circular(12),
                           topLeft: Radius.circular(12),
                         ),
@@ -200,7 +200,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                           elevation: 0.0,
                           items: [
                             BottomNavigationBarItem(
-                              icon: Container(
+                              icon: const SizedBox(
                                 height: 53,
                                 child: ImageIcon(
                                   AssetImage('images/homeGrey.png'),
@@ -222,7 +222,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                             ),
                             BottomNavigationBarItem(
                               label: '',
-                              icon: Container(
+                              icon: const SizedBox(
                                 height: 53,
                                 child: ImageIcon(
                                   AssetImage('images/shoppingCartGrey.png'),
@@ -243,9 +243,9 @@ class _NavigationHomeState extends State<NavigationHome> {
                             ),
                             BottomNavigationBarItem(
                               label: '',
-                              icon: Container(
+                              icon: const SizedBox(
                                 height: 53,
-                                child: const ImageIcon(
+                                child: ImageIcon(
                                   AssetImage('images/searchGrey.png'),
                                   size: 25,
                                 ),
@@ -264,9 +264,9 @@ class _NavigationHomeState extends State<NavigationHome> {
                             ),
                             BottomNavigationBarItem(
                               label: '',
-                              icon: Container(
+                              icon: const SizedBox(
                                 height: 53,
-                                child:const  ImageIcon(
+                                child:  ImageIcon(
                                   AssetImage('images/favouriteGrey.png'),
                                   size: 25,
                                 ),
@@ -277,7 +277,7 @@ class _NavigationHomeState extends State<NavigationHome> {
                                     border: Border(
                                         top: BorderSide(
                                             color: Colors.white, width: 2))),
-                                child: ImageIcon(
+                                child: const ImageIcon(
                                   AssetImage('images/favourite.png'),
                                   size: 25,
                                 ),
