@@ -24,8 +24,8 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-    Provider.of<SearchProvider>(context, listen: false)
-        .disableWriteInSearchFunction();
+//    Provider.of<SearchProvider>(context, listen: false)
+//        .disableWriteInSearchFunction();
     super.initState();
   }
 
@@ -75,8 +75,9 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             )
           ],
-          bottom: searchResult.enableWriteInSearch == true
-              ? PreferredSize(
+          bottom:
+//          searchResult.enableWriteInSearch == true ?
+          PreferredSize(
                   child: Padding(
                     padding: const EdgeInsets.only(
                         bottom: 10.0, right: 18, left: 18),
@@ -112,9 +113,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               }
                             },
                             suffix: Icons.search,
-                            label: searchResult.enableWriteInSearch
-                                ? ''
-                                : '${AppLocalizations.of(context).trans('what_do_you_want')}',
+                            hintText: '${AppLocalizations.of(context).trans('what_do_you_want')}',
                             type: TextInputType.text,
                           ),
                         ),
@@ -135,7 +134,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   preferredSize: Size(media.width, 90))
-              : null,
+             // : null,
         ),
         body: Container(
           width: media.width,
@@ -151,67 +150,69 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
             ),
           ),
-          child: searchResult.enableWriteInSearch == false
-              ? SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8.0,),
-                      SizedBox(
-                        height: 40,
-                        child: defaultFormField(
-                          removeContainer: true,
-                          validate: (val) {
-                            return null;
-                          },
-                          onTap: () {
-                            print('dgvd');
-                            searchResult.enableWriteInSearchFunction();
-                          },
-                          readOnly: true,
-                          suffix: Icons.search,
-                          label:
-                              '${AppLocalizations.of(context).trans('what_do_you_want')}',
-                          isClickable: false,
-                          type: TextInputType.text,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        '${AppLocalizations.of(context).trans('try_these_keywords')}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline4
-                            .copyWith(color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Wrap(
-                        children: List.generate(
-                          9,
-                          (index) => Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 2),
-                            child: GestureDetector(
-                              onTap: () {},
-                              child: Text(
-                                'product ${index + 1}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    .copyWith(color: Colors.white70),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : MediaQuery.removePadding(
+          child:
+//          searchResult.enableWriteInSearch == false
+//              ? SingleChildScrollView(
+//                  child: Column(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: [
+//                      const SizedBox(height: 8.0,),
+//                      SizedBox(
+//                        height: 40,
+//                        child: defaultFormField(
+//                          removeContainer: true,
+//                          validate: (val) {
+//                            return null;
+//                          },
+//                          onTap: () {
+//                            print('dgvd');
+//                            searchResult.enableWriteInSearchFunction();
+//                          },
+//                          readOnly: true,
+//                          suffix: Icons.search,
+//                          label:
+//                              '${AppLocalizations.of(context).trans('what_do_you_want')}',
+//                          isClickable: false,
+//                          type: TextInputType.text,
+//                        ),
+//                      ),
+//                      const SizedBox(
+//                        height: 20,
+//                      ),
+//                      Text(
+//                        '${AppLocalizations.of(context).trans('try_these_keywords')}',
+//                        style: Theme.of(context)
+//                            .textTheme
+//                            .headline4
+//                            .copyWith(color: Colors.white),
+//                      ),
+//                      const SizedBox(
+//                        height: 8,
+//                      ),
+//                      Wrap(
+//                        children: List.generate(
+//                          9,
+//                          (index) => Padding(
+//                            padding: const EdgeInsets.symmetric(
+//                                horizontal: 4, vertical: 2),
+//                            child: GestureDetector(
+//                              onTap: () {},
+//                              child: Text(
+//                                'product ${index + 1}',
+//                                style: Theme.of(context)
+//                                    .textTheme
+//                                    .headline5
+//                                    .copyWith(color: Colors.white70),
+//                              ),
+//                            ),
+//                          ),
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                )
+//              :
+          MediaQuery.removePadding(
                       context: context,
                       removeTop: true,
                       removeLeft: true,

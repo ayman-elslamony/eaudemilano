@@ -126,7 +126,7 @@ Widget defaultTextInCard(
 }
 
 Widget addFavouriteAndRemoveInCard(
-    {String favIconUrl, Function onFavPressed, Function onDeletePressed}) {
+    {String favIconUrl, Function onFavPressed, Function onDeletePressed ,bool isEnabledReload=false,}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 18),
     child: Column(
@@ -135,20 +135,26 @@ Widget addFavouriteAndRemoveInCard(
       children: [
         InkWell(
           onTap: onFavPressed,
-          child: ImageIcon(
-            AssetImage(favIconUrl),
-            size: 17,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ImageIcon(
+              AssetImage(favIconUrl),
+              size: 17,
+            ),
           ),
         ),
         const SizedBox(
-          height: 10.0,
+          height: 5.0,
         ),
-        InkWell(
+        isEnabledReload? loaderApp(loaderMinSize: true,):InkWell(
           onTap: onDeletePressed,
-          child: const ImageIcon(
-            AssetImage('images/delete.png'),
-            size: 17,
-            color: Color(0xFF7D3030),
+          child: const Padding(
+            padding:  EdgeInsets.all(8.0),
+            child:  ImageIcon(
+              AssetImage('images/delete.png'),
+              size: 17,
+              color: Color(0xFF7D3030),
+            ),
           ),
         ),
       ],
@@ -213,6 +219,7 @@ Widget defaultCard(
                 : addFavouriteAndRemoveInCard(
                     onDeletePressed: onDeletePressed,
                     onFavPressed: onFavPressed,
+                    isEnabledReload: isEnabledReload,
                     favIconUrl: favIconUrl),
             justEnableDeleteIcon == true
                 ? Padding(
@@ -223,10 +230,13 @@ Widget defaultCard(
                       children: [
                         isEnabledReload? loaderApp(loaderMinSize: true,):InkWell(
                           onTap: onDeletePressed,
-                          child: const ImageIcon(
-                            AssetImage('images/delete.png'),
-                            size: 18,
-                            color: Color(0xFF7D3030),
+                          child: const Padding(
+                            padding:  EdgeInsets.all(8.0),
+                            child:  ImageIcon(
+                              AssetImage('images/delete.png'),
+                              size: 18,
+                              color: Color(0xFF7D3030),
+                            ),
                           ),
                         ),
                       ],

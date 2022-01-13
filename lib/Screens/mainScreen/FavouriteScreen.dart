@@ -186,15 +186,17 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                                     .products[index]
                                                     .productDetails
                                                     .id;
-                                                await favouriteProvider
+                                                bool result = await favouriteProvider
                                                     .removeFromFavourite(
                                                         locale: _locale,
                                                         context: context,
                                                         index: index,
                                                         id: id);
-                                                cartProvider.removeFavouriteProductInCart(
-                                                  id:id
-                                                        );
+                                                if(result==true){
+                                                  cartProvider.removeFavouriteProductInCart(
+                                                      id:id
+                                                  );
+                                                }
                                               },
                                               text:
                                                   '${AppLocalizations.of(context).trans('remove')}',

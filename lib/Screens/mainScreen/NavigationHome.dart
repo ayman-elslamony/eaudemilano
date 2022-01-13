@@ -112,11 +112,10 @@ class _NavigationHomeState extends State<NavigationHome> {
               child: InnerDrawer(
                   key: changeIndex.innerDrawerKey,
                   onTapClose: true,
-                  // default false
-                  swipe: false,
+                  swipe: true,
                   tapScaffoldEnabled: false,
                   swipeChild: true,
-                  offset: IDOffset.horizontal(0.20),
+                  offset: const IDOffset.horizontal(0.20),
 //                      proportionalChildArea : false, // default true
                   leftAnimationType: InnerDrawerAnimation.static,
                   // default static
@@ -310,9 +309,9 @@ class _NavigationHomeState extends State<NavigationHome> {
                               onPressed: cartProvider.getAllProductsInCart.specificProduct.length==0?null:() {
                                 navigateTo(context, CheckoutScreen());
                               },backgroundColor: cartProvider.getAllProductsInCart.specificProduct.isEmpty?secondaryColor:primeColor,
-                              child:const  ImageIcon(
-                                AssetImage('images/arrow.png'),
-                                size: 17,
+                              child: const Icon(
+                               Icons.arrow_forward,
+                                size: 22,
                                 color: Colors.white,
                               ),
                             ),

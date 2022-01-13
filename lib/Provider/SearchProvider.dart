@@ -15,7 +15,7 @@ import 'FavouriteProvider.dart';
 enum GetSearchResultStage { ERROR, LOADING, DONE }
 
 class SearchProvider extends ChangeNotifier {
-  bool enableWriteInSearch = false;
+//  bool enableWriteInSearch = false;
   GetSearchResultStage searchResultStage;
   List<SearchModel> _searchResult=[];
   String _searchKey='';
@@ -77,15 +77,15 @@ class SearchProvider extends ChangeNotifier {
     _searchResult=[];
     notifyListeners();
   }
- enableWriteInSearchFunction(){
-    print('cxcxvc');
-  enableWriteInSearch = true;
-  notifyListeners();
-
-}
-  disableWriteInSearchFunction(){
-    print('cdgrtgc');
-    _searchResult=[];
-    enableWriteInSearch = false;
-  }
+// enableWriteInSearchFunction(){
+//    print('cxcxvc');
+//  enableWriteInSearch = true;
+//  notifyListeners();
+//
+//}
+//  disableWriteInSearchFunction(){
+//    print('cdgrtgc');
+//    _searchResult=[];
+//    enableWriteInSearch = false;
+//  }
 }

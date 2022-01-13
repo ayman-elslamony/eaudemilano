@@ -19,7 +19,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   String _locale;
-
+  FavouriteProvider favouriteProvider;
   @override
   void initState() {
     _locale =
@@ -29,6 +29,7 @@ class _CartScreenState extends State<CartScreen> {
       Provider.of<CartProvider>(context, listen: false)
           .getAllProductsInCartFunction(context: context, locale: _locale);
     }
+  favouriteProvider =  Provider.of<FavouriteProvider>(context,listen: false);
     super.initState();
   }
   @override
@@ -171,12 +172,8 @@ class _CartScreenState extends State<CartScreen> {
                                     Navigator.of(context).pop();
                                   }, textKey: 'cancel',context: context),
                                   defaultButton(function: (){
-//                                    cartProvider.getAllProductsInCart.specificProduct[index].product.id
-//                                    setState(() {
-//                                      countList.removeAt(index);
-//                                      Navigator.of(context).pop();
-//                                    });
-
+                                    cartProvider.removeProductFromCart(context: context,locale: _locale,productIndex: index);
+                                  Navigator.of(context).pop();
                                   }, text: '${AppLocalizations.of(context).trans('remove')}',width: 120,)
                                 ],
                               ),
@@ -184,9 +181,16 @@ class _CartScreenState extends State<CartScreen> {
                           ));
                     },
                     favIconUrl: cartProvider.getAllProductsInCart.specificProduct[index].favorite=='no'?'images/fav.png':'images/favWithColor.png',
-                  onFavPressed:(){
-                    cartProvider.addToFavouriteOrDelete(locale: _locale,context: context,index: index,);
+                  onFavPressed:()async{
+                   bool result=await cartProvider.addToFavouriteOrDelete(locale: _locale,context: context,index: index,);
+                  if(result == true){
+                    favouriteProvider.getAllProductsInFavouriteFunction(
+                        context: context,
+                        locale: _locale
+                    );
                   }
+                   },
+                  isEnabledReload: cartProvider.getAllProductsInCart.specificProduct[index].enableLoader
                 ),
               ),
               itemCount: cartProvider.allProductsInCartStage ==

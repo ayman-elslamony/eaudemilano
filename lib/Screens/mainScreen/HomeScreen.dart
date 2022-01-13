@@ -11,6 +11,7 @@ import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/Screens/subScreens/SeeAllBestSellingScreen.dart';
 import 'package:eaudemilano/Screens/subScreens/SeeAllCategoriesScreen.dart';
+import 'package:eaudemilano/Screens/subScreens/ViewProductScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
@@ -46,11 +47,13 @@ class _HomeScreenState extends State<HomeScreen> {
       bool isFocusCard = true,
       String urlImage,
       String productPrice,
+        Function onTap,
       String productName}) {
     return AnimatedSize(
       curve: Curves.fastOutSlowIn,
       duration: const Duration(seconds: 1),
-      child: SizedBox(
+      child: InkWell(
+        onTap: onTap,
         child: Stack(
           children: [
             Positioned(
@@ -190,79 +193,79 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0, top: 8.0),
-                  child: Column(
-                    children: [
-                      Row(
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0, top: 8.0,right: 12.0),
+                      child: Row(
                         children: [
                           Text(
                               '${AppLocalizations.of(context).trans('popular')}',
                               style: Theme.of(context).textTheme.headline3),
                         ],
                       ),
-                      SizedBox(
-                        width: media.width,
-                        height: 18,
-                        child: Center(
-                          child: MediaQuery.removePadding(
-                            context: context,
-                            removeTop: true,
-                            removeLeft: true,
-                            removeBottom: true,
-                            removeRight: true,
-                            child: ListView.separated(
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Text(
-                                  homeProvider
-                                      .getAllPopularCategories[index].title,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline4
-                                      .copyWith(
-                                          color: homeProvider
-                                                      .focusOnSpecificWidget ==
-                                                  index
-                                              ? primeColor
-                                              : secondaryColor),
-                                );
-                              },
-                              itemCount:
-                                  homeProvider.getAllPopularCategories.length,
-                              separatorBuilder: (context, index) => SizedBox(
-                                width: 20,
-                              ),
-                              scrollDirection: Axis.horizontal,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                            onTap: (){
-                              navigateTo(context, SeeAllCategoriesScreen());
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 8.0),
-                              child: Text(
-                                '${AppLocalizations.of(context).trans('see_all')}',
+                    ),
+                    SizedBox(
+                      width: media.width,
+                      height: 18,
+                      child: Center(
+                        child: MediaQuery.removePadding(
+                          context: context,
+                          removeTop: true,
+                          removeLeft: true,
+                          removeBottom: true,
+                          removeRight: true,
+                          child: ListView.separated(
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Text(
+                                homeProvider
+                                    .getAllPopularCategories[index].title,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline4
                                     .copyWith(
-                                        color: primeColor,
-                                        decoration: TextDecoration.underline),
-                              ),
+                                        color: homeProvider
+                                                    .focusOnSpecificWidget ==
+                                                index
+                                            ? primeColor
+                                            : secondaryColor),
+                              );
+                            },
+                            itemCount:
+                                homeProvider.getAllPopularCategories.length,
+                            separatorBuilder: (context, index) => SizedBox(
+                              width: 20,
+                            ),
+                            scrollDirection: Axis.horizontal,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            navigateTo(context, SeeAllCategoriesScreen());
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 8.0),
+                            child: Text(
+                              '${AppLocalizations.of(context).trans('see_all')}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  .copyWith(
+                                      color: primeColor,
+                                      decoration: TextDecoration.underline),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 homeProvider.allPopularCategoriesStage ==
                         GetPopularCategoriesStageStage.LOADING
@@ -312,6 +315,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     : CarouselSlider.builder(
                         itemCount: homeProvider.getAllPopularCategories.length,
                         itemBuilder: (context, index) => createCard(
+                          onTap: (){
+                            navigateTo(context, ViewProductScreen(
+                              productId: homeProvider
+                                  .getAllPopularCategories[index].product.id,
+                            ));
+                          },
                             productName: homeProvider
                                 .getAllPopularCategories[index].product.title,
                             productPrice: homeProvider
@@ -343,7 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 8,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
+                  padding: const EdgeInsets.only(left: 12.0,right: 12.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

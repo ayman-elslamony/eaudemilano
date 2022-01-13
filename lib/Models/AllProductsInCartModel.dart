@@ -21,6 +21,7 @@ class AllProductsInCart {
 }
 
 class SpecificProductInCart {
+  bool enableLoader;
   int id;
   String favorite;
   String price;
@@ -39,6 +40,7 @@ class SpecificProductInCart {
     this.itemId,
     this.sizeId,
     this.sizeName,
+    this.enableLoader=false,
     this.product});
 
   SpecificProductInCart.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class SpecificProductInCart {
     itemId = json['item_id'];
     sizeId = json['size_id'];
     sizeName = json['size_name'];
+    enableLoader=false;
     product =
         json['product'] != null ? ProductDetails.fromJson(json['product'])
     :

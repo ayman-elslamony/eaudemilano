@@ -88,9 +88,10 @@ class CartProvider extends ChangeNotifier {
     print('1');
     for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
       print('2');
-      if (_allProductsInCart.specificProduct[i].id == id) {
+      if (_allProductsInCart.specificProduct[i].product.id == id) {
         _allProductsInCart.specificProduct[i].favorite = 'no';
         notifyListeners();
+        print('3');
       }
     }
   }}
@@ -98,8 +99,10 @@ class CartProvider extends ChangeNotifier {
   }
 
 
-Future<void> removeProductFromCart({context, locale,int ProductId})async{
-    String url = '$domain/api/user/remove-from-cart/$ProductId';
+Future<void> removeProductFromCart({context, locale,int productIndex})async{
+    String url = '$domain/api/user/remove-from-cart/${_allProductsInCart.specificProduct[productIndex].id}';
+    _allProductsInCart.specificProduct[productIndex].enableLoader = true;
+    notifyListeners();
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -117,26 +120,24 @@ Future<void> removeProductFromCart({context, locale,int ProductId})async{
               headers: headers));
       var responseJson = response.data;
       print('responseJson');
-      print(responseJson['data']);
+      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        if (responseJson['message'] != null) {
-          showAlertDialog(context, content: responseJson['message']);
-
-        }
-        print(_allProductsInCart.specificProduct.length.toString());
-        await getAllProductsInCartFunction(locale: locale,context: context);
+//
+      print(productIndex);
+        _allProductsInCart.specificProduct.removeAt(productIndex);
         await getTotalPrice();
-        this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
         notifyListeners();
       } else {
         print('D');
-        this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
-        var errors = responseJson['message'];
-        showAlertDialog(context, content: '$errors');
+        _allProductsInCart.specificProduct[productIndex].enableLoader = false;
         notifyListeners();
+        if(responseJson['message'] !=null) {
+          showAlertDialog(context, content: '${responseJson['message']}');
+        }
       }
     } catch (e) {
       this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
+      _allProductsInCart.specificProduct[productIndex].enableLoader = false;
       notifyListeners();
       print(e);
       throw e;
@@ -195,9 +196,12 @@ Future<void> removeProductFromCart({context, locale,int ProductId})async{
 
   Future<void>  getTotalPrice()async{
     _totalPrice=0;
-    if(_allProductsInCart.specificProduct.isNotEmpty) {
-      for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
-        _totalPrice  += double.parse(_allProductsInCart.specificProduct[i].total);
+    if(_allProductsInCart !=null) {
+      if (_allProductsInCart.specificProduct.isNotEmpty) {
+        for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
+          _totalPrice +=
+              double.parse(_allProductsInCart.specificProduct[i].total);
+        }
       }
     }
   }
@@ -208,8 +212,8 @@ Future<void> removeProductFromCart({context, locale,int ProductId})async{
       _allProductsInCart.specificProduct[index].favorite='no';
     }
   }
-  Future<void> addToFavouriteOrDelete({context, locale,int index})async{
-    String url = '$domain/api/user/add-to-favorite/${_allProductsInCart.specificProduct[index].id}';
+  Future<bool> addToFavouriteOrDelete({context, locale,int index})async{
+    String url = '$domain/api/user/add-to-favorite/${_allProductsInCart.specificProduct[index].product.id}';
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -232,21 +236,18 @@ Future<void> removeProductFromCart({context, locale,int ProductId})async{
       print('responseJson');
       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        Provider.of<FavouriteProvider>(context,listen: false).getAllProductsInFavouriteFunction(
-          context: context,
-          locale: locale
-        );
+        return true;
     }
     else {
         checkIsFavourite(index);
         notifyListeners();
-
+        return false;
       }
     } catch (e) {
       checkIsFavourite(index);
       notifyListeners();
       print(e);
-      throw e;
+      return false;
     }
   }
 }

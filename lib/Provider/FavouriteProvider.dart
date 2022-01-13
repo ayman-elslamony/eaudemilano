@@ -90,7 +90,7 @@ class FavouriteProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> removeFromFavourite({context, locale,int index,int id})async{
+  Future<bool> removeFromFavourite({context, locale,int index,int id})async{
     _allProductsInFavourite.products[index].productDetails.enableLoader = true;
     notifyListeners();
     String url = '$domain/api/user/add-to-favorite/$id';
@@ -113,19 +113,20 @@ class FavouriteProvider extends ChangeNotifier {
       print('responseJson');
       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        print('ddcf');
         _allProductsInFavourite.products.removeAt(index);
         notifyListeners();
+        return true;
       }
       else {
         _allProductsInFavourite.products[index].productDetails.enableLoader = false;
         notifyListeners();
+        return false;
       }
     } catch (e) {
       _allProductsInFavourite.products[index].productDetails.enableLoader = false;
       notifyListeners();
       print(e);
-      throw e;
+      return false;
     }
   }
 }

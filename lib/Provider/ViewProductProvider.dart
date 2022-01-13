@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
+import 'CartProvider.dart';
 import 'FavouriteProvider.dart';
 
 enum GetProductViewStage { ERROR, LOADING, DONE }
@@ -32,7 +33,10 @@ List<bool> isSelectedSizeOFProduct=[];
 
   Future<void> viewProduct({context, locale, int id})async{
     this.getProductViewStage = GetProductViewStage.LOADING;
-
+    isFavourite = false;
+     idOfSelectedSizeProduct='';
+    isSelectedSizeOFProduct=[];
+    _currentCount = 0;
     String url = '$domain/api/view-product/$id';
     await getUserToken();
     var headers = {
@@ -85,7 +89,7 @@ List<bool> isSelectedSizeOFProduct=[];
       'Authorization': 'Bearer $_token',
       'language': locale.toString()
     };
-    isFavourite = true;
+    isFavourite = !isFavourite;
     notifyListeners();
     try {
       Dio dio = Dio();
@@ -104,11 +108,11 @@ List<bool> isSelectedSizeOFProduct=[];
         );
       }
       else {
-        isFavourite = false;
+        isFavourite = !isFavourite;
         notifyListeners();
       }
     } catch (e) {
-      isFavourite = false;
+      isFavourite = !isFavourite;
       notifyListeners();
       print(e);
       throw e;
@@ -148,6 +152,10 @@ List<bool> isSelectedSizeOFProduct=[];
       print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         showAlertDialog(context, content: responseJson['message']);
+        Provider.of<CartProvider>(context,listen: false).getAllProductsInCartFunction(
+          locale: locale,
+          context: context
+        );
 //        if (responseJson['message'] != null) {
 //
 //

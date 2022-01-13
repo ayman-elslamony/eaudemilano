@@ -112,18 +112,15 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                         ),
                                         Row(
                                           children: [
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Image.asset(
-                                                  'images/back.png',
-                                                  color: primeColor,
-                                                  fit: BoxFit.fill,
-                                                  height: 16,
-                                                  width: 16,
-                                                ),
+                                            IconButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              iconSize: 19,
+                                              icon: const
+                                              Icon(
+                                                Icons.arrow_back_ios,
+                                                color: primeColor,
                                               ),
                                             ),
                                             const Spacer(),
@@ -413,7 +410,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                           child: MaterialButton(
                                             onPressed: viewProduct
                                                         .currentCount ==
-                                                    0
+                                                    0 || viewProduct.addProductToCartStage == GetAddProductToCartStage.LOADING
                                                 ? null
                                                 : () async{
                                                     if (viewProduct
@@ -461,7 +458,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                             borderRadius: BorderRadius.circular(
                                               12.0,
                                             ),
-                                            color: viewProduct.currentCount == 0
+                                            color: viewProduct.currentCount == 0||viewProduct.addProductToCartStage == GetAddProductToCartStage.LOADING
                                                 ? secondaryColor
                                                 : primeColor,
                                           ),
