@@ -5,8 +5,9 @@ import 'package:eaudemilano/Provider/CartProvider.dart';
 import 'package:eaudemilano/Provider/FavouriteProvider.dart';
 import 'package:eaudemilano/Provider/HomeProvider.dart';
 import 'package:eaudemilano/Provider/changeIndexPage.dart';
-import 'package:eaudemilano/Provider/locale_provider.dart';
+import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Screens/subScreens/CheckoutScreen.dart';
+import 'package:eaudemilano/styles/colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,12 +18,7 @@ import 'FavouriteScreen.dart';
 import 'HomeScreen.dart';
 import 'SearchScreen.dart';
 
-final GlobalKey<InnerDrawerState> innerDrawerKey =
-    GlobalKey<InnerDrawerState>();
 
-void openDrawer() {
-  innerDrawerKey.currentState.toggle(direction: InnerDrawerDirection.start);
-}
 
 class NavigationHome extends StatefulWidget {
   static const String routName = '/NavigationHome_Screen';
@@ -74,12 +70,7 @@ class _NavigationHomeState extends State<NavigationHome> {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
 
-//    Provider.of<HomeProvider>(context, listen: false)
-//        .getHomeData(context: context, locale: _locale);
-//      Provider.of<CartProvider>(context, listen: false)
-//          .getAllProductsInCartFunction(context: context,locale: _locale).then((value){
-//
-//      });
+
 
   }
   Widget drawerText(
@@ -115,12 +106,11 @@ class _NavigationHomeState extends State<NavigationHome> {
         builder: (context, changeIndex, child) => WillPopScope(
             onWillPop: () async {
               SystemNavigator.pop();
-              changeIndex.current;
               return false;
             },
             child: SafeArea(
               child: InnerDrawer(
-                  key: innerDrawerKey,
+                  key: changeIndex.innerDrawerKey,
                   onTapClose: true,
                   // default false
                   swipe: false,
@@ -315,16 +305,18 @@ class _NavigationHomeState extends State<NavigationHome> {
                       ),
                     ),
                     floatingActionButton: changeIndex.index == 1
-                        ? FloatingActionButton(
-                            onPressed: () {
-                              navigateTo(context, CheckoutScreen());
-                            },
-                            child:const  ImageIcon(
-                              AssetImage('images/arrow.png'),
-                              size: 17,
-                              color: Colors.white,
+                        ? Consumer<CartProvider>(
+                      builder: (context, cartProvider, child) =>  FloatingActionButton(
+                              onPressed: cartProvider.getAllProductsInCart.specificProduct.length==0?null:() {
+                                navigateTo(context, CheckoutScreen());
+                              },backgroundColor: cartProvider.getAllProductsInCart.specificProduct.isEmpty?secondaryColor:primeColor,
+                              child:const  ImageIcon(
+                                AssetImage('images/arrow.png'),
+                                size: 17,
+                                color: Colors.white,
+                              ),
                             ),
-                          )
+                        )
                         : null,
                   )),
             )));

@@ -1,40 +1,23 @@
-class AllPopularCategories {
-  List<PopularCategories>  allPopularCategories;
-
-  AllPopularCategories({this.allPopularCategories});
-
-  AllPopularCategories.fromJson(Map<String, dynamic> json) {
-    if (json['data'] != null) {
-      allPopularCategories = <PopularCategories>[];
-      json['data'].forEach((v) {
-        allPopularCategories.add( PopularCategories.fromJson(v));
-      });
-    }
-  }
-
-}
 
 class PopularCategories {
   int  id;
   String  title;
   String  popularity;
-  List<Product>  products;
+  Product  product;
 
-  PopularCategories({this.id, this.title, this.popularity, this.products});
+  PopularCategories({this.id, this.title, this.popularity, this.product});
+
   PopularCategories.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     popularity = json['popularity'];
-    if (json['product'] != null) {
-      products = <Product>[];
-      json['data'].forEach((v) {
-        products.add( Product.fromJson(v));
-      });
-    }
+    product =
+    json['product'] != null ? Product.fromJson(json['product']) : null;
   }
+
 }
 
-class Product{
+class Product {
   int  id;
   String  title;
   String  priceBeforeDiscount;
@@ -59,5 +42,7 @@ class Product{
     size = json['size'];
   }
 
- 
 }
+
+
+

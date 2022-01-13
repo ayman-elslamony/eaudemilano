@@ -12,9 +12,11 @@ import 'package:flutter/services.dart';
 import 'Provider/CartProvider.dart';
 import 'Provider/FavouriteProvider.dart';
 import 'Provider/HomeProvider.dart';
+import 'Provider/SearchProvider.dart';
 import 'Provider/UserProvider.dart';
+import 'Provider/ViewProductProvider.dart';
 import 'Provider/changeIndexPage.dart';
-import 'Provider/locale_provider.dart';
+import 'Provider/LocaleProvider.dart';
 import 'Screens/intoScreen/SplashScreen.dart';
 import 'Screens/mainScreen/NavigationHome.dart';
 
@@ -156,6 +158,10 @@ class _MyAppState extends State<MyApp> {
             create: (_) => CartProvider()),
         ChangeNotifierProvider<FavouriteProvider>(
             create: (_) => FavouriteProvider()),
+        ChangeNotifierProvider<SearchProvider>(
+            create: (_) => SearchProvider()),
+        ChangeNotifierProvider<ViewProductProvider>(
+            create: (_) => ViewProductProvider()),
       ],
       child: Consumer<LocaleProvider>(builder:
           (BuildContext context, LocaleProvider localeProvider, Widget child) {

@@ -1,28 +1,25 @@
-class CategorieDetails {
+class SearchModel {
   int id;
   String title;
   String priceBeforeDiscount;
   String price;
   String image;
-  String sizeId;
-  String sizeName;
+  String size;
 
-  CategorieDetails(
+  SearchModel(
       {this.id,
       this.title,
       this.priceBeforeDiscount,
       this.price,
       this.image,
-      this.sizeId,
-      this.sizeName});
+      this.size});
 
-  CategorieDetails.fromJson(Map<String, dynamic> json) {
+  SearchModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     priceBeforeDiscount = json['price_before_discount'];
     price = json['price'];
     image = json['image'];
-    sizeId = json['size_id'];
-    sizeName = json['size_name'];
+    size = json['size'];
   }
 }

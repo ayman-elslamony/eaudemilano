@@ -2,7 +2,8 @@ import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/CartProvider.dart';
 import 'package:eaudemilano/Provider/FavouriteProvider.dart';
-import 'package:eaudemilano/Provider/locale_provider.dart';
+import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -41,14 +42,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              openDrawer();
+          leading:  Consumer<ChangeIndex>(
+            builder: (context, changeIndex, child) => IconButton(onPressed: () {
+              changeIndex.openDrawer();
             },
             icon: const ImageIcon(
               AssetImage('images/drawer.png'),
             ),
-          ),
+          ),),
           title: Row(
             children: [
               Text(
@@ -98,8 +99,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
         ),
         body: Container(
           width: media.width,
-          height: media.height * 0.8,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+          height: media.height * 0.82,
+          padding: const EdgeInsets.only(left: 14.0,right: 14.0, bottom: 12.0),
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topRight,
@@ -111,24 +112,21 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             ),
           ),
           child: Consumer<FavouriteProvider>(
-            builder: (context, favouriteProvider, child) => favouriteProvider
-                        .allProductsInFavouriteStage ==
-                    GetAllProductsInFavouriteStage.LOADING
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [loaderApp()],
-                  )
-                : ListView.separated(
+            builder: (context, favouriteProvider, child) => ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) => const SizedBox(
                       height: 5.0,
                     ),
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      return favouriteProvider
+                          .allProductsInFavouriteStage ==
+                          GetAllProductsInFavouriteStage.LOADING
+                          ? loadingCard(media: media): Padding(
+                        padding:  const EdgeInsets.only(top:8.0),
                         child: defaultCard(
+                          productId: favouriteProvider.getAllProductsInFavourite
+                              .products[index].productDetails.id,
                           titleContent: '',
                           imgUrl: favouriteProvider.getAllProductsInFavourite
                               .products[index].productDetails.image,
@@ -209,6 +207,9 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                       );
                     },
                     itemCount: favouriteProvider
+                        .allProductsInFavouriteStage ==
+                        GetAllProductsInFavouriteStage.LOADING
+                        ?8:favouriteProvider
                         .getAllProductsInFavourite.products.length,
                   ),
           ),

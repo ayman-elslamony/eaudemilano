@@ -1,7 +1,8 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/UserProvider.dart';
-import 'package:eaudemilano/Provider/locale_provider.dart';
+import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Provider/LocaleProvider.dart';
 
 import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -51,11 +52,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {openDrawer();},
+        leading:  Consumer<ChangeIndex>(
+        builder: (context, changeIndex, child) => IconButton(onPressed: () {
+      changeIndex.openDrawer();
+    },
           icon:const  ImageIcon(
             AssetImage('images/drawer.png'),
           ),
+        ),
         ),
         title: Text(
           '${AppLocalizations.of(context).trans('profile')}',

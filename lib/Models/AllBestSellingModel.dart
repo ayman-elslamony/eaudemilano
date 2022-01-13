@@ -11,17 +11,17 @@
 
 class  AllBestSelling{
   int  currentPage;
-  List<BestSellingContent>  data;
+  List<BestSellingContent>  bestSellingContent;
   int  total;
 
-  AllBestSelling({this.currentPage, this.data, this.total});
+  AllBestSelling({this.currentPage, this.bestSellingContent, this.total});
 
   AllBestSelling.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      data = <BestSellingContent>[];
+      bestSellingContent = <BestSellingContent>[];
       json['data'].forEach((v) {
-        data.add(BestSellingContent.fromJson(v));
+        bestSellingContent.add(BestSellingContent.fromJson(v));
       });
     }
     total = json['total'];

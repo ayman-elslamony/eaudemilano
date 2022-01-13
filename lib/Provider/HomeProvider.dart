@@ -5,16 +5,18 @@ import 'package:eaudemilano/Helper/Helper.dart';
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Models/AllBestSellingModel.dart';
 import 'package:eaudemilano/Models/AllCategoriesModel.dart';
-import 'package:eaudemilano/Models/CategorieDetails.dart';
-import 'package:eaudemilano/Models/CategorieDetails.dart';
-import 'package:eaudemilano/Models/CategorieDetails.dart';
-import 'package:eaudemilano/Models/CategorieDetails.dart';
+import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
+import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
+import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
+import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/PopularCategoriesModel.dart';
+import 'package:eaudemilano/Models/ProductViewModel.dart';
 import 'package:eaudemilano/Models/SomeBestSellingModel.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
 
+enum GetHomeStage { ERROR, LOADING, DONE }
 enum GetAllCategoriesStage { ERROR, LOADING, DONE }
 enum GetCategorieDetailsStage { ERROR, LOADING, DONE }
 enum GetPopularCategoriesStageStage { ERROR, LOADING, DONE }
@@ -22,61 +24,90 @@ enum GetSomeBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllBestSellingStage { ERROR, LOADING, DONE }
 
 class HomeProvider extends ChangeNotifier {
-  String token = '';
 
+  GetHomeStage homeStage;
+
+  String token = '';
   Future<void> getUserToken() async {
     if (token == '') {
       token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
     }
   }
-Future<void> getHomeData({context,locale})async{
-  getAllCategoriesFunction(context: context,locale: locale);
-  getPopularCategoriesFunction(context: context,locale: locale);
-  getSomeBestSellingFunction(context: context,locale: locale);
-}
-  GetAllCategoriesStage AllCategoriesStage;
-  AllCategories _allCategories;
 
-  AllCategories get getAllCategories => _allCategories;
+
+Future<void> getHomeData({context,locale})async{
+  bool enableNotify=false;
+  if(_someBestSelling.isEmpty || _allPopularCategories.isEmpty) {
+    this.homeStage = GetHomeStage.LOADING;
+    enableNotify = true;
+  }
+  if(_someBestSelling.isEmpty){
+    this.someBestSellingStage = GetSomeBestSellingStage.LOADING;
+  }
+  if(_allPopularCategories.isEmpty){
+    await getAllPopularCategoriesFunction(context: context,locale: locale);
+  }
+ if(_someBestSelling.isEmpty){
+    await getSomeBestSellingFunction(context: context,locale: locale);
+  }
+
+
+if(enableNotify) {
+  homeStage = GetHomeStage.DONE;
+  notifyListeners();
+}
+}
+  GetAllCategoriesStage allCategoriesStage;
+  List<Categorie> _allCategories=[];
+
+  List<Categorie> get getAllCategories => _allCategories;
 
   Future<void> getAllCategoriesFunction({context, locale}) async {
-    this.AllCategoriesStage = GetAllCategoriesStage.LOADING;
-    notifyListeners();
-    String url = '$domain/api/categories';
-    await getUserToken();
-    var headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'api_password': apiPassword,
-      'Authorization': token,
-      'language': locale.toString()
-    };
-    try {
-      Dio dio = Dio();
-      Response response = await dio.get(url,
-          options: Options(
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: headers));
-      var responseJson = response.data;
-      debugPrint(responseJson);
-      if (response.statusCode == 200 && responseJson["status"] == true) {
-        _allCategories = AllCategories.fromJson(responseJson);
-        debugPrint(_allCategories.categories.length.toString());
-        this.AllCategoriesStage = GetAllCategoriesStage.DONE;
+    if(_allCategories.isEmpty){
+      this.allCategoriesStage = GetAllCategoriesStage.LOADING;
+      // notifyListeners();
+      String url = '$domain/api/categories';
+      await getUserToken();
+      var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api_password': apiPassword,
+        'Authorization': token,
+        'language': locale.toString()
+      };
+      try {
+        Dio dio = Dio();
+        Response response = await dio.get(url,
+            options: Options(
+                followRedirects: false,
+                validateStatus: (status) => true,
+                headers: headers));
+        var responseJson = response.data;
+        print(responseJson);
+        if (response.statusCode == 200 && responseJson["status"] == true) {
+          if (responseJson['data'] != null) {
+            _allCategories = <Categorie>[];
+            responseJson['data'].forEach((v) {
+              _allCategories
+                  .add(Categorie.fromJson(v));
+            });
+          }
+          print(_allCategories.length.toString());
+          this.allCategoriesStage = GetAllCategoriesStage.DONE;
+          notifyListeners();
+        } else {
+          print('D');
+          this.allCategoriesStage = GetAllCategoriesStage.ERROR;
+          var errors = responseJson['message'];
+          showAlertDialog(context, content: '$errors');
+          notifyListeners();
+        }
+      } catch (e) {
+        this.allCategoriesStage = GetAllCategoriesStage.ERROR;
         notifyListeners();
-      } else {
-        print('D');
-        this.AllCategoriesStage = GetAllCategoriesStage.ERROR;
-        var errors = responseJson['message'];
-        showAlertDialog(context, content: '$errors');
-        notifyListeners();
+        print(e);
+        throw e;
       }
-    } catch (e) {
-      this.AllCategoriesStage = GetAllCategoriesStage.ERROR;
-      notifyListeners();
-      print(e);
-      throw e;
     }
   }
 
@@ -85,7 +116,7 @@ Future<void> getHomeData({context,locale})async{
 
   CategorieDetails get getCategorieDetails => _CategorieDetails;
 
-  Future<void> getCategorieDetailsFunction({context, locale, String id}) async {
+  Future<void> getCategorieDetailsFunction({context, locale, int id}) async {
     this.categorieDetailsStage = GetCategorieDetailsStage.LOADING;
     notifyListeners();
     String url = '$domain/api/categories/$id';
@@ -105,18 +136,17 @@ Future<void> getHomeData({context,locale})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      debugPrint(responseJson);
+       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         _CategorieDetails =
-            CategorieDetails.fromJson(responseJson['data']['data']);
-        debugPrint(_allCategories.categories.length.toString());
+            CategorieDetails.fromJson(responseJson['data']);
+         print(_CategorieDetails.products[0].title.toString());
         this.categorieDetailsStage = GetCategorieDetailsStage.DONE;
         notifyListeners();
       } else {
         print('D');
+        _CategorieDetails=CategorieDetails(products: []);
         this.categorieDetailsStage = GetCategorieDetailsStage.ERROR;
-        var errors = responseJson['message'];
-        showAlertDialog(context, content: '$errors');
         notifyListeners();
       }
     } catch (e) {
@@ -127,15 +157,15 @@ Future<void> getHomeData({context,locale})async{
     }
   }
 
-  GetPopularCategoriesStageStage popularCategoriesStage;
-  AllPopularCategories _allPopularCategories;
+  GetPopularCategoriesStageStage allPopularCategoriesStage;
+  List<PopularCategories> _allPopularCategories=[];
 
-  AllPopularCategories get getPopularCategories => _allPopularCategories;
+  List<PopularCategories> get getAllPopularCategories => _allPopularCategories;
 
-  Future<void> getPopularCategoriesFunction(
+  Future<void> getAllPopularCategoriesFunction(
       {context, locale}) async {
-    this.popularCategoriesStage = GetPopularCategoriesStageStage.LOADING;
-    notifyListeners();
+    this.allPopularCategoriesStage = GetPopularCategoriesStageStage.LOADING;
+   // notifyListeners();
     String url = '$domain/api/popular-categories';
     await getUserToken();
     var headers = {
@@ -153,23 +183,27 @@ Future<void> getHomeData({context,locale})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      debugPrint(responseJson);
+       print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        _allPopularCategories =
-            AllPopularCategories.fromJson(responseJson['data']);
-        debugPrint(
-            _allPopularCategories.allPopularCategories.length.toString());
-        this.popularCategoriesStage = GetPopularCategoriesStageStage.DONE;
+        if (responseJson['data'] != null) {
+          _allPopularCategories = <PopularCategories>[];
+          responseJson['data'].forEach((v) {
+            _allPopularCategories.add( PopularCategories.fromJson(v));
+          });
+        }
+         print(
+            _allPopularCategories.length.toString());
+        this.allPopularCategoriesStage = GetPopularCategoriesStageStage.DONE;
         notifyListeners();
       } else {
         print('D');
-        this.popularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
+        this.allPopularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
         notifyListeners();
       }
     } catch (e) {
-      this.popularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
+      this.allPopularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
       notifyListeners();
       print(e);
       throw e;
@@ -177,13 +211,13 @@ Future<void> getHomeData({context,locale})async{
   }
 
   GetSomeBestSellingStage someBestSellingStage;
-  List<SomeBestSelling> _someBestSelling;
+  List<SomeBestSelling> _someBestSelling=[];
 
   List<SomeBestSelling> get getSomeBestSelling => _someBestSelling;
 
-  Future<void> getSomeBestSellingFunction({context, locale, String id}) async {
+  Future<void> getSomeBestSellingFunction({context, locale}) async {
     this.someBestSellingStage = GetSomeBestSellingStage.LOADING;
-    notifyListeners();
+  //  notifyListeners();
     String url = '$domain/api/some-best-selling';
     await getUserToken();
     var headers = {
@@ -201,15 +235,17 @@ Future<void> getHomeData({context,locale})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      debugPrint(responseJson);
+       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _someBestSelling = <SomeBestSelling>[];
           responseJson['data'].forEach((v) {
             _someBestSelling.add(SomeBestSelling.fromJson(v));
           });
+        }else{
+          _someBestSelling = [];
         }
-        debugPrint(_someBestSelling.length.toString());
+         print(_someBestSelling.length.toString());
         this.someBestSellingStage = GetSomeBestSellingStage.DONE;
         notifyListeners();
       } else {
@@ -228,14 +264,13 @@ Future<void> getHomeData({context,locale})async{
   }
 
   GetAllBestSellingStage allBestSellingStage;
-  List<AllBestSelling> _allBestSelling;
+  AllBestSelling _allBestSelling;
 
-  List<AllBestSelling> get getAllBestSelling => _allBestSelling;
+  AllBestSelling get getAllBestSelling => _allBestSelling;
 
-  Future<void> getAllBestSellingFunction({context, locale, String id}) async {
+  Future<void> getAllBestSellingFunction({context, locale}) async {
     this.allBestSellingStage = GetAllBestSellingStage.LOADING;
-    notifyListeners();
-    String url = '$domain/api/some-best-selling';
+    String url = '$domain/api/all-best-selling';
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -252,15 +287,10 @@ Future<void> getHomeData({context,locale})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      debugPrint(responseJson);
+       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        if (responseJson['data'] != null) {
-          _allBestSelling = <AllBestSelling>[];
-          responseJson['data'].forEach((v) {
-            _allBestSelling.add(AllBestSelling.fromJson(v));
-          });
-        }
-        debugPrint(_allBestSelling.length.toString());
+          _allBestSelling = AllBestSelling.fromJson(responseJson['data']);
+         print(_allBestSelling.bestSellingContent.length.toString());
         this.allBestSellingStage = GetAllBestSellingStage.DONE;
         notifyListeners();
       } else {
@@ -277,4 +307,16 @@ Future<void> getHomeData({context,locale})async{
       throw e;
     }
   }
+
+  int _focusOnSpecificWidget = 1;
+
+  int get focusOnSpecificWidget => _focusOnSpecificWidget;
+  focusOnSpecificWidgetFunction(index,_){
+  print('cdfhj');
+  print(index);
+  _focusOnSpecificWidget = index;
+   notifyListeners();
+}
+
+
 }

@@ -2,7 +2,8 @@ import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/CartProvider.dart';
 import 'package:eaudemilano/Provider/FavouriteProvider.dart';
-import 'package:eaudemilano/Provider/locale_provider.dart';
+import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Provider/LocaleProvider.dart';
 
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -24,7 +25,7 @@ class _CartScreenState extends State<CartScreen> {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     if( Provider.of<CartProvider>(context, listen: false)
-        .getAllProductsInCart== null) {
+        .getAllProductsInCart.specificProduct.isEmpty) {
       Provider.of<CartProvider>(context, listen: false)
           .getAllProductsInCartFunction(context: context, locale: _locale);
     }
@@ -36,11 +37,14 @@ class _CartScreenState extends State<CartScreen> {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) => Scaffold(
           appBar: AppBar(
-            leading: IconButton(onPressed: () {
-              openDrawer();
-            }, icon: const ImageIcon(
-               AssetImage('images/drawer.png'),
-            ),),
+            leading:
+            Consumer<ChangeIndex>(
+              builder: (context, changeIndex, child) => IconButton(onPressed: () {
+                changeIndex.openDrawer();
+              }, icon: const ImageIcon(
+                 AssetImage('images/drawer.png'),
+              ),),
+            ),
             title: Row(
               children: [
                 Text(
@@ -118,8 +122,8 @@ class _CartScreenState extends State<CartScreen> {
           ),
           body: Container(
             width: media.width,
-            height: media.height*0.8,
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            height: media.height*0.82,
+            padding: const EdgeInsets.only(left: 14.0,right: 14.0, bottom: 8.0),
             decoration: const BoxDecoration(
               gradient:  LinearGradient(
                 begin: Alignment.topRight,
@@ -130,22 +134,14 @@ class _CartScreenState extends State<CartScreen> {
                 ],
               ),
             ),
-            child: cartProvider.allProductsInCartStage ==
-                GetAllProductsInCartStage.LOADING?Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                loaderApp()
-              ],
-            ): ListView.separated(
+            child:  ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              separatorBuilder: (context, index) => const SizedBox(
-                height: 5.0,
-              ),
               itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: defaultCard(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: cartProvider.allProductsInCartStage ==
+                    GetAllProductsInCartStage.LOADING?loadingCard(media: media):defaultCard(
+                  productId: cartProvider.getAllProductsInCart.specificProduct[index].product.id,
                     titleContent: cartProvider.getAllProductsInCart.specificProduct[index].quantity,
                     title: cartProvider.getAllProductsInCart.specificProduct[index].price,
                     subTitle: cartProvider.getAllProductsInCart.specificProduct[index].product.title,
@@ -191,7 +187,8 @@ class _CartScreenState extends State<CartScreen> {
                   }
                 ),
               ),
-              itemCount: cartProvider.getAllProductsInCart.specificProduct.length ,
+              itemCount: cartProvider.allProductsInCartStage ==
+                  GetAllProductsInCartStage.LOADING?8:cartProvider.getAllProductsInCart.specificProduct.length ,
             ),
           ),
 

@@ -13,6 +13,9 @@
   "email": "Email",
   "login": "Login",
   "ok": "ok",
+  "similar_product": "There are no similar products",
+
+  "There_is_no_result": "There is no result",
   "have_an_account": "Have an account?",
   "cart": "Cart",
   "search": "Search...",

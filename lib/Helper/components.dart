@@ -1,9 +1,10 @@
 import 'package:eaudemilano/Localization/app_localizations.dart';
-import 'package:eaudemilano/Screens/subScreens/ShowItemScreen.dart';
+import 'package:eaudemilano/Screens/subScreens/ViewProductScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shimmer/shimmer.dart';
 
 //final List<String> imgList = [
 //  'https://thumbs.dreamstime.com/t/gym-24699087.jpg',
@@ -117,7 +118,7 @@ Widget defaultTextInCard(
         Text(subTitle,
             style: Theme.of(context)
                 .textTheme
-                .headline6
+                .headline5
                 .copyWith(color: Colors.grey[800])),
       ],
     ),
@@ -158,6 +159,7 @@ Widget addFavouriteAndRemoveInCard(
 Widget defaultCard(
         {@required int currentIndex,
         @required BuildContext context,
+        @required int productId,
         Size media,
         String title,
         String subTitle,
@@ -170,7 +172,9 @@ Widget defaultCard(
         Function onDeletePressed}) =>
     InkWell(
       onTap: () {
-        navigateTo(context, ShowItemScreen());
+        navigateTo(context, ViewProductScreen(
+          productId: productId,
+        ));
       },
       child: Card(
         shape: RoundedRectangleBorder(
@@ -217,7 +221,7 @@ Widget defaultCard(
 //    crossAxisAlignment: CrossAxisAlignment.start,
 //    mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        isEnabledReload? loaderApp(loaderSize: 35):InkWell(
+                        isEnabledReload? loaderApp(loaderMinSize: true,):InkWell(
                           onTap: onDeletePressed,
                           child: const ImageIcon(
                             AssetImage('images/delete.png'),
@@ -234,6 +238,23 @@ Widget defaultCard(
       ),
     );
 
+
+
+Widget loadingCard({Size media}){
+  return Shimmer.fromColors(
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: SizedBox(
+        width: media.width,
+        height: media.height*0.15,
+      ),
+    ),
+    baseColor: Colors.grey[300],
+    highlightColor: Colors.grey[100],
+  );
+}
 Widget subtitleOfHomeScreen(
     {Function function,
     BuildContext context,
@@ -459,6 +480,8 @@ Widget defaultFormField({
   Function suffixPressed,
   bool isClickable = true,
   bool readOnly = false,
+  bool removeContainer=false,
+  bool autoFocus=false
 }) =>
     SizedBox(
       height: 55.0,
@@ -467,12 +490,13 @@ Widget defaultFormField({
         child: Container(
           width: double.infinity,
           padding:
-              const EdgeInsets.only(top: 15, bottom: 12, left: 5, right: 5),
+          removeContainer? const EdgeInsets.all(0.0):const EdgeInsets.only(top: 15, bottom: 12, left: 5, right: 5),
           decoration: BoxDecoration(
             color: const Color(0xFF8C8C8C),
             borderRadius: BorderRadius.circular(15),
           ),
           child: TextFormField(
+            autofocus: autoFocus,
             controller: controller,
             keyboardType: type,
             obscureText: isPassword,
@@ -496,7 +520,7 @@ Widget defaultFormField({
                   const TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
               suffixIcon: suffix != null
                   ? IconButton(
-                      padding: EdgeInsets.only(bottom: 7),
+                      padding: removeContainer?const EdgeInsets.all(0.0):const EdgeInsets.only(bottom: 7),
                       onPressed: suffixPressed,
                       icon: Icon(
                         suffix,
@@ -569,11 +593,11 @@ void showToast({
       fontSize: 16.0,
     );
 
-Widget loaderApp({double loaderSize=60}) {
+Widget loaderApp({bool loaderMinSize=false}) {
   return  SpinKitSpinningLines(
     color: Colors.black87,
     lineWidth: 4,
-    size: loaderSize,
+    size: loaderMinSize?35:60,
   );
 }
 
