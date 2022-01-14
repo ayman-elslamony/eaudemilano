@@ -113,7 +113,7 @@ class UserDataProvider extends ChangeNotifier {
   }
 
 
-  verifyUser({String locale, context,token})async{
+  Future<bool> verifyUser({String locale, context,token,String codeVerification})async{
     String url = '$domain/api/verify-user';
 
     var headers = {
@@ -124,7 +124,7 @@ class UserDataProvider extends ChangeNotifier {
       'language': locale.toString()
     };
     var formData = FormData.fromMap({
-      'code': '123456',
+      'code': codeVerification,
     });
     try {
       Dio dio = Dio();
@@ -138,19 +138,12 @@ class UserDataProvider extends ChangeNotifier {
       print('responseJson');
         print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        print('success');
+        return true;
       }
-//      else {
-//        print('D');
-//        this.stage = UserDataProviderStage.ERROR;
-//        var errors = responseJson['message'];
-//        showAlertDialog(context,
-//            content: '$errors' );
-//        notifyListeners();
-//      }
+      return false;
     } catch (e) {
       print(e);
-//      throw e;
+      return false;
     }
   }
 // Register Request
@@ -193,16 +186,17 @@ class UserDataProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-
+          print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
 
        // if(responseJson["message"]== "تم تسجيل عضوية بنجاح برجاء فحص البريد الألكتروني لتاكيد عضويتك" ){
 
 
        // }
-         await verifyUser(context: context,locale: locale,token: responseJson['user']["api_token"]);
+        bool isVerfied = await verifyUser(context: context,locale: locale,token: responseJson['user']["api_token"],codeVerification: responseJson['user']["code"]);
          print('uuuuuuuuuuu');
-        Helper.saveUserLoggedInSharedPreferences(true);
+         if(isVerfied==true){
+           Helper.saveUserLoggedInSharedPreferences(true);
         Helper.saveUserIdInSharedPreferences(
             responseJson['user']["id"]);
         Helper.saveUsernameInSharedPreferences(
@@ -215,11 +209,15 @@ class UserDataProvider extends ChangeNotifier {
             responseJson['user']["mobile"]);
         Helper.saveUserTokenInSharedPreferences(
             responseJson['user']["api_token"]);
-
         await Provider.of<UserDataProvider>(context, listen: false)
             .getUserData();
-
         navigateAndFinish(context, NavigationHome());
+           this.stage = UserDataProviderStage.DONE;
+           notifyListeners();
+         }else{
+           this.stage = UserDataProviderStage.ERROR;
+           notifyListeners();
+         }
 
         //          .then((value) {
 //        if (responseJson["data"]['user']["is_verified"] == true) {
@@ -232,8 +230,7 @@ class UserDataProvider extends ChangeNotifier {
 //        }
 //      });
 
-        this.stage = UserDataProviderStage.DONE;
-        notifyListeners();
+
       } else {
         print('D');
         this.stage = UserDataProviderStage.ERROR;

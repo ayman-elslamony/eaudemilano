@@ -618,6 +618,8 @@ Widget loaderApp({bool loaderMinSize=false}) {
     lineWidth: 4,
     size: loaderMinSize?35:60,
   );
+
+
 }
 
 showAlertDialog(BuildContext context,

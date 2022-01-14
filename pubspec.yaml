@@ -51,6 +51,7 @@ dependencies:
   firebase_core: any
   shimmer: any
   flutter_staggered_animations: ^1.0.0
+  webview_flutter: ^2.0.13
 dev_dependencies:
   flutter_test:
     sdk: flutter

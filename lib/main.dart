@@ -10,6 +10,7 @@ import 'package:eaudemilano/Localization/app_localization_delegate.dart';
 import 'package:flutter/services.dart';
 
 import 'Provider/CartProvider.dart';
+import 'Provider/CheckOutProvider.dart';
 import 'Provider/FavouriteProvider.dart';
 import 'Provider/HomeProvider.dart';
 import 'Provider/SearchProvider.dart';
@@ -162,6 +163,8 @@ class _MyAppState extends State<MyApp> {
             create: (_) => SearchProvider()),
         ChangeNotifierProvider<ViewProductProvider>(
             create: (_) => ViewProductProvider()),
+        ChangeNotifierProvider<CheckOutProvider>(
+            create: (_) => CheckOutProvider()),
       ],
       child: Consumer<LocaleProvider>(builder:
           (BuildContext context, LocaleProvider localeProvider, Widget child) {

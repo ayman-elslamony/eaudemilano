@@ -25,10 +25,18 @@ class CartProvider extends ChangeNotifier {
   GetAllProductsInCartStage allProductsInCartStage;
   AllProductsInCart _allProductsInCart=AllProductsInCart(specificProduct: [],totalProducts: 0,currentPage: 0);
 
+   void resetAllProductsInCart() {
+    _allProductsInCart = AllProductsInCart(specificProduct: [],totalProducts: 0,currentPage: 0);
+    notifyListeners();
+  }
+
   AllProductsInCart get getAllProductsInCart => _allProductsInCart;
-  Future<void> getAllProductsInCartFunction({context, locale}) async {
+  Future<void> getAllProductsInCartFunction({context, locale,bool enableLoading=false}) async {
 
     this.allProductsInCartStage = GetAllProductsInCartStage.LOADING;
+    if(enableLoading){
+      notifyListeners();
+    }
     String url = '$domain/api/user/cart';
     await getUserToken();
     var headers = {

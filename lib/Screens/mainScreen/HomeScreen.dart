@@ -16,6 +16,7 @@ import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'NavigationHome.dart';
@@ -28,19 +29,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+  RefreshController _refreshController ;
   String _locale;
 
   @override
   void initState() {
     super.initState();
-
+    _refreshController =
+        RefreshController(initialRefresh: false);
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     Provider.of<HomeProvider>(context, listen: false)
         .getHomeData(context: context, locale: _locale);
   }
-
+  void _onRefresh() async {
+    Provider.of<HomeProvider>(context, listen: false)
+        .onRefresh(context: context, locale: _locale);
+    _refreshController.refreshCompleted();
+  }
   createCard(
       {double width,
       double height,
@@ -121,133 +127,252 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        leading: Consumer<ChangeIndex>(
-          builder: (context, changeIndex, child) => IconButton(
-            onPressed: () {
-              changeIndex.openDrawer();
-            },
-            icon: ImageIcon(
-              AssetImage('images/drawer.png'),
+    return SmartRefresher(
+      enablePullDown: true,
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Consumer<ChangeIndex>(
+            builder: (context, changeIndex, child) => IconButton(
+              onPressed: () {
+                changeIndex.openDrawer();
+              },
+              icon: ImageIcon(
+                AssetImage('images/drawer.png'),
+              ),
             ),
           ),
-        ),
-        title: Consumer<ChangeIndex>(
-          builder: (context, changeIndex, child) => SizedBox(
-            height: 40,
-            child: defaultFormField(
-              removeContainer: true,
-              validate: (val) {
-                return null;
-              },
-              onTap: () async {
-                changeIndex.changeIndexFunction(2);
-              },
-              readOnly: true,
-              suffix: Icons.search,
-              label: '${AppLocalizations.of(context).trans('search')}',
-              isClickable: false,
-              type: TextInputType.text,
+          title: Consumer<ChangeIndex>(
+            builder: (context, changeIndex, child) => SizedBox(
+              height: 40,
+              child: defaultFormField(
+                removeContainer: true,
+                validate: (val) {
+                  return null;
+                },
+                onTap: () async {
+                  changeIndex.changeIndexFunction(2);
+                },
+                readOnly: true,
+                suffix: Icons.search,
+                label: '${AppLocalizations.of(context).trans('search')}',
+                isClickable: false,
+                type: TextInputType.text,
+              ),
             ),
           ),
-        ),
-        actions: [
-          InkWell(
-            onTap: () {
-              navigateTo(context, ProfileScreen());
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                radius: 18,
-                child: ClipOval(
-                  child: Image.asset(
-                    'images/user.png',
-                    color: primeColor,
-                    width: 24,
-                    fit: BoxFit.fill,
+          actions: [
+            InkWell(
+              onTap: () {
+                navigateTo(context, ProfileScreen());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  radius: 18,
+                  child: ClipOval(
+                    child: Image.asset(
+                      'images/user.png',
+                      color: primeColor,
+                      width: 24,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
+            )
+          ],
+        ),
+        body: Consumer<HomeProvider>(
+          builder: (context, homeProvider, child) => Container(
+            width: media.width,
+            height: media.height,
+            //padding: const EdgeInsets.only(horizontal: 12.0, vertical: 8.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: const [
+                  Color(0xFF060606),
+                  Color(0xFF747474),
+                ],
+              ),
             ),
-          )
-        ],
-      ),
-      body: Consumer<HomeProvider>(
-        builder: (context, homeProvider, child) => Container(
-          width: media.width,
-          height: media.height,
-          //padding: const EdgeInsets.only(horizontal: 12.0, vertical: 8.0),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: const [
-                Color(0xFF060606),
-                Color(0xFF747474),
-              ],
-            ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0, top: 8.0,right: 12.0),
-                      child: Row(
-                        children: [
-                          Text(
-                              '${AppLocalizations.of(context).trans('popular')}',
-                              style: Theme.of(context).textTheme.headline3),
-                        ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12.0, top: 8.0,right: 12.0),
+                        child: Row(
+                          children: [
+                            Text(
+                                '${AppLocalizations.of(context).trans('popular')}',
+                                style: Theme.of(context).textTheme.headline3),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: media.width,
-                      height: 18,
-                      child: Center(
-                        child: MediaQuery.removePadding(
-                          context: context,
-                          removeTop: true,
-                          removeLeft: true,
-                          removeBottom: true,
-                          removeRight: true,
-                          child: ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Text(
-                                homeProvider
-                                    .getAllPopularCategories[index].title,
+                      SizedBox(
+                        width: media.width,
+                        height: 18,
+                        child: Center(
+                          child: MediaQuery.removePadding(
+                            context: context,
+                            removeTop: true,
+                            removeLeft: true,
+                            removeBottom: true,
+                            removeRight: true,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Text(
+                                  homeProvider
+                                      .getAllPopularCategories[index].title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      .copyWith(
+                                          color: homeProvider
+                                                      .focusOnSpecificWidget ==
+                                                  index
+                                              ? primeColor
+                                              : secondaryColor),
+                                );
+                              },
+                              itemCount:
+                                  homeProvider.getAllPopularCategories.length,
+                              separatorBuilder: (context, index) => SizedBox(
+                                width: 20,
+                              ),
+                              scrollDirection: Axis.horizontal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              navigateTo(context, SeeAllCategoriesScreen());
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 8.0),
+                              child: Text(
+                                '${AppLocalizations.of(context).trans('see_all')}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline4
                                     .copyWith(
-                                        color: homeProvider
-                                                    .focusOnSpecificWidget ==
-                                                index
-                                            ? primeColor
-                                            : secondaryColor),
-                              );
-                            },
-                            itemCount:
-                                homeProvider.getAllPopularCategories.length,
-                            separatorBuilder: (context, index) => SizedBox(
-                              width: 20,
+                                        color: primeColor,
+                                        decoration: TextDecoration.underline),
+                              ),
                             ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  homeProvider.allPopularCategoriesStage ==
+                          GetPopularCategoriesStageStage.LOADING
+                      ? CarouselSlider.builder(
+                          itemCount: 3,
+                          itemBuilder: (context, index) => Shimmer.fromColors(
+                            baseColor: Colors.grey[300],
+                            highlightColor: Colors.grey[100],
+                            child: SizedBox(
+                              height: media.height * 0.28,
+                              width: double.infinity,
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                color: Colors.white,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      width: media.width * 0.29,
+                                      height: media.height * 0.15,
+                                    ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          options: CarouselOptions(
+                            disableCenter: false,
+                            viewportFraction: 0.55,
+                            height: media.height * 0.3,
+                            aspectRatio: 16 / 9,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            initialPage: 1,
+                            enableInfiniteScroll: false,
+                            autoPlay: false,
+                            scrollDirection: Axis.horizontal,
+                          ),
+                        )
+                      : CarouselSlider.builder(
+                          itemCount: homeProvider.getAllPopularCategories.length,
+                          itemBuilder: (context, index) => createCard(
+                            onTap: (){
+                              navigateTo(context, ViewProductScreen(
+                                productId: homeProvider
+                                    .getAllPopularCategories[index].product.id,
+                              ));
+                            },
+                              productName: homeProvider
+                                  .getAllPopularCategories[index].product.title,
+                              productPrice: homeProvider
+                                  .getAllPopularCategories[index].product.price,
+                              urlImage: homeProvider
+                                  .getAllPopularCategories[index].product.image,
+                              width: media.width,
+                              height: media.height,
+                              isFocusCard:
+                                  homeProvider.focusOnSpecificWidget == index
+                                      ? true
+                                      : false),
+                          options: CarouselOptions(
+                            disableCenter: false,
+                            viewportFraction: 0.55,
+                            height: media.height * 0.3,
+                            aspectRatio: 16 / 9,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            initialPage: 1,
+                            enableInfiniteScroll: false,
+                            autoPlay: false,
+                            onPageChanged:
+                                homeProvider.focusOnSpecificWidgetFunction,
                             scrollDirection: Axis.horizontal,
                           ),
                         ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Text(
+                          '${AppLocalizations.of(context).trans('best_selling')}',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
                         InkWell(
-                          onTap: (){
-                            navigateTo(context, SeeAllCategoriesScreen());
+                          onTap: () {
+                            navigateTo(context, SeeAllBestSelling());
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -265,154 +390,40 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                  ],
-                ),
-                homeProvider.allPopularCategoriesStage ==
-                        GetPopularCategoriesStageStage.LOADING
-                    ? CarouselSlider.builder(
-                        itemCount: 3,
-                        itemBuilder: (context, index) => Shimmer.fromColors(
-                          baseColor: Colors.grey[300],
-                          highlightColor: Colors.grey[100],
-                          child: SizedBox(
-                            height: media.height * 0.28,
-                            width: double.infinity,
-                            child: Card(
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              color: Colors.white,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    width: media.width * 0.29,
-                                    height: media.height * 0.15,
-                                  ),
-                                  SizedBox(
-                                    height: 5.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        options: CarouselOptions(
-                          disableCenter: false,
-                          viewportFraction: 0.55,
-                          height: media.height * 0.3,
-                          aspectRatio: 16 / 9,
-                          enlargeCenterPage: true,
-                          enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          initialPage: 1,
-                          enableInfiniteScroll: false,
-                          autoPlay: false,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                      )
-                    : CarouselSlider.builder(
-                        itemCount: homeProvider.getAllPopularCategories.length,
-                        itemBuilder: (context, index) => createCard(
-                          onTap: (){
-                            navigateTo(context, ViewProductScreen(
-                              productId: homeProvider
-                                  .getAllPopularCategories[index].product.id,
-                            ));
-                          },
-                            productName: homeProvider
-                                .getAllPopularCategories[index].product.title,
-                            productPrice: homeProvider
-                                .getAllPopularCategories[index].product.price,
-                            urlImage: homeProvider
-                                .getAllPopularCategories[index].product.image,
-                            width: media.width,
-                            height: media.height,
-                            isFocusCard:
-                                homeProvider.focusOnSpecificWidget == index
-                                    ? true
-                                    : false),
-                        options: CarouselOptions(
-                          disableCenter: false,
-                          viewportFraction: 0.55,
-                          height: media.height * 0.3,
-                          aspectRatio: 16 / 9,
-                          enlargeCenterPage: true,
-                          enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          initialPage: 1,
-                          enableInfiniteScroll: false,
-                          autoPlay: false,
-                          onPageChanged:
-                              homeProvider.focusOnSpecificWidgetFunction,
-                          scrollDirection: Axis.horizontal,
-                        ),
-                      ),
-                SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12.0,right: 12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${AppLocalizations.of(context).trans('best_selling')}',
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          navigateTo(context, SeeAllBestSelling());
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12.0, vertical: 8.0),
-                          child: Text(
-                            '${AppLocalizations.of(context).trans('see_all')}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline4
-                                .copyWith(
-                                    color: primeColor,
-                                    decoration: TextDecoration.underline),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-                ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => const SizedBox(
-                    height: 5.0,
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: homeProvider.someBestSellingStage ==
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 5.0,
+                    ),
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: homeProvider.someBestSellingStage ==
+                              GetSomeBestSellingStage.LOADING
+                          ? loadingCard(media: media)
+                          : defaultCard(
+                        productId: homeProvider.getSomeBestSelling[index].id,
+                              titleContent: '',
+                              title: homeProvider.getSomeBestSelling[index].price,
+                              subTitle:
+                                  homeProvider.getSomeBestSelling[index].title,
+                              context: context,
+                              imgUrl:
+                                  homeProvider.getSomeBestSelling[index].image,
+                              currentIndex: index,
+                              media: media),
+                    ),
+                    itemCount: homeProvider.someBestSellingStage ==
                             GetSomeBestSellingStage.LOADING
-                        ? loadingCard(media: media)
-                        : defaultCard(
-                      productId: homeProvider.getSomeBestSelling[index].id,
-                            titleContent: '',
-                            title: homeProvider.getSomeBestSelling[index].price,
-                            subTitle:
-                                homeProvider.getSomeBestSelling[index].title,
-                            context: context,
-                            imgUrl:
-                                homeProvider.getSomeBestSelling[index].image,
-                            currentIndex: index,
-                            media: media),
+                        ? 5
+                        : homeProvider.getSomeBestSelling.length,
                   ),
-                  itemCount: homeProvider.someBestSellingStage ==
-                          GetSomeBestSellingStage.LOADING
-                      ? 5
-                      : homeProvider.getSomeBestSelling.length,
-                ),
-                SizedBox(
-                  height: 8.0,
-                )
-              ],
+                  SizedBox(
+                    height: 8.0,
+                  )
+                ],
+              ),
             ),
           ),
         ),

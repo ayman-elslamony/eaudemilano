@@ -35,7 +35,14 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  onRefresh({context,locale})async{
+    _someBestSelling=[];
+    _allPopularCategories=[];
+    this.someBestSellingStage = GetSomeBestSellingStage.LOADING;
+    await getAllPopularCategoriesFunction(context: context,locale: locale,enableNotify: true);
+    await getSomeBestSellingFunction(context: context,locale: locale);
 
+  }
 Future<void> getHomeData({context,locale})async{
   bool enableNotify=false;
   if(_someBestSelling.isEmpty || _allPopularCategories.isEmpty) {
@@ -164,9 +171,11 @@ if(enableNotify) {
   List<PopularCategories> get getAllPopularCategories => _allPopularCategories;
 
   Future<void> getAllPopularCategoriesFunction(
-      {context, locale}) async {
+      {context, locale,bool enableNotify=false}) async {
     this.allPopularCategoriesStage = GetPopularCategoriesStageStage.LOADING;
-   // notifyListeners();
+    if(enableNotify){
+      notifyListeners();
+    }
     String url = '$domain/api/popular-categories';
     await getUserToken();
     var headers = {
@@ -210,6 +219,7 @@ if(enableNotify) {
       throw e;
     }
   }
+
 
   GetSomeBestSellingStage someBestSellingStage;
   List<SomeBestSelling> _someBestSelling=[];

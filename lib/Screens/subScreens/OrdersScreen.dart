@@ -80,8 +80,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
             child: ListView.builder(
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: homeProvider.allCategoriesStage ==
-                    GetAllCategoriesStage.LOADING
+                child: homeProvider.allOrdersStage == GetAllOrdersStage.LOADING
                     ? loadingCard(media: media)
                     : Container(
                   margin:const EdgeInsets.only(top: 8.0),

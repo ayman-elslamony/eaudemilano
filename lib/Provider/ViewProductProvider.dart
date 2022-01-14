@@ -78,7 +78,7 @@ List<bool> isSelectedSizeOFProduct=[];
     }
   }
   bool isFavourite=false;
-  Future<void> addToFavouriteOrDelete({context, locale})async{
+  Future<bool> addToFavouriteOrDelete({context, locale})async{
 
     String url = '$domain/api/user/add-to-favorite/${_productView.productDetails.id}';
     await getUserToken();
@@ -102,20 +102,18 @@ List<bool> isSelectedSizeOFProduct=[];
       print('responseJson');
       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        Provider.of<FavouriteProvider>(context,listen: false).getAllProductsInFavouriteFunction(
-            context: context,
-            locale: locale
-        );
+       return true;
       }
       else {
         isFavourite = !isFavourite;
         notifyListeners();
+        return false;
       }
     } catch (e) {
       isFavourite = !isFavourite;
       notifyListeners();
       print(e);
-      throw e;
+      return false;
     }
   }
 

@@ -24,14 +24,16 @@ class FavouriteProvider extends ChangeNotifier {
   }
 
   GetAllProductsInFavouriteStage allProductsInFavouriteStage;
-  AllProductsInFavourite _allProductsInFavourite;
+  AllProductsInFavourite _allProductsInFavourite=AllProductsInFavourite(products: []);
 
   AllProductsInFavourite get getAllProductsInFavourite => _allProductsInFavourite;
 
-  Future<void> getAllProductsInFavouriteFunction({context, locale}) async {
+  Future<void> getAllProductsInFavouriteFunction({context, locale,bool enableLoading=false}) async {
 
     this.allProductsInFavouriteStage = GetAllProductsInFavouriteStage.LOADING;
-   // notifyListeners();
+    if(enableLoading){
+      notifyListeners();
+    }
     String url = '$domain/api/user/favorite';
     await getUserToken();
     print('_token');

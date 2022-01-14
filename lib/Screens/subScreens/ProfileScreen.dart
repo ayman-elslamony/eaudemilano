@@ -145,7 +145,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     titleKey: 'orders',
                     imgUrl: 'images/orders.png',
                     onTap: () {
-                      navigateTo(context, OrdersScreen());
+                    //  navigateTo(context, OrdersScreen());
                     })
                 ,showScreenComponent(titleKey: 'language_switch',imgUrl: 'images/language.png',
                 onTap: ()async{

@@ -1,5 +1,7 @@
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
+import 'package:eaudemilano/Provider/CartProvider.dart';
+import 'package:eaudemilano/Provider/FavouriteProvider.dart';
 import 'package:eaudemilano/Provider/HomeProvider.dart';
 import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Provider/ViewProductProvider.dart';
@@ -7,6 +9,7 @@ import 'package:eaudemilano/Provider/ViewProductProvider.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +26,8 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
   String _locale;
 
   String imgUrl = '';
+  FavouriteProvider _favouriteProvider;
+  CartProvider _cartProvider;
 
   @override
   void initState() {
@@ -33,6 +38,8 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     Provider.of<ViewProductProvider>(context, listen: false)
         .viewProduct(context: context, locale: _locale, id: widget.productId);
+    _favouriteProvider = Provider.of<FavouriteProvider>(context, listen: false);
+    _cartProvider = Provider.of<CartProvider>(context, listen: false);
   }
 
   Widget _createIncrementDicrementButton(IconData icon, Function onPressed) {
@@ -117,8 +124,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                 Navigator.of(context).pop();
                                               },
                                               iconSize: 19,
-                                              icon: const
-                                              Icon(
+                                              icon: const Icon(
                                                 Icons.arrow_back_ios,
                                                 color: primeColor,
                                               ),
@@ -214,7 +220,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                           ),
                                         ),
                                         const SizedBox(
-                                          height: 8,
+                                          height: 3,
                                         ),
                                         Row(
                                           children: [
@@ -251,12 +257,23 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                             ),
                                             const Spacer(),
                                             IconButton(
-                                              onPressed: () {
-                                                viewProduct
-                                                    .addToFavouriteOrDelete(
+                                              onPressed: () async {
+                                                bool isSuccess =
+                                                    await viewProduct
+                                                        .addToFavouriteOrDelete(
                                                   locale: _locale,
                                                   context: context,
                                                 );
+                                                if (isSuccess == true) {
+                                                  _favouriteProvider
+                                                      .getAllProductsInFavouriteFunction(
+                                                          context: context,
+                                                          locale: _locale);
+                                                  _cartProvider
+                                                      .getAllProductsInCartFunction(
+                                                          context: context,
+                                                          locale: _locale);
+                                                }
                                               },
                                               icon: ImageIcon(
                                                 AssetImage(
@@ -267,7 +284,10 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                 ),
                                                 color: Colors.grey[600],
                                               ),
-                                            )
+                                            ),
+                                            const SizedBox(
+                                              width: 16,
+                                            ),
                                           ],
                                         ),
                                       ],
@@ -406,63 +426,80 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                       ),
                                       Expanded(
                                         flex: 3,
-                                        child: Container(
-                                          child: MaterialButton(
-                                            onPressed: viewProduct
-                                                        .currentCount ==
-                                                    0 || viewProduct.addProductToCartStage == GetAddProductToCartStage.LOADING
-                                                ? null
-                                                : () async{
-                                                    if (viewProduct
-                                                            .idOfSelectedSizeProduct ==
-                                                        '') {
-                                                      Fluttertoast.showToast(
-                                                        msg: AppLocalizations.of(
-                                                                        context)
-                                                                    .locale
-                                                                    .languageCode ==
-                                                                "en"
-                                                            ? 'Please Select Size of product'
-                                                            : 'من فضلك اختر حجم المنتج',
-                                                        toastLength:
-                                                            Toast.LENGTH_LONG,
-                                                        gravity:
-                                                            ToastGravity.CENTER,
-                                                        timeInSecForIosWeb: 5,
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        textColor: Colors.black,
-                                                        fontSize: 16.0,
-                                                      );
-                                                    } else {
-                                                     await viewProduct.addProductToCart(
-                                                          locale: _locale,
-                                                          context: context,
-                                                          productId: viewProduct
-                                                              .productView
-                                                              .productDetails
-                                                              .id);
-                                                    }
-                                                  },
-                                            child: Text(
-                                              '${AppLocalizations.of(context).trans('add_to')}',
-                                              style: const TextStyle(
-                                                fontFamily: 'Lato',
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 15,
+                                        child: viewProduct
+                                                    .addProductToCartStage ==
+                                                GetAddProductToCartStage.LOADING
+                                            ? const SpinKitWave(
+                                                color: primeColor,
+                                                type: SpinKitWaveType.center,
+                                                size: 35,
+                                              )
+                                            : Container(
+                                                child: MaterialButton(
+                                                  onPressed: viewProduct
+                                                              .currentCount ==
+                                                          0
+                                                      ? null
+                                                      : () async {
+                                                          if (viewProduct
+                                                                  .idOfSelectedSizeProduct ==
+                                                              '') {
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg: AppLocalizations.of(
+                                                                              context)
+                                                                          .locale
+                                                                          .languageCode ==
+                                                                      "en"
+                                                                  ? 'Please Select Size of product'
+                                                                  : 'من فضلك اختر حجم المنتج',
+                                                              toastLength: Toast
+                                                                  .LENGTH_LONG,
+                                                              gravity:
+                                                                  ToastGravity
+                                                                      .CENTER,
+                                                              timeInSecForIosWeb:
+                                                                  5,
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                              textColor:
+                                                                  Colors.black,
+                                                              fontSize: 16.0,
+                                                            );
+                                                          } else {
+                                                            await viewProduct.addProductToCart(
+                                                                locale: _locale,
+                                                                context:
+                                                                    context,
+                                                                productId: viewProduct
+                                                                    .productView
+                                                                    .productDetails
+                                                                    .id);
+                                                          }
+                                                        },
+                                                  child: Text(
+                                                    '${AppLocalizations.of(context).trans('add_to')}',
+                                                    style: const TextStyle(
+                                                      fontFamily: 'Lato',
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    12.0,
+                                                  ),
+                                                  color: viewProduct
+                                                              .currentCount ==
+                                                          0
+                                                      ? secondaryColor
+                                                      : primeColor,
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              12.0,
-                                            ),
-                                            color: viewProduct.currentCount == 0||viewProduct.addProductToCartStage == GetAddProductToCartStage.LOADING
-                                                ? secondaryColor
-                                                : primeColor,
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),
