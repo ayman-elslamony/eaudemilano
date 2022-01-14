@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         width: media.width,
-                        height: 18,
+                        height:22,
                         child: Center(
                           child: MediaQuery.removePadding(
                             context: context,

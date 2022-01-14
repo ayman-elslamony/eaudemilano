@@ -177,7 +177,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 defaultTextButton(
                     function: () {
                       Provider.of<UserDataProvider>(context, listen: false)
-                          .logout(context: context, locale: _locale);
+                          .logout(context: context, locale: _locale).then((_){
+                            Provider.of<ChangeIndex>(context,listen: false).changeIndexFunction(0);
+
+                      });
                     },
                     context: context,
                     textKey: 'logout',

@@ -11,6 +11,7 @@ import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/PopularCategoriesModel.dart';
 import 'package:eaudemilano/Models/ProductViewModel.dart';
+import 'package:eaudemilano/Models/SettingInformation.dart';
 import 'package:eaudemilano/Models/SomeBestSellingModel.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ enum GetPopularCategoriesStageStage { ERROR, LOADING, DONE }
 enum GetSomeBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllOrdersStage { ERROR, LOADING, DONE }
+enum GetSettingInformationStage { ERROR, LOADING, DONE }
 
 class HomeProvider extends ChangeNotifier {
 
@@ -65,6 +67,7 @@ if(enableNotify) {
   notifyListeners();
 }
 }
+
   GetAllCategoriesStage allCategoriesStage;
   List<Categorie> _allCategories=[];
 
@@ -373,5 +376,60 @@ if(enableNotify) {
    notifyListeners();
 }
 
+  GetSettingInformationStage settingInformationStage;
+  static SettingInformation _settingInformation;
 
+  SettingInformation get getSettingInformation => _settingInformation;
+
+  Future<void> getSettingInformationFunction({context, locale,bool enableNotify=false}) async {
+    if(_settingInformation == null){
+      if(enableNotify == true){
+        this.settingInformationStage = GetSettingInformationStage.LOADING;
+        notifyListeners();
+      }
+      String url = '$domain/api/setting';
+      var headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'api_password': apiPassword,
+        'language': locale.toString()
+      };
+      try {
+        Dio dio = Dio();
+        Response response = await dio.get(url,
+            options: Options(
+                followRedirects: false,
+                validateStatus: (status) => true,
+                headers: headers));
+        var responseJson = response.data;
+        print('Iam');
+        print(responseJson);
+        if (response.statusCode == 200 && responseJson["status"] == true) {
+          if (responseJson['data'] != null) {
+            _settingInformation = SettingInformation.fromJson(responseJson['data']);
+          }
+          print(_settingInformation.areas.length.toString());
+          if(enableNotify == true){
+            this.settingInformationStage = GetSettingInformationStage.DONE;
+            notifyListeners();
+          }
+        } else {
+          print('D');
+          var errors = responseJson['message'];
+          showAlertDialog(context, content: '$errors');
+          if(enableNotify == true){
+            this.settingInformationStage = GetSettingInformationStage.ERROR;
+            notifyListeners();
+          }
+        }
+      } catch (e) {
+        if(enableNotify == true){
+          this.settingInformationStage = GetSettingInformationStage.ERROR;
+          notifyListeners();
+        }
+        print(e);
+        throw e;
+      }
+    }
+  }
 }

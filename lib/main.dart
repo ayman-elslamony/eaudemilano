@@ -56,10 +56,11 @@ void main() async {
 //      AndroidFlutterLocalNotificationsPlugin>()
 //      ?.createNotificationChannel(channel);
 
-  SystemChrome.setEnabledSystemUIOverlays([
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
     SystemUiOverlay.top,
     SystemUiOverlay.bottom,
   ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
 

@@ -15,7 +15,8 @@ enum GetCheckOutProviderStage { ERROR, LOADING, DONE }
 
 class CheckOutProvider extends ChangeNotifier {
   String _token = '';
-    static String _directLink = '';
+
+  static String _directLink = '';
     static int _paymentMethod =0;
 
    String get directLink => _directLink;
@@ -32,6 +33,13 @@ class CheckOutProvider extends ChangeNotifier {
   }
   GetCheckOutProviderStage checkOutProviderStage;
 
+  static int _areaId=1;
+
+  setAreaId(val){
+    print('dgdg');
+    print(val);
+    _areaId = val;
+  }
   Future<bool> sendUserData({
     context,
     locale,
@@ -39,7 +47,6 @@ class CheckOutProvider extends ChangeNotifier {
     sur_name,
     email,
     mobile,
-    area_id,
     street,
     zip_code,
     city,
@@ -65,7 +72,7 @@ class CheckOutProvider extends ChangeNotifier {
       'sur_name': sur_name,
       'email': email,
       'mobile': mobile,
-      'area_id': area_id,
+      'area_id': _areaId,
       'street': street,
       'zip_code': zip_code,
       'city': city,

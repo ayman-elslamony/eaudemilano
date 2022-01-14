@@ -45,6 +45,13 @@ class ProductDetails {
   String size;
   String description;
   String image;
+  String favorite;
+  ProductInCart productInCart =
+  ProductInCart(
+      quantity: '0',
+      sizeId: '',
+      sizeName: ''
+  );
 
   ProductDetails({this.id,
     this.title,
@@ -53,7 +60,8 @@ class ProductDetails {
     this.price,
     this.size,
     this.description,
-    this.image});
+    this.productInCart,
+    this.image,this.favorite});
 
   ProductDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -64,21 +72,49 @@ class ProductDetails {
     size = json['size'];
     description = json['description'];
     image = json['image'];
+    favorite=json['favorite'];
+    print('product_in_cart');
+    print(json['product_in_cart'].runtimeType);
+    if (json['product_in_cart'] != null) {
+      json['product_in_cart'].forEach((v) {
+        print('v');
+        print(v);
+        productInCart=ProductInCart.fromJson(v);
+      });
+    }
   }
 
 }
+class ProductInCart {
+  int id;
+  String sizeId='';
+  String sizeName;
+  String quantity='0';
 
+  ProductInCart({this.id, this.sizeId='', this.sizeName='6644', this.quantity='0'});
+
+  ProductInCart.fromJson(Map<String, dynamic> json) {
+    print('dgdg');
+    id = json['id'];
+    sizeId = json['size_id']??'';
+    sizeName = json['size_name']??'';
+    quantity = json['quantity']??'0';
+  }
+
+}
 class ProductSizes {
   int id;
   String sizeId;
   String sizeName;
   String priceBeforeDiscount;
   String price;
+  bool isSelected;
 
   ProductSizes({this.id,
     this.sizeId,
     this.sizeName,
     this.priceBeforeDiscount,
+    this.isSelected=false,
     this.price});
 
   ProductSizes.fromJson(Map<String, dynamic> json) {
@@ -87,6 +123,7 @@ class ProductSizes {
     sizeName = json['size_name'];
     priceBeforeDiscount = json['price_before_discount'];
     price = json['price'];
+    isSelected=false;
   }
 
 }

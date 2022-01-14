@@ -32,7 +32,6 @@ class UserDataProvider extends ChangeNotifier {
   // get user Data From Shared Preferences
 
   Future getUserData() async {
-
     Helper.is_loggedIn = await Helper.getUserLoggedInSharedPreferences();
     Helper.userId = await Helper.getUserIdInSharedPreferences();
     Helper.userName = await Helper.getUsernameInSharedPreferences();
@@ -342,9 +341,8 @@ class UserDataProvider extends ChangeNotifier {
   }
 
 // Logout
-  logout({context, locale,}) async {
+ Future logout({context, locale,}) async {
     this.stage = UserDataProviderStage.LOADING;
-
 
     String url = '$domain/api/logout';
     var token = Helper.token;

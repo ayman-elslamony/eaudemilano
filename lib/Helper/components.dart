@@ -496,6 +496,7 @@ Widget defaultFormField({
   bool isClickable = true,
   bool readOnly = false,
   bool removeContainer=false,
+  Widget suffixWidget,
   bool autoFocus=false
 }) =>
     SizedBox(
@@ -518,6 +519,7 @@ Widget defaultFormField({
             enabled: isClickable,
             onFieldSubmitted: onSubmit,
             onChanged: onChange,
+
             onTap: onTap ?? () {},
             validator: validate,
             cursorColor: primeColor,
@@ -543,6 +545,7 @@ Widget defaultFormField({
                       ),
                     )
                   : null,
+              suffix: suffixWidget == null ?null:suffixWidget,
               fillColor: const Color(0xFF8C8C8C),
               filled: true,
               errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),

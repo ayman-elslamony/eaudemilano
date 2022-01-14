@@ -130,20 +130,20 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                               ),
                                             ),
                                             const Spacer(),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Image.asset(
-                                                  'images/share.png',
-                                                  color: primeColor,
-                                                  fit: BoxFit.fill,
-                                                  height: 20,
-                                                  width: 20,
-                                                ),
-                                              ),
-                                            ),
+//                                            InkWell(
+//                                              onTap: () {},
+//                                              child: Padding(
+//                                                padding:
+//                                                    const EdgeInsets.all(8.0),
+//                                                child: Image.asset(
+//                                                  'images/share.png',
+//                                                  color: primeColor,
+//                                                  fit: BoxFit.fill,
+//                                                  height: 20,
+//                                                  width: 20,
+//                                                ),
+//                                              ),
+//                                            ),
                                           ],
                                         ),
                                         SizedBox(
@@ -353,8 +353,10 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                               border: Border.all(
                                                   color: secondaryColor),
                                               color:
-                                                  viewProduct.isSelectedSizeOFProduct[
-                                                              index] ==
+                                              viewProduct
+                                                  .productView
+                                                  .productDetailsSizes[index]
+                                                    .isSelected ==
                                                           true
                                                       ? const Color(0xFF8C8C8C)
                                                       : Colors.transparent,
@@ -438,12 +440,9 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                 child: MaterialButton(
                                                   onPressed: viewProduct
                                                               .currentCount ==
-                                                          0
-                                                      ? null
+                                                          0 ? null
                                                       : () async {
-                                                          if (viewProduct
-                                                                  .idOfSelectedSizeProduct ==
-                                                              '') {
+                                                          if (viewProduct.productView.productDetails.productInCart.sizeId == '') {
                                                             Fluttertoast
                                                                 .showToast(
                                                               msg: AppLocalizations.of(
@@ -466,7 +465,33 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                                   Colors.black,
                                                               fontSize: 16.0,
                                                             );
-                                                          } else {
+                                                          }else if(viewProduct
+                                                              .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
+                                                          ){
+                                                            Fluttertoast
+                                                                .showToast(
+                                                              msg: AppLocalizations.of(
+                                                                  context)
+                                                                  .locale
+                                                                  .languageCode ==
+                                                                  "en"
+                                                                  ? 'This quantity Of Product already exists'
+                                                                  : 'هذه الكمية موجودة بالفعل',
+                                                              toastLength: Toast
+                                                                  .LENGTH_LONG,
+                                                              gravity:
+                                                              ToastGravity
+                                                                  .CENTER,
+                                                              timeInSecForIosWeb:
+                                                              5,
+                                                              backgroundColor:
+                                                              Colors.red,
+                                                              textColor:
+                                                              Colors.black,
+                                                              fontSize: 16.0,
+                                                            );
+                                                          }
+                                                          else {
                                                             await viewProduct.addProductToCart(
                                                                 locale: _locale,
                                                                 context:
@@ -495,7 +520,9 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                   ),
                                                   color: viewProduct
                                                               .currentCount ==
-                                                          0
+                                                          0|| viewProduct
+                                                      .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
+
                                                       ? secondaryColor
                                                       : primeColor,
                                                 ),

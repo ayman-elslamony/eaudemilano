@@ -69,8 +69,7 @@ class _NavigationHomeState extends State<NavigationHome> {
 
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-
-
+    Provider.of<HomeProvider>(context,listen: false).getSettingInformationFunction(context: context,locale: _locale);
 
   }
   Widget drawerText(

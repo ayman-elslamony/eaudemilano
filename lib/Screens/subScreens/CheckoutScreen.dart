@@ -3,6 +3,7 @@ import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Localization/app_localizations.dart';
 import 'package:eaudemilano/Provider/CartProvider.dart';
 import 'package:eaudemilano/Provider/CheckOutProvider.dart';
+import 'package:eaudemilano/Provider/HomeProvider.dart';
 import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Provider/changeIndexPage.dart';
 
@@ -10,6 +11,7 @@ import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
@@ -116,9 +118,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             activeColor: Theme.of(context).primaryColor,
             title: Text(
               '${AppLocalizations.of(context).trans(titleKey)}',
-              style: Theme.of(context).textTheme.headline2.copyWith(
-                fontSize: 15
-              ),
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 15),
             ),
 
             value: index,
@@ -317,28 +318,73 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         '${AppLocalizations.of(context).trans('country_region')}',
                   ),
                   spacerWidget,
-                  defaultFormField(
-                    hintText:
-                        '${AppLocalizations.of(context).trans('province')}',
-                    onTap: () {
-                      setState(() {
-                        _provinceValidator = false;
-                      });
-                    },
-                    controller: provinceController,
-                    type: TextInputType.text,
-                    validate: (String val) {
-                      if (val == null || val.isEmpty) {
-                        setState(() {
-                          _provinceValidator = true;
-                        });
-                      } else {
+//                  Provider.of<HomeProvider>(context,listen: false).
+                  Consumer<HomeProvider>(
+                    builder: (context, homeProvider, child) => defaultFormField(
+                      suffixWidget: SizedBox(
+                        child: PopupMenuButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: const EdgeInsets.only(top: 15),
+                          tooltip:
+                              '${AppLocalizations.of(context).trans('province')}',
+                          itemBuilder: (ctx) {
+                            return homeProvider.getSettingInformation.areas
+                                .map((val) => PopupMenuItem<String>(
+                                      value: val.name.toString(),
+                                      child: Center(
+                                          child: Text(
+                                        val.name.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
+                                      )),
+                                    ))
+                                .toList();
+                          },
+                          onSelected: (val) {
+                            print('val');
+                            print(val);
+                            for (var element
+                                in homeProvider.getSettingInformation.areas) {
+                              if (element.name == val) {
+                                _checkOutProvider.setAreaId(element.id);
+                              }
+                            }
+                            setState(() {
+                              provinceController.text = val;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down,
+                            size: 25,
+                          ),
+                        ),
+                      ),
+                      readOnly: true,
+                      hintText:
+                          '${AppLocalizations.of(context).trans('province')}',
+                      onTap: () {
                         setState(() {
                           _provinceValidator = false;
                         });
-                      }
-                      return null;
-                    },
+                      },
+                      controller: provinceController,
+                      type: TextInputType.text,
+                      validate: (String val) {
+                        if (val == null || val.isEmpty) {
+                          setState(() {
+                            _provinceValidator = true;
+                          });
+                        } else {
+                          setState(() {
+                            _provinceValidator = false;
+                          });
+                        }
+                        return null;
+                      },
+                    ),
                   ),
                   validatorForm(
                     context: context,
@@ -458,41 +504,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 44.0,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: defaultTextButton(
-                                function: () {
-                                  Navigator.of(context).pop();
-                                },
-                                context: context,
-                                textKey: 'back'),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Consumer<CheckOutProvider>(
-                            builder: (context, checkOutProvider, child) =>
-                                Expanded(
-                              flex: 2,
-                              child: checkOutProvider.checkOutProviderStage ==
-                                      GetCheckOutProviderStage.LOADING
-                                  ? SpinKitWave(
-                                      color: primeColor,
-                                      type: SpinKitWaveType.center,
-                                      size: 35,
-                                    )
-                                  : defaultButton(
-                                      function: goToNextStep,
-                                      text:
-                                          '${AppLocalizations.of(context).trans('next')}'),
-                            ),
-                          ),
-                        ],
+                    child: Consumer<CheckOutProvider>(
+                      builder: (context, checkOutProvider, child) => SizedBox(
+                        width: double.infinity,
+                        height: 44.0,
+                        child: checkOutProvider.checkOutProviderStage ==
+                                GetCheckOutProviderStage.LOADING
+                            ? const Center(
+                                child: SpinKitWave(
+                                  color: primeColor,
+                                  type: SpinKitWaveType.center,
+                                  size: 35,
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: defaultTextButton(
+                                        function: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        context: context,
+                                        textKey: 'back'),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: defaultButton(
+                                        function: goToNextStep,
+                                        text:
+                                            '${AppLocalizations.of(context).trans('next')}'),
+                                  ),
+                                ],
+                              ),
                       ),
                     ),
                   ),
@@ -604,11 +651,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         fit: BoxFit.fill,
                       ),
                     ),
-                   const SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     Text(
-                        _checkOutProvider.paymentMethod==2?'${AppLocalizations.of(context).trans('your_order_will_arrive_soon')}':'${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
+                      _checkOutProvider.paymentMethod == 2
+                          ? '${AppLocalizations.of(context).trans('your_order_will_arrive_soon')}'
+                          : '${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -647,13 +696,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         height: 0.7,
                                         color: primeColor,
                                       )),
-                              SizedBox(
+                              const SizedBox(
                                 width: 8,
                               ),
-                              ImageIcon(
-                                AssetImage('images/arrow.png'),
-                                size: 14,
-                                color: primeColor,
+                              const Icon(
+                                Icons.arrow_forward,
+                                size: 22,
+                                color: Colors.white,
                               ),
                             ],
                           ),
@@ -680,16 +729,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: 15.0,
                     ),
                     ListView.builder(
-                        itemCount: _cartProvider.getAllProductsInCart.specificProduct.length,
-  itemBuilder: (context,index)=>showRecipt(
-    title:  _cartProvider.getAllProductsInCart.specificProduct[index].product.title,
-    salary: _cartProvider.getAllProductsInCart.specificProduct[index].total
-  ),
-  shrinkWrap: true,
-  physics: const NeverScrollableScrollPhysics(),
-
-                        ),
-                   const SizedBox(
+                      itemCount: _cartProvider
+                          .getAllProductsInCart.specificProduct.length,
+                      itemBuilder: (context, index) => showRecipt(
+                          title: _cartProvider.getAllProductsInCart
+                              .specificProduct[index].product.title,
+                          salary: _cartProvider.getAllProductsInCart
+                              .specificProduct[index].total),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+                    const SizedBox(
                       height: 10,
                     ),
                     myDivider(height: 25),
@@ -766,37 +816,38 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             Expanded(
                               flex: 2,
                               child: defaultButton(
-                                  function: () async{
+                                  function: () async {
                                     //My fatora
-                                    if(_checkOutProvider.paymentMethod==1){
+                                    if (_checkOutProvider.paymentMethod == 1) {
                                       Navigator.push(
                                         context,
                                         PageRouteBuilder(
-                                          pageBuilder: (context,animation1, animation2) => PaymentWebView(
+                                          pageBuilder: (context, animation1,
+                                                  animation2) =>
+                                              PaymentWebView(
                                             url: _checkOutProvider.directLink,
                                           ),
-                                          transitionDuration:
-                                          const Duration(milliseconds: 1000),
+                                          transitionDuration: const Duration(
+                                              milliseconds: 1000),
                                         ),
-                                      ).then((value){
-                                        if(value==true){
-  setState(() {
-                                        _showDoneWidget = true;
-                                      });
+                                      ).then((value) {
+                                        if (value == true) {
+                                          setState(() {
+                                            _showDoneWidget = true;
+                                          });
                                         }
                                       });
-
                                     }
                                     //cache on del...
-                                    if(_checkOutProvider.paymentMethod==2){
+                                    if (_checkOutProvider.paymentMethod == 2) {
                                       setState(() {
                                         _showDoneWidget = true;
                                       });
                                     }
-
                                   },
-                                  text:
-                                      _checkOutProvider.paymentMethod==2?'${AppLocalizations.of(context).trans('finish')}':'${AppLocalizations.of(context).trans('pay')}'),
+                                  text: _checkOutProvider.paymentMethod == 2
+                                      ? '${AppLocalizations.of(context).trans('finish')}'
+                                      : '${AppLocalizations.of(context).trans('pay')}'),
                             ),
                           ],
                         ),
@@ -880,11 +931,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       print(_activeCurrentStep);
       if (_activeCurrentStep == 1) {
         _checkOutProvider.setPaymentMethod(radioTilePaymentResult);
-        if(radioTilePaymentResult == 1){
-
-        }else{
-
-        }
+        if (radioTilePaymentResult == 1) {
+        } else {}
         setState(() {
           _activeCurrentStep += 1;
         });
@@ -904,30 +952,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             emailAddressController.text.isNotEmpty) {
           print('efgegerg');
           form.save();
-          String areaId =
-              '${countryRegionController.text}/${provinceController.text}/${cityController.text}';
-         _checkOutProvider.sendUserData(
-              locale: _locale,
-              context: context,
-              name: nameController.text,
-              sur_name: surNameController.text,
-              email: emailAddressController.text,
-              mobile: telephoneController.text,
-              city: areaId,
-              street: streetNumberController.text,
-              area_id: 1,
-              zip_code: zipController.text).then((result){
-           if (result == true) {
-            // _cartProvider.resetAllProductsInCart();
-             setState(() {
-               _activeCurrentStep += 1;
-             });
-             return;
-           }
-         });
+          String address =
+              '${countryRegionController.text}-${provinceController.text}-${cityController.text}';
+          _checkOutProvider
+              .sendUserData(
+                  locale: _locale,
+                  context: context,
+                  name: nameController.text,
+                  sur_name: surNameController.text,
+                  email: emailAddressController.text,
+                  mobile: telephoneController.text,
+                  city: address,
+                  street: streetNumberController.text,
+                  zip_code: zipController.text)
+              .then((result) {
+            if (result == true) {
+              // _cartProvider.resetAllProductsInCart();
+              setState(() {
+                _activeCurrentStep += 1;
+              });
+              return;
+            }
+          });
         }
       }
-
     }
   }
 
@@ -936,13 +984,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     nameController.text = Helper.userName;
     telephoneController.text = Helper.userPhone;
     emailAddressController.text = Helper.userEmail;
-
-  surNameController.text='kamel';
-   streetNumberController.text='ahmed oraby street';
- zipController.text='2050';
-    countryRegionController.text='egypt';
-    provinceController.text='mansoura';
-    cityController.text='mansoura';
+    //Provider.of<HomeProvider>(context,listen: false).getSettingInformationFunction(context: context,locale: _locale,enableNotify: true);
+    surNameController.text = 'kamel';
+    streetNumberController.text = 'ahmed oraby street';
+    countryRegionController.text = 'Egypt';
+    zipController.text = '2050';
+    provinceController.text = 'mansoura';
+    cityController.text = 'mansoura';
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     _checkOutProvider = Provider.of<CheckOutProvider>(context, listen: false);
@@ -953,8 +1001,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
+    return WillPopScope(
+      onWillPop: ()async{
+       if( Provider.of<CheckOutProvider>(context)
+           .checkOutProviderStage !=
+           GetCheckOutProviderStage.LOADING){
+         SystemNavigator.pop();
+       }
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
 //        leading: IconButton(onPressed: (){
 //          if(_showDoneWidget==true){
 //            Navigator.pushAndRemoveUntil(
@@ -978,83 +1035,88 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //        },  icon:const ImageIcon(
 //              AssetImage('images/back.png'),
 //            ),),
-        leading: Consumer<ChangeIndex>(
-          builder: (context, changeIndex, child) => IconButton(
-            onPressed: () {
-              if (_showDoneWidget) {
-                changeIndex.changeIndexFunction(0);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          NavigationHome(),
-                      transitionDuration: const Duration(seconds: 0),
-                    ),
-                    (Route<dynamic> route) => false);
-              } else {
-                Navigator.of(context).pop();
-              }
-            },
-            icon: const ImageIcon(
-              AssetImage('images/back.png'),
+          leading: Consumer<ChangeIndex>(
+            builder: (context, changeIndex, child) => IconButton(
+              onPressed: Provider.of<CheckOutProvider>(context)
+                          .checkOutProviderStage ==
+                      GetCheckOutProviderStage.LOADING
+                  ? null
+                  : () {
+                      if (_showDoneWidget) {
+                        changeIndex.changeIndexFunction(0);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  NavigationHome(),
+                              transitionDuration: const Duration(seconds: 0),
+                            ),
+                            (Route<dynamic> route) => false);
+                      } else {
+                        Navigator.of(context).pop();
+                      }
+                    },
+              icon: const ImageIcon(
+                AssetImage('images/back.png'),
+              ),
             ),
           ),
-        ),
-        title: Text(
-          '${AppLocalizations.of(context).trans('checkout')}',
-          style: Theme.of(context)
-              .textTheme
-              .headline3
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        bottom: PreferredSize(
-            child: Theme(
-                data: ThemeData(
-                    canvasColor: const Color(0xFF060606),
-                    colorScheme: ColorScheme.light(
-                      //background: Colors.transparent,
-                      primary: _showDoneWidget
-                          ? const Color(0xFF27AE60)
-                          : primeColor,
-                      onSurface: _showDoneWidget
-                          ? const Color(0xFF27AE60)
-                          : Colors.grey[600],
-                    )),
-                child: SizedBox(
-                  width: media.width,
-                  height: 75,
-                  child: Stepper(
-                    type: StepperType.horizontal,
-                    steps: steps(),
-                    onStepContinue: goToNextStep,
-                    // onStepCancel takes us to the previous step
-                    onStepCancel: backToPreviousStep,
-
-                    // onStepTap allows to directly click on the particular step we want
-                    onStepTapped: (int index) {
-                      setState(() {
-                        _activeCurrentStep = index;
-                      });
-                    },
-                  ),
-                )),
-            preferredSize: Size(media.width, 70)),
-      ),
-      body: Container(
-        width: media.width,
-        height: media.height * 0.8,
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color(0xFF060606),
-              Color(0xFF747474),
-            ],
+          title: Text(
+            '${AppLocalizations.of(context).trans('checkout')}',
+            style: Theme.of(context)
+                .textTheme
+                .headline3
+                .copyWith(fontWeight: FontWeight.bold),
           ),
+          bottom: PreferredSize(
+              child: Theme(
+                  data: ThemeData(
+                      canvasColor: const Color(0xFF060606),
+                      colorScheme: ColorScheme.light(
+                        //background: Colors.transparent,
+                        primary: _showDoneWidget
+                            ? const Color(0xFF27AE60)
+                            : primeColor,
+                        onSurface: _showDoneWidget
+                            ? const Color(0xFF27AE60)
+                            : Colors.grey[600],
+                      )),
+                  child: SizedBox(
+                    width: media.width,
+                    height: 75,
+                    child: Stepper(
+                      type: StepperType.horizontal,
+                      steps: steps(),
+                      onStepContinue: goToNextStep,
+                      // onStepCancel takes us to the previous step
+                      onStepCancel: backToPreviousStep,
+
+                      // onStepTap allows to directly click on the particular step we want
+                      onStepTapped: (int index) {
+                        setState(() {
+                          _activeCurrentStep = index;
+                        });
+                      },
+                    ),
+                  )),
+              preferredSize: Size(media.width, 70)),
         ),
-        child: stepList()[_activeCurrentStep],
+        body: Container(
+          width: media.width,
+          height: media.height * 0.8,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color(0xFF060606),
+                Color(0xFF747474),
+              ],
+            ),
+          ),
+          child: stepList()[_activeCurrentStep],
+        ),
       ),
     );
   }
