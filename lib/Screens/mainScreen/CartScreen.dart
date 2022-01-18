@@ -21,16 +21,16 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   String _locale;
   FavouriteProvider favouriteProvider;
-  RefreshController _refreshController ;
+  RefreshController _refreshControllerCartScreen ;
   void _onRefresh() async {
     await Provider.of<CartProvider>(context, listen: false)
         .getAllProductsInCartFunction(context: context, locale: _locale,enableLoading: false);
-    _refreshController.refreshCompleted();
+    _refreshControllerCartScreen.refreshCompleted();
   }
 
   @override
   void initState() {
-    _refreshController =
+    _refreshControllerCartScreen =
         RefreshController(initialRefresh: false);
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
@@ -48,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
     return Consumer<CartProvider>(
       builder: (context, cartProvider, child) => SmartRefresher(
         enablePullDown: true,
-        controller: _refreshController,
+        controller: _refreshControllerCartScreen,
         onRefresh: _onRefresh,
         child: Scaffold(
             appBar: AppBar(
@@ -151,64 +151,90 @@ class _CartScreenState extends State<CartScreen> {
                   ],
                 ),
               ),
-              child:  ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: cartProvider.allProductsInCartStage ==
-                      GetAllProductsInCartStage.LOADING?loadingCard(media: media):defaultCard(
-                    productId: cartProvider.getAllProductsInCart.specificProduct[index].product.id,
-                      titleContent: cartProvider.getAllProductsInCart.specificProduct[index].quantity,
-                      title: cartProvider.getAllProductsInCart.specificProduct[index].price,
-                      subTitle: cartProvider.getAllProductsInCart.specificProduct[index].product.title,
-                      imgUrl: cartProvider.getAllProductsInCart.specificProduct[index].product.image,
-                      context: context, currentIndex: index, media: media,
-                      onDeletePressed: (){
-                        showDialog(
-                            context: context,
-                            builder: (context) =>  AlertDialog(
-                              title: Text(
-                                '${AppLocalizations.of(context).trans('remove_item')}',
-                                style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.black87,fontWeight: FontWeight.bold),
-                                textAlign: TextAlign.start,
-                              ),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 18),
-                              content: SizedBox(
-                                height:80,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const SizedBox()
-                                    ,defaultTextButton(function: (){
-                                      Navigator.of(context).pop();
-                                    }, textKey: 'cancel',context: context),
-                                    defaultButton(function: (){
-                                      cartProvider.removeProductFromCart(context: context,locale: _locale,productIndex: index);
-                                    Navigator.of(context).pop();
-                                    }, text: '${AppLocalizations.of(context).trans('remove')}',width: 120,)
-                                  ],
-                                ),
-                              ),
-                            ));
-                      },
-                      favIconUrl: cartProvider.getAllProductsInCart.specificProduct[index].favorite=='no'?'images/fav.png':'images/favWithColor.png',
-                    onFavPressed:()async{
-                     bool result=await cartProvider.addToFavouriteOrDelete(locale: _locale,context: context,index: index,);
-                    if(result == true){
-                      favouriteProvider.getAllProductsInFavouriteFunction(
-                          context: context,
-                          locale: _locale
-                      );
-                    }
-                     },
-                    isEnabledReload: cartProvider.getAllProductsInCart.specificProduct[index].enableLoader
-                  ),
+              child:   cartProvider.allProductsInCartStage ==
+                  GetAllProductsInCartStage.DONE && cartProvider.getAllProductsInCart.specificProduct.isEmpty
+                  ? Center(
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Text(
+                          '${AppLocalizations.of(context).trans('no_products')}',
+                          style: Theme.of(context).textTheme.headline3,
+                          textAlign: TextAlign.center,
+                        )),
+                  ],
                 ),
-                itemCount: cartProvider.allProductsInCartStage ==
-                    GetAllProductsInCartStage.LOADING?8:cartProvider.getAllProductsInCart.specificProduct.length ,
+              )
+                  : SingleChildScrollView(
+                child: Column(
+                  children: [
+               MediaQuery.removePadding(
+                      context: context,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: cartProvider.allProductsInCartStage ==
+                              GetAllProductsInCartStage.LOADING?loadingCard(media: media):defaultCard(
+                            productId: cartProvider.getAllProductsInCart.specificProduct[index].product.id,
+                              titleContent: cartProvider.getAllProductsInCart.specificProduct[index].quantity,
+                              title: cartProvider.getAllProductsInCart.specificProduct[index].price,
+                              subTitle: cartProvider.getAllProductsInCart.specificProduct[index].product.title,
+                              imgUrl: cartProvider.getAllProductsInCart.specificProduct[index].product.image,
+                              context: context, currentIndex: index, media: media,
+                              onDeletePressed: (){
+                                showDialog(
+                                    context: context,
+                                    builder: (context) =>  AlertDialog(
+                                      title: Text(
+                                        '${AppLocalizations.of(context).trans('remove_item')}',
+                                        style: Theme.of(context).textTheme.headline3.copyWith(color: Colors.black87,fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(25.0))),
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 20,vertical: 18),
+                                      content: SizedBox(
+                                        height:80,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const SizedBox()
+                                            ,defaultTextButton(function: (){
+                                              Navigator.of(context).pop();
+                                            }, textKey: 'cancel',context: context),
+                                            defaultButton(function: (){
+                                              cartProvider.removeProductFromCart(context: context,locale: _locale,productIndex: index);
+                                            Navigator.of(context).pop();
+                                            }, text: '${AppLocalizations.of(context).trans('remove')}',width: 120,)
+                                          ],
+                                        ),
+                                      ),
+                                    ));
+                              },
+                              favIconUrl: cartProvider.getAllProductsInCart.specificProduct[index].favorite=='no'?'images/fav.png':'images/favWithColor.png',
+                            onFavPressed:()async{
+                             bool result=await cartProvider.addToFavouriteOrDelete(locale: _locale,context: context,index: index,);
+                            if(result == true){
+                              favouriteProvider.getAllProductsInFavouriteFunction(
+                                  context: context,
+                                  locale: _locale
+                              );
+                            }
+                             },
+                            isEnabledReload: cartProvider.getAllProductsInCart.specificProduct[index].enableLoader
+                          ),
+                        ),
+                        itemCount: cartProvider.allProductsInCartStage ==
+                            GetAllProductsInCartStage.LOADING?5:cartProvider.getAllProductsInCart.specificProduct.length ,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    )
+                  ],
+                ),
               ),
             ),
 

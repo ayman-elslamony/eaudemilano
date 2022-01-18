@@ -44,13 +44,15 @@
   "add_to": "اضافة إلى السلة",
   "add_to_card": "تم الإضافة إلى عربة التسوق بنجاح",
   "home": "الصفحة الرئيسية",
+  "no_products": "لايوجد منتجات حالياً",
   "exclusive_for_woman": "حصرياً للنساء",
   "exclusive_for_man": "حصرياً للرجال",
   "partners": "المشاركين",
   "checkout": "الدفع",
   "finish": "إنهاء",
-
-
+  "swipe_up": "إسحب للأعلى",
+  "no_more_notifications": "ﻻ توجد منتجات اخرى",
+  "load_failed": "فشل التحميل! انقر فوق إعادة المحاولة!",
   "billing_details": "تفاصيل الفاتورة",
   "name": "اسم",
   "surname": "لقب",

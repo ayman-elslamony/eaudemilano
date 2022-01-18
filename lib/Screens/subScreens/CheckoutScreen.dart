@@ -36,7 +36,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _provinceValidator = false;
   bool _telephoneValidator = false;
   bool _emailValidator = false;
-  bool _pay_with_paypalValidator = false;
 
   var nameController = TextEditingController();
   var surNameController = TextEditingController();
@@ -47,9 +46,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   var provinceController = TextEditingController();
   var telephoneController = TextEditingController();
   var emailAddressController = TextEditingController();
-  var pay_with_paypalController = TextEditingController();
   var formKeyForUserData = GlobalKey<FormState>();
-  var formKeyForPay = GlobalKey<FormState>();
   var _locale;
 
   Widget validatorForm(
@@ -76,7 +73,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     height: 6,
   );
 
-  Widget showRecipt({String title, String salary}) {
+  Widget showRecipt({String title, String salary,String size ,String quantity}) {
     return SizedBox(
       height: 28,
       child: ListTile(
@@ -88,6 +85,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 color: Colors.white,
               ),
         ),
+//          subtitle: Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            children: [
+//              Text(
+//                quantity,
+//                style: Theme.of(context).textTheme.headline5.copyWith(
+//                  color: Colors.white,
+//                ),
+//              ),
+//              Text(
+//                size,
+//                style: Theme.of(context).textTheme.headline5.copyWith(
+//                  color: Colors.white,
+//                ),
+//              )
+//            ],
+//          ),
         trailing: Text(
           '$salary\$',
           style: Theme.of(context).textTheme.headline5.copyWith(
@@ -98,43 +112,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  int radioTilePaymentResult = 0;
-
-  Widget radioTileCard({BuildContext context, int index, String titleKey}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15.0),
-      width: 330,
-      height: 55.0,
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(11.0),
-          ),
-          border: Border.all(color: Colors.grey[300])),
-      child: SizedBox(
-        child: Theme(
-          data: ThemeData(unselectedWidgetColor: Colors.grey[300]),
-          child: RadioListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-            activeColor: Theme.of(context).primaryColor,
-            title: Text(
-              '${AppLocalizations.of(context).trans(titleKey)}',
-              style:
-                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 15),
-            ),
-
-            value: index,
-            groupValue: radioTilePaymentResult,
-            onChanged: (value) {
-              setState(() {
-                print(value);
-                radioTilePaymentResult = value;
-              });
-            }, //  <-- leading Checkbox
-          ),
-        ),
-      ),
-    );
-  }
+//   int radioTilePaymentResult = 0;
+//
+//  Widget radioTileCard({BuildContext context, int index, String titleKey}) {
+//    return Container(
+//      margin: const EdgeInsets.only(bottom: 15.0),
+//      width: 330,
+//      height: 55.0,
+//      decoration: BoxDecoration(
+//          borderRadius: const BorderRadius.all(
+//            Radius.circular(11.0),
+//          ),
+//          border: Border.all(color: Colors.grey[300])),
+//      child: SizedBox(
+//        child: Theme(
+//          data: ThemeData(unselectedWidgetColor: Colors.grey[300]),
+//          child: RadioListTile(
+//            contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
+//            activeColor: Theme.of(context).primaryColor,
+//            title: Text(
+//              '${AppLocalizations.of(context).trans(titleKey)}',
+//              style:
+//                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 15),
+//            ),
+//
+//            value: index,
+//            groupValue: radioTilePaymentResult,
+//            onChanged: (value) {
+//              setState(() {
+//                print(value);
+//                radioTilePaymentResult = value;
+//              });
+//            }, //  <-- leading Checkbox
+//          ),
+//        ),
+//      ),
+//    );
+//  }
 
   List<Widget> stepList() => [
         SingleChildScrollView(
@@ -548,89 +562,89 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-          child: Form(
-            key: formKeyForPay,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-//                    Container(
-//                      margin: const EdgeInsets.only(right: 8.0),
-//                      padding: const EdgeInsets.all(1.0),
-//                      decoration: BoxDecoration(
-//                          borderRadius: BorderRadius.circular(100),
-//                          border:
-//                              Border.all(width: 2, color: Colors.grey[600])),
-//                      child: const CircleAvatar(
-//                          radius: 8, backgroundColor: primeColor),
+//        Padding(
+//          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+//          child: Form(
+//            key: formKeyForPay,
+//            child: Column(
+//              children: [
+//                Row(
+//                  children: [
+////                    Container(
+////                      margin: const EdgeInsets.only(right: 8.0),
+////                      padding: const EdgeInsets.all(1.0),
+////                      decoration: BoxDecoration(
+////                          borderRadius: BorderRadius.circular(100),
+////                          border:
+////                              Border.all(width: 2, color: Colors.grey[600])),
+////                      child: const CircleAvatar(
+////                          radius: 8, backgroundColor: primeColor),
+////                    ),
+//                    Text(
+//                      '${AppLocalizations.of(context).trans('payment_methods')}',
+//                      style: Theme.of(context)
+//                          .textTheme
+//                          .headline3
+//                          .copyWith(fontWeight: FontWeight.bold),
 //                    ),
-                    Text(
-                      '${AppLocalizations.of(context).trans('payment_methods')}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                radioTileCard(
-                  context: context,
-                  index: 1,
-                  titleKey: 'my_fatora',
-                ),
-                radioTileCard(
-                  context: context,
-                  index: 2,
-                  titleKey: 'Cash_on_delivery',
-                ),
-                defaultSubtitleTextOne(
-                    context: context,
-                    //  textColor: Colors.white70,
-                    text:
-                        '${AppLocalizations.of(context).trans('your_personal_data')}'),
-                Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 44.0,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: defaultTextButton(
-                              function: backToPreviousStep,
-                              context: context,
-                              textKey: 'back'),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: defaultButton(
-                              background: radioTilePaymentResult == 0
-                                  ? secondaryColor
-                                  : primeColor,
-                              function: radioTilePaymentResult == 0
-                                  ? null
-                                  : goToNextStep,
-                              text:
-                                  '${AppLocalizations.of(context).trans('next')}'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+//                  ],
+//                ),
+//                const SizedBox(
+//                  height: 30,
+//                ),
+//                radioTileCard(
+//                  context: context,
+//                  index: 1,
+//                  titleKey: 'my_fatora',
+//                ),
+//                radioTileCard(
+//                  context: context,
+//                  index: 2,
+//                  titleKey: 'Cash_on_delivery',
+//                ),
+//                defaultSubtitleTextOne(
+//                    context: context,
+//                    //  textColor: Colors.white70,
+//                    text:
+//                        '${AppLocalizations.of(context).trans('your_personal_data')}'),
+//                Spacer(),
+//                Padding(
+//                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+//                  child: SizedBox(
+//                    width: double.infinity,
+//                    height: 44.0,
+//                    child: Row(
+//                      children: [
+//                        Expanded(
+//                          flex: 1,
+//                          child: defaultTextButton(
+//                              function: backToPreviousStep,
+//                              context: context,
+//                              textKey: 'back'),
+//                        ),
+//                        const SizedBox(
+//                          width: 8,
+//                        ),
+//                        Expanded(
+//                          flex: 2,
+//                          child: defaultButton(
+//                              background: radioTilePaymentResult == 0
+//                                  ? secondaryColor
+//                                  : primeColor,
+//                              function: radioTilePaymentResult == 0
+//                                  ? null
+//                                  : goToNextStep,
+//                              text:
+//                                  '${AppLocalizations.of(context).trans('next')}'),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                ),
+//              ],
+//            ),
+//          ),
+//        ),
         _showDoneWidget
             ? Padding(
                 padding:
@@ -655,9 +669,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: 50,
                     ),
                     Text(
-                      _checkOutProvider.paymentMethod == 2
-                          ? '${AppLocalizations.of(context).trans('your_order_will_arrive_soon')}'
-                          : '${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
+//                      _checkOutProvider.paymentMethod == 2
+//                          ? '${AppLocalizations.of(context).trans('your_order_will_arrive_soon')}'
+                          //:
+                    '${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -729,55 +744,54 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       height: 15.0,
                     ),
                     ListView.builder(
-                      itemCount: _cartProvider
-                          .getAllProductsInCart.specificProduct.length,
+                      itemCount: _checkOutProvider.myOrder.details.length,
                       itemBuilder: (context, index) => showRecipt(
-                          title: _cartProvider.getAllProductsInCart
-                              .specificProduct[index].product.title,
-                          salary: _cartProvider.getAllProductsInCart
-                              .specificProduct[index].total),
+                          title: _checkOutProvider.myOrder.details[index].title,
+                          size: _checkOutProvider.myOrder.details[index].size,
+                          quantity: _checkOutProvider.myOrder.details[index].quantity,
+                          salary: _checkOutProvider.myOrder.details[index].total),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    myDivider(height: 25),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context).trans('subtotal')}',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                color: Colors.white,
-                              ),
-                        ),
-                        Text(
-                          '85\$',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                color: Colors.white,
-                              ),
-                        )
-                      ],
-                    ),
-                    myDivider(height: 28),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${AppLocalizations.of(context).trans('expedition')}',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                color: Colors.white,
-                              ),
-                        ),
-                        Text(
-                          '10\$',
-                          style: Theme.of(context).textTheme.headline4.copyWith(
-                                color: Colors.white,
-                              ),
-                        )
-                      ],
-                    ),
+//                    myDivider(height: 25),
+//                    Row(
+//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                      children: [
+//                        Text(
+//                          '${AppLocalizations.of(context).trans('subtotal')}',
+//                          style: Theme.of(context).textTheme.headline4.copyWith(
+//                                color: Colors.white,
+//                              ),
+//                        ),
+//                        Text(
+//                          '85\$',
+//                          style: Theme.of(context).textTheme.headline4.copyWith(
+//                                color: Colors.white,
+//                              ),
+//                        )
+//                      ],
+//                    ),
+//                    myDivider(height: 28),
+//                    Row(
+//                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                      children: [
+//                        Text(
+//                          '${AppLocalizations.of(context).trans('expedition')}',
+//                          style: Theme.of(context).textTheme.headline4.copyWith(
+//                                color: Colors.white,
+//                              ),
+//                        ),
+//                        Text(
+//                          '10\$',
+//                          style: Theme.of(context).textTheme.headline4.copyWith(
+//                                color: Colors.white,
+//                              ),
+//                        )
+//                      ],
+//                    ),
                     myDivider(height: 28),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -789,68 +803,83 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                         ),
                         Text(
-                          '95\$',
+                          '${_checkOutProvider.myOrder.total}\$',
                           style: Theme.of(context).textTheme.headline4.copyWith(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
-                    Spacer(),
-                    Padding(
+                   const Spacer(),
+                    _checkOutProvider.directLinkStage == GetDirectLinkStage.LOADING?const Center(
+                      child: SpinKitWave(
+                        color: primeColor,
+                        type: SpinKitWaveType.center,
+                        size: 35,
+                      ),
+                    ):Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12.0),
                       child: SizedBox(
                         width: double.infinity,
                         height: 44.0,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: defaultTextButton(
-                                  function: backToPreviousStep,
-                                  context: context,
-                                  textKey: 'back'),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: defaultButton(
-                                  function: () async {
-                                    //My fatora
-                                    if (_checkOutProvider.paymentMethod == 1) {
-                                      Navigator.push(
-                                        context,
-                                        PageRouteBuilder(
-                                          pageBuilder: (context, animation1,
-                                                  animation2) =>
-                                              PaymentWebView(
-                                            url: _checkOutProvider.directLink,
-                                          ),
-                                          transitionDuration: const Duration(
-                                              milliseconds: 1000),
+                        child:
+                        defaultButton(
+                            function: () async {
+                              //My fatora
+//                                    if (_checkOutProvider.paymentMethod == 1) {
+//                                      Navigator.push(
+//                                        context,
+//                                        PageRouteBuilder(
+//                                          pageBuilder: (context, animation1,
+//                                                  animation2) =>
+//                                              PaymentWebView(
+//                                            url: _checkOutProvider.directLink,
+//                                          ),
+//                                          transitionDuration: const Duration(
+//                                              milliseconds: 1000),
+//                                        ),
+//                                      ).then((value) {
+//                                        if (value == true) {
+//                                          setState(() {
+//                                            _showDoneWidget = true;
+//                                          });
+//                                        }
+//                                      });
+//                                    }
+//                                    //cache on del...
+//                                    if (_checkOutProvider.paymentMethod == 2) {
+//                                      setState(() {
+//                                        _showDoneWidget = true;
+//                                      });
+//                                    }
+                            _checkOutProvider.getDirectLink(locale: _locale,context: context).then((value){
+                              if(value ==true){
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation1,
+                                        animation2) =>
+                                        PaymentWebView(
+                                          url: _checkOutProvider.directLink,
                                         ),
-                                      ).then((value) {
-                                        if (value == true) {
-                                          setState(() {
-                                            _showDoneWidget = true;
-                                          });
-                                        }
-                                      });
-                                    }
-                                    //cache on del...
-                                    if (_checkOutProvider.paymentMethod == 2) {
-                                      setState(() {
-                                        _showDoneWidget = true;
-                                      });
-                                    }
-                                  },
-                                  text: _checkOutProvider.paymentMethod == 2
-                                      ? '${AppLocalizations.of(context).trans('finish')}'
-                                      : '${AppLocalizations.of(context).trans('pay')}'),
-                            ),
-                          ],
-                        ),
+                                    transitionDuration: const Duration(
+                                        milliseconds: 1000),
+                                  ),
+                                ).then((value) {
+                                  if (value == true) {
+                                    setState(() {
+                                      _showDoneWidget = true;
+                                    });
+                                  }
+                                });
+                              }
+                            });
+
+                            },
+                            text:
+//                                  _checkOutProvider.paymentMethod == 2
+//                                      ? '${AppLocalizations.of(context).trans('finish')}'
+//                                      :
+                            '${AppLocalizations.of(context).trans('pay')}'),
                       ),
                     ),
                   ],
@@ -877,30 +906,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               height: 0.0,
               width: 0.0,
             )),
+//        Step(
+//            state: _activeCurrentStep <= 1
+//                ? StepState.indexed
+//                : StepState.complete,
+//            isActive: _activeCurrentStep >= 1,
+//            title: _activeCurrentStep != 1
+//                ? const SizedBox()
+//                : Text(
+//                    '${AppLocalizations.of(context).trans('payment_details')}',
+//                    style: Theme.of(context)
+//                        .textTheme
+//                        .headline4
+//                        .copyWith(color: Colors.white),
+//                  ),
+//            content: const SizedBox(
+//              height: 0.0,
+//              width: 0.0,
+//            )),
         Step(
             state: _activeCurrentStep <= 1
                 ? StepState.indexed
                 : StepState.complete,
             isActive: _activeCurrentStep >= 1,
             title: _activeCurrentStep != 1
-                ? const SizedBox()
-                : Text(
-                    '${AppLocalizations.of(context).trans('payment_details')}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline4
-                        .copyWith(color: Colors.white),
-                  ),
-            content: const SizedBox(
-              height: 0.0,
-              width: 0.0,
-            )),
-        Step(
-            state: _activeCurrentStep <= 2
-                ? StepState.indexed
-                : StepState.complete,
-            isActive: _activeCurrentStep >= 2,
-            title: _activeCurrentStep != 2
                 ? const SizedBox()
                 : Text(
                     _showDoneWidget
@@ -930,9 +959,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (_activeCurrentStep < (stepList().length - 1)) {
       print(_activeCurrentStep);
       if (_activeCurrentStep == 1) {
-        _checkOutProvider.setPaymentMethod(radioTilePaymentResult);
-        if (radioTilePaymentResult == 1) {
-        } else {}
+//        _checkOutProvider.setPaymentMethod(radioTilePaymentResult);
+//        if (radioTilePaymentResult == 1) {
+//        } else {}
+//        setState(() {
+//          _activeCurrentStep += 1;
+//        });
+
         setState(() {
           _activeCurrentStep += 1;
         });
@@ -1005,7 +1038,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       onWillPop: ()async{
        if( Provider.of<CheckOutProvider>(context)
            .checkOutProviderStage !=
-           GetCheckOutProviderStage.LOADING){
+           GetCheckOutProviderStage.LOADING || _activeCurrentStep != 1){
          SystemNavigator.pop();
        }
         return false;
@@ -1053,7 +1086,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                             (Route<dynamic> route) => false);
                       } else {
-                        Navigator.of(context).pop();
+                          Navigator.of(context).pop();
                       }
                     },
               icon: const ImageIcon(
@@ -1087,16 +1120,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: Stepper(
                       type: StepperType.horizontal,
                       steps: steps(),
-                      onStepContinue: goToNextStep,
+                     onStepContinue: null,
+                      onStepTapped: null,
                       // onStepCancel takes us to the previous step
-                      onStepCancel: backToPreviousStep,
+                      //onStepCancel: backToPreviousStep,
 
                       // onStepTap allows to directly click on the particular step we want
-                      onStepTapped: (int index) {
-                        setState(() {
-                          _activeCurrentStep = index;
-                        });
-                      },
                     ),
                   )),
               preferredSize: Size(media.width, 70)),

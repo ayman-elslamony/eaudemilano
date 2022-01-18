@@ -29,13 +29,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  RefreshController _refreshController ;
+  RefreshController _refreshControllerHomeScreen ;
   String _locale;
 
   @override
   void initState() {
     super.initState();
-    _refreshController =
+    _refreshControllerHomeScreen =
         RefreshController(initialRefresh: false);
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onRefresh() async {
     Provider.of<HomeProvider>(context, listen: false)
         .onRefresh(context: context, locale: _locale);
-    _refreshController.refreshCompleted();
+    _refreshControllerHomeScreen.refreshCompleted();
   }
   createCard(
       {double width,
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final media = MediaQuery.of(context).size;
     return SmartRefresher(
       enablePullDown: true,
-      controller: _refreshController,
+      controller: _refreshControllerHomeScreen,
       onRefresh: _onRefresh,
       child: Scaffold(
         appBar: AppBar(
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
+                                    SizedBox(
                                       width: media.width * 0.29,
                                       height: media.height * 0.15,
                                     ),
@@ -372,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            navigateTo(context, SeeAllBestSelling());
+                            navigateTo(context, SeeAllBestSellingScreen());
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -391,14 +391,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  ListView.separated(
+                  ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 5.0,
-                    ),
                     itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.only(top: 10.0,left: 8,right: 8),
                       child: homeProvider.someBestSellingStage ==
                               GetSomeBestSellingStage.LOADING
                           ? loadingCard(media: media)
@@ -420,7 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         : homeProvider.getSomeBestSelling.length,
                   ),
                   SizedBox(
-                    height: 8.0,
+                    height: 10.0,
                   )
                 ],
               ),

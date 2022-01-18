@@ -12,17 +12,17 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
-class SeeAllBestSelling extends StatefulWidget {
+class SeeAllBestSellingScreen extends StatefulWidget {
   @override
-  _SeeAllBestSellingState createState() => _SeeAllBestSellingState();
+  _SeeAllBestSellingScreenState createState() => _SeeAllBestSellingScreenState();
 }
 
-class _SeeAllBestSellingState extends State<SeeAllBestSelling> {
+class _SeeAllBestSellingScreenState extends State<SeeAllBestSellingScreen> {
   String _locale;
-  RefreshController _refreshController ;
+  RefreshController _refreshControllerAllBestSellingScreen ;
   @override
   void initState() {
-    _refreshController =
+    _refreshControllerAllBestSellingScreen =
         RefreshController(initialRefresh: false);
 
     _locale =
@@ -34,7 +34,7 @@ class _SeeAllBestSellingState extends State<SeeAllBestSelling> {
   void _onRefresh() async {
     await Provider.of<HomeProvider>(context, listen: false)
         .getAllBestSellingFunction(context: context, locale: _locale);
-    _refreshController.refreshCompleted();
+    _refreshControllerAllBestSellingScreen.refreshCompleted();
   }
 
   @override
@@ -43,7 +43,7 @@ class _SeeAllBestSellingState extends State<SeeAllBestSelling> {
     final media = MediaQuery.of(context).size;
     return SmartRefresher(
       enablePullDown: true,
-      controller: _refreshController,
+      controller: _refreshControllerAllBestSellingScreen,
       onRefresh: _onRefresh,
       child: Scaffold(
         appBar: AppBar(
@@ -80,28 +80,37 @@ class _SeeAllBestSellingState extends State<SeeAllBestSelling> {
                 ],
               ),
             ),
-            child: MediaQuery.removePadding(
-              context: context,
-              removeTop: true,
-              removeLeft: true,
-              removeRight: true,
-              removeBottom: false,
-              child:ListView.builder(
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: homeProvider.allBestSellingStage == GetAllBestSellingStage.LOADING
-                      ?loadingCard(media: media):defaultCard(
-                    productId: homeProvider.getAllBestSelling.bestSellingContent[index].id,
-                      titleContent: '',
-                      title: homeProvider.getAllBestSelling.bestSellingContent[index].price,
-                      imgUrl: homeProvider.getAllBestSelling.bestSellingContent[index].image,
-                      subTitle: homeProvider.getAllBestSelling.bestSellingContent[index].title,
-                      context: context,
-                      currentIndex: index,
-                      media: media),
-                ),
-                itemCount: homeProvider.allBestSellingStage == GetAllBestSellingStage.LOADING
-                    ?8:homeProvider.getAllBestSelling.bestSellingContent.length,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    removeLeft: true,
+                    removeRight: true,
+                    removeBottom: true,
+                    child:ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.only(top: 12,),
+                        child: homeProvider.allBestSellingStage == GetAllBestSellingStage.LOADING
+                            ?loadingCard(media: media):defaultCard(
+                          productId: homeProvider.getAllBestSelling.bestSellingContent[index].id,
+                            titleContent: '',
+                            title: homeProvider.getAllBestSelling.bestSellingContent[index].price,
+                            imgUrl: homeProvider.getAllBestSelling.bestSellingContent[index].image,
+                            subTitle: homeProvider.getAllBestSelling.bestSellingContent[index].title,
+                            context: context,
+                            currentIndex: index,
+                            media: media),
+                      ),
+                      itemCount: homeProvider.allBestSellingStage == GetAllBestSellingStage.LOADING
+                          ?5:homeProvider.getAllBestSelling.bestSellingContent.length,
+                    ),
+                  ),
+                  const SizedBox(height: 12.0,)
+                ],
               ),
             ),
           ),

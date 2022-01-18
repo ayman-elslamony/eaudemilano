@@ -183,6 +183,7 @@ Widget defaultCard(
         ));
       },
       child: Card(
+        margin: const EdgeInsets.only(right: 5.0,left: 5.0,),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -253,6 +254,7 @@ Widget defaultCard(
 Widget loadingCard({Size media}){
   return Shimmer.fromColors(
     child: Card(
+      margin: const EdgeInsets.only(right: 5.0,left: 5.0,),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),

@@ -123,14 +123,29 @@ if(enableNotify) {
   }
 
   GetCategorieDetailsStage categorieDetailsStage;
-  CategorieDetails _CategorieDetails;
+  List<CategorieDetails> _CategorieDetails=[];
+  List<CategorieDetails> _temporaryCategorieDetails=[];
 
-  CategorieDetails get getCategorieDetails => _CategorieDetails;
+  List<CategorieDetails> get getCategorieDetails => _CategorieDetails;
 
-  Future<void> getCategorieDetailsFunction({context, locale, int id}) async {
-    this.categorieDetailsStage = GetCategorieDetailsStage.LOADING;
-    notifyListeners();
-    String url = '$domain/api/categories/$id';
+  int pageNumber = 1;
+  int get nextPage => pageNumber;
+  void resetPageNumber(){
+    pageNumber = 1;
+  }
+  Future<void> getCategorieDetailsFunction({context, locale, int id, currentPage = 1}) async {
+    print(pageNumber);
+    print(currentPage);
+    if (currentPage == 1) {
+      this.categorieDetailsStage = GetCategorieDetailsStage.LOADING;
+      _CategorieDetails=[];
+      _temporaryCategorieDetails = [];
+    }
+    print('_temporaryCategorieDetailssssssssssss');
+    print(_temporaryCategorieDetails.length);
+    print('_CategorieDetailsssssssss');
+    print(_CategorieDetails.length);
+    String url = '$domain/api/categories/$id?page=$currentPage';
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -149,14 +164,23 @@ if(enableNotify) {
       var responseJson = response.data;
        print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-        _CategorieDetails =
-            CategorieDetails.fromJson(responseJson['data']);
-         print(_CategorieDetails.products[0].title.toString());
+        final int lastPage = responseJson["data"]["last_page"];
+        _temporaryCategorieDetails = _CategorieDetails;
+        responseJson['data']['data'].forEach((v) {
+          _temporaryCategorieDetails.add(CategorieDetails.fromJson(v));
+      });
+        pageNumber = currentPage;
+         if(pageNumber < lastPage) {
+           pageNumber++;
+         }
+         print('_temporaryCategorieDetails');
+         print(_temporaryCategorieDetails.length);
+         _CategorieDetails = _temporaryCategorieDetails;
         this.categorieDetailsStage = GetCategorieDetailsStage.DONE;
         notifyListeners();
       } else {
         print('D');
-        _CategorieDetails=CategorieDetails(products: []);
+        _CategorieDetails=[];
         this.categorieDetailsStage = GetCategorieDetailsStage.ERROR;
         notifyListeners();
       }

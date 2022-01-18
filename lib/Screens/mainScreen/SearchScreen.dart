@@ -212,44 +212,49 @@ class _SearchScreenState extends State<SearchScreen> {
 //                  ),
 //                )
 //              :
-          MediaQuery.removePadding(
-                      context: context,
-                      removeTop: true,
-                      removeLeft: true,
-                      removeRight: true,
-                      child: searchResult.getSearchResult.length == 0 && lastSearch!=''
-                          ? Center(
-                              child: defaultSubtitleTextOne(
-                                  context: context, text: '${AppLocalizations.of(context).trans('There_is_no_result')}'),
-                            )
-                          : MediaQuery.removePadding(
-                        context: context,
-                            removeTop: true,
-                            child: ListView.builder(
-                                itemBuilder: (context, index) => Padding(
-                                  padding:
-                                      const EdgeInsets.only(top:8.0),
-                                  child: searchResult.searchResultStage == GetSearchResultStage.LOADING?
-                                    loadingCard(media: media):defaultCard(
-                                    productId: searchResult
-                                        .getSearchResult[index].id,
-                                      titleContent: '',
-                                      title: searchResult
-                                          .getSearchResult[index].price,
-                                      imgUrl: searchResult
-                                          .getSearchResult[index].image,
-                                      subTitle: searchResult
-                                          .getSearchResult[index].title,
-                                      context: context,
-                                      currentIndex: index,
-                                      media: media),
-                                ),
-                                itemCount: searchResult.searchResultStage == GetSearchResultStage.LOADING?8:searchResult.getSearchResult.length,
-                              ),
-                          ),
-                    ),
+          searchResult.getSearchResult.isEmpty && lastSearch!=''&& searchResult.searchResultStage == GetSearchResultStage.DONE
+              ? Center(
+            child: defaultSubtitleTextOne(
+                context: context, text: '${AppLocalizations.of(context).trans('There_is_no_result')}'),
+          )
+              :SingleChildScrollView(
+                child: Column(
+                children: [
+                  MediaQuery.removePadding(
+                              context: context,
+                              child: MediaQuery.removePadding(
+                                context: context,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemBuilder: (context, index) => Padding(
+                                          padding:
+                                              const EdgeInsets.only(top:12.0),
+                                          child: searchResult.searchResultStage == GetSearchResultStage.LOADING?
+                                            loadingCard(media: media):defaultCard(
+                                            productId: searchResult
+                                                .getSearchResult[index].id,
+                                              titleContent: '',
+                                              title: searchResult
+                                                  .getSearchResult[index].price,
+                                              imgUrl: searchResult
+                                                  .getSearchResult[index].image,
+                                              subTitle: searchResult
+                                                  .getSearchResult[index].title,
+                                              context: context,
+                                              currentIndex: index,
+                                              media: media),
+                                        ),
+                                        itemCount: searchResult.searchResultStage == GetSearchResultStage.LOADING?8:searchResult.getSearchResult.length,
+                                      ),
+                                  ),
+                            ),
+                  const SizedBox(height: 12.0,)
+                ],
+            ),
+              ),
+          ),
         ),
-      ),
     );
   }
 }

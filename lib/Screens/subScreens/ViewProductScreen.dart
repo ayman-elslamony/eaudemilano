@@ -627,7 +627,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                       itemCount:
                                           viewProduct.getProductViewStage ==
                                                   GetProductViewStage.LOADING
-                                              ? 3
+                                              ? 5
                                               : viewProduct.productView
                                                   .similarProducts.length,
                                     ),

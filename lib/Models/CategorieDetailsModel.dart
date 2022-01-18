@@ -1,27 +1,26 @@
 
 
+//class CategorieDetails {
+//
+//  List<Product>  products;
+//
+//  CategorieDetails({this.currentPage, this.products, this.totalPages});
+//
+//  CategorieDetails.fromJson(Map<String, dynamic> json) {
+//    currentPage = json['current_page'];
+//    if (json['data'] != null) {
+//      products = <Product>[];
+//      json['data'].forEach((v) {
+//        products.add( Product.fromJson(v));
+//      });
+//    }
+//    totalPages = json['total'];
+//  }
+//
+//
+//}
+
 class CategorieDetails {
-  int  currentPage;
-  List<Product>  products;
-  int  totalPages;
-
-  CategorieDetails({this.currentPage, this.products, this.totalPages});
-
-  CategorieDetails.fromJson(Map<String, dynamic> json) {
-    currentPage = json['current_page'];
-    if (json['data'] != null) {
-      products = <Product>[];
-      json['data'].forEach((v) {
-        products.add( Product.fromJson(v));
-      });
-    }
-    totalPages = json['total'];
-  }
-
- 
-}
-
-class Product {
   int  id;
   String  title;
   String  priceBeforeDiscount;
@@ -30,7 +29,7 @@ class Product {
   String  sizeId;
   String  sizeName;
 
-  Product(
+  CategorieDetails(
       {this.id,
         this.title,
         this.priceBeforeDiscount,
@@ -39,7 +38,7 @@ class Product {
         this.sizeId,
         this.sizeName});
 
-  Product.fromJson(Map<String, dynamic> json) {
+  CategorieDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     priceBeforeDiscount = json['price_before_discount'];

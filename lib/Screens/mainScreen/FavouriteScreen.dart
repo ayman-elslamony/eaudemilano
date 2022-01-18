@@ -21,11 +21,11 @@ class FavouriteScreen extends StatefulWidget {
 class _FavouriteScreenState extends State<FavouriteScreen> {
   String _locale;
   var _cartProvider;
-  RefreshController _refreshController ;
+  RefreshController _refreshControllerFavouriteScreen ;
   @override
   void initState() {
 
-    _refreshController =
+    _refreshControllerFavouriteScreen =
         RefreshController(initialRefresh: false);
 
 
@@ -46,7 +46,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   void _onRefresh() async {
    await Provider.of<FavouriteProvider>(context, listen: false)
         .getAllProductsInFavouriteFunction(context: context, locale: _locale,enableLoading: false);
-    _refreshController.refreshCompleted();
+    _refreshControllerFavouriteScreen.refreshCompleted();
   }
 
   @override
@@ -54,7 +54,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     final media = MediaQuery.of(context).size;
     return SmartRefresher(
       enablePullDown: true,
-      controller: _refreshController,
+      controller: _refreshControllerFavouriteScreen,
       onRefresh: _onRefresh,
       child: Scaffold(
           appBar: AppBar(
@@ -130,108 +130,129 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
               ),
             ),
             child: Consumer<FavouriteProvider>(
-              builder: (context, favouriteProvider, child) => ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) => const SizedBox(
-                        height: 5.0,
-                      ),
-                      itemBuilder: (context, index) {
-                        return favouriteProvider
-                            .allProductsInFavouriteStage ==
-                            GetAllProductsInFavouriteStage.LOADING
-                            ? loadingCard(media: media): Padding(
-                          padding:  const EdgeInsets.only(top:8.0),
-                          child: defaultCard(
-                            productId: favouriteProvider.getAllProductsInFavourite
-                                .products[index].productDetails.id,
-                            titleContent: '',
-                            imgUrl: favouriteProvider.getAllProductsInFavourite
-                                .products[index].productDetails.image,
-                            title: favouriteProvider.getAllProductsInFavourite
-                                .products[index].productDetails.price,
-                            subTitle: favouriteProvider.getAllProductsInFavourite
-                                .products[index].productDetails.title,
-                            context: context,
-                            currentIndex: index,
-                            media: media,
-                            justEnableDeleteIcon: true,
-                            isEnabledReload: favouriteProvider
-                                .getAllProductsInFavourite
-                                .products[index]
-                                .productDetails
-                                .enableLoader,
-                            onDeletePressed: () {
-                              showDialog(
+              builder: (context, favouriteProvider, child) => favouriteProvider
+                  .allProductsInFavouriteStage ==
+                  GetAllProductsInFavouriteStage.LOADING
+                  && favouriteProvider
+                  .getAllProductsInFavourite.products.isEmpty
+                  ? Center(
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Text(
+                          '${AppLocalizations.of(context).trans('no_products')}',
+                          style: Theme.of(context).textTheme.headline3,
+                          textAlign: TextAlign.center,
+                        )),
+                  ],
+                ),
+              )
+                  :SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return favouriteProvider
+                                  .allProductsInFavouriteStage ==
+                                  GetAllProductsInFavouriteStage.LOADING
+                                  ? loadingCard(media: media): Padding(
+                                padding:  const EdgeInsets.only(top:12.0),
+                                child: defaultCard(
+                                  productId: favouriteProvider.getAllProductsInFavourite
+                                      .products[index].productDetails.id,
+                                  titleContent: '',
+                                  imgUrl: favouriteProvider.getAllProductsInFavourite
+                                      .products[index].productDetails.image,
+                                  title: favouriteProvider.getAllProductsInFavourite
+                                      .products[index].productDetails.price,
+                                  subTitle: favouriteProvider.getAllProductsInFavourite
+                                      .products[index].productDetails.title,
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text(
-                                          '${AppLocalizations.of(context).trans('remove_item')}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline3
-                                              .copyWith(
-                                                  color: Colors.black87,
-                                                  fontWeight: FontWeight.bold),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(25.0))),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 20, vertical: 18),
-                                        content: SizedBox(
-                                          height: 80,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const SizedBox(),
-                                              defaultTextButton(
-                                                  function: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  textKey: 'cancel',
-                                                  context: context),
-                                              defaultButton(
-                                                function: () async {
-                                                  Navigator.of(context).pop();
-                                                  int id =  favouriteProvider
-                                                      .getAllProductsInFavourite
-                                                      .products[index]
-                                                      .productDetails
-                                                      .id;
-                                                  bool result = await favouriteProvider
-                                                      .removeFromFavourite(
-                                                          locale: _locale,
-                                                          context: context,
-                                                          index: index,
-                                                          id: id);
-                                                  if(result==true){
-                                                    _cartProvider.removeFavouriteProductInCart(
-                                                        id:id
-                                                    );
-                                                  }
-                                                },
-                                                text:
-                                                    '${AppLocalizations.of(context).trans('remove')}',
-                                                width: 120,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ));
+                                  currentIndex: index,
+                                  media: media,
+                                  justEnableDeleteIcon: true,
+                                  isEnabledReload: favouriteProvider
+                                      .getAllProductsInFavourite
+                                      .products[index]
+                                      .productDetails
+                                      .enableLoader,
+                                  onDeletePressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title: Text(
+                                                '${AppLocalizations.of(context).trans('remove_item')}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline3
+                                                    .copyWith(
+                                                        color: Colors.black87,
+                                                        fontWeight: FontWeight.bold),
+                                                textAlign: TextAlign.start,
+                                              ),
+                                              shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.all(
+                                                      Radius.circular(25.0))),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20, vertical: 18),
+                                              content: SizedBox(
+                                                height: 80,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    const SizedBox(),
+                                                    defaultTextButton(
+                                                        function: () {
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                        textKey: 'cancel',
+                                                        context: context),
+                                                    defaultButton(
+                                                      function: () async {
+                                                        Navigator.of(context).pop();
+                                                        int id =  favouriteProvider
+                                                            .getAllProductsInFavourite
+                                                            .products[index]
+                                                            .productDetails
+                                                            .id;
+                                                        bool result = await favouriteProvider
+                                                            .removeFromFavourite(
+                                                                locale: _locale,
+                                                                context: context,
+                                                                index: index,
+                                                                id: id);
+                                                        if(result==true){
+                                                          _cartProvider.removeFavouriteProductInCart(
+                                                              id:id
+                                                          );
+                                                        }
+                                                      },
+                                                      text:
+                                                          '${AppLocalizations.of(context).trans('remove')}',
+                                                      width: 120,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ));
+                                  },
+                                ),
+                              );
                             },
+                            itemCount: favouriteProvider
+                                .allProductsInFavouriteStage ==
+                                GetAllProductsInFavouriteStage.LOADING
+                                ?5:favouriteProvider
+                                .getAllProductsInFavourite.products.length,
                           ),
-                        );
-                      },
-                      itemCount: favouriteProvider
-                          .allProductsInFavouriteStage ==
-                          GetAllProductsInFavouriteStage.LOADING
-                          ?8:favouriteProvider
-                          .getAllProductsInFavourite.products.length,
-                    ),
+                    const SizedBox(height: 12.0,)
+                  ],
+                ),
+              ),
             ),
           )),
     );
