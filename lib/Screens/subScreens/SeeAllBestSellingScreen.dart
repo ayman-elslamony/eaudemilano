@@ -98,7 +98,8 @@ class _SeeAllBestSellingScreenState extends State<SeeAllBestSellingScreen> {
                             ?loadingCard(media: media):defaultCard(
                           productId: homeProvider.getAllBestSelling.bestSellingContent[index].id,
                             titleContent: '',
-                            title: homeProvider.getAllBestSelling.bestSellingContent[index].price,
+                            priceBeforeDiscount: homeProvider.getAllBestSelling.bestSellingContent[index].priceBeforeDiscount,
+                            price: homeProvider.getAllBestSelling.bestSellingContent[index].price,
                             imgUrl: homeProvider.getAllBestSelling.bestSellingContent[index].image,
                             subTitle: homeProvider.getAllBestSelling.bestSellingContent[index].title,
                             context: context,

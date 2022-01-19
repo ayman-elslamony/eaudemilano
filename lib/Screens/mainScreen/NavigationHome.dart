@@ -155,6 +155,10 @@ class _NavigationHomeState extends State<NavigationHome> {
                             drawerText(
                                 context: context,
                                 textKey: 'home',
+                                onTap: (){
+                                  Navigator.of(context).pop();
+                                  changeIndex.changeIndexFunction(0);
+                                },
                                 textColor: changeIndex.index==0?Colors.black87:null),
                             drawerText(
                                 context: context,

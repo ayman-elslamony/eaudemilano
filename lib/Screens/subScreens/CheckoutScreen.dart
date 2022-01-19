@@ -73,7 +73,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     height: 6,
   );
 
-  Widget showRecipt({String title, String salary,String size ,String quantity}) {
+  Widget showRecipt(
+      {String title, String salary, String size, String quantity}) {
     return SizedBox(
       height: 28,
       child: ListTile(
@@ -671,8 +672,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Text(
 //                      _checkOutProvider.paymentMethod == 2
 //                          ? '${AppLocalizations.of(context).trans('your_order_will_arrive_soon')}'
-                          //:
-                    '${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
+                      //:
+                      '${AppLocalizations.of(context).trans('you_made_payment_successfully')}',
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -717,7 +718,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               const Icon(
                                 Icons.arrow_forward,
                                 size: 22,
-                                color: Colors.white,
+                                color: primeColor,
                               ),
                             ],
                           ),
@@ -748,8 +749,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       itemBuilder: (context, index) => showRecipt(
                           title: _checkOutProvider.myOrder.details[index].title,
                           size: _checkOutProvider.myOrder.details[index].size,
-                          quantity: _checkOutProvider.myOrder.details[index].quantity,
-                          salary: _checkOutProvider.myOrder.details[index].total),
+                          quantity:
+                              _checkOutProvider.myOrder.details[index].quantity,
+                          salary:
+                              _checkOutProvider.myOrder.details[index].total),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                     ),
@@ -809,22 +812,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                       ],
                     ),
-                   const Spacer(),
-                    _checkOutProvider.directLinkStage == GetDirectLinkStage.LOADING?const Center(
-                      child: SpinKitWave(
-                        color: primeColor,
-                        type: SpinKitWaveType.center,
-                        size: 35,
-                      ),
-                    ):Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 12.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 44.0,
-                        child:
-                        defaultButton(
-                            function: () async {
-                              //My fatora
+                    const Spacer(),
+                    Consumer<CheckOutProvider>(
+                        builder: (context, checkOutProvider, child) => Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 12.0),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 44.0,
+                                child: _checkOutProvider.directLinkStage ==
+                                        GetDirectLinkStage.LOADING
+                                    ? const Center(
+                                        child: SpinKitWave(
+                                          color: primeColor,
+                                          type: SpinKitWaveType.center,
+                                          size: 35,
+                                        ),
+                                      )
+                                    : defaultButton(
+                                        function: () async {
+                                          //My fatora
 //                                    if (_checkOutProvider.paymentMethod == 1) {
 //                                      Navigator.push(
 //                                        context,
@@ -851,37 +858,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //                                        _showDoneWidget = true;
 //                                      });
 //                                    }
-                            _checkOutProvider.getDirectLink(locale: _locale,context: context).then((value){
-                              if(value ==true){
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation1,
-                                        animation2) =>
-                                        PaymentWebView(
-                                          url: _checkOutProvider.directLink,
-                                        ),
-                                    transitionDuration: const Duration(
-                                        milliseconds: 1000),
-                                  ),
-                                ).then((value) {
-                                  if (value == true) {
-                                    setState(() {
-                                      _showDoneWidget = true;
-                                    });
-                                  }
-                                });
-                              }
-                            });
-
-                            },
-                            text:
+                                          _checkOutProvider
+                                              .getDirectLink(
+                                                  locale: _locale,
+                                                  context: context)
+                                              .then((value) {
+                                            if (value == true) {
+                                              Navigator.push(
+                                                context,
+                                                PageRouteBuilder(
+                                                  pageBuilder: (context,
+                                                          animation1,
+                                                          animation2) =>
+                                                      PaymentWebView(
+                                                    url: _checkOutProvider
+                                                        .directLink,
+                                                  ),
+                                                  transitionDuration:
+                                                      const Duration(
+                                                          milliseconds: 1000),
+                                                ),
+                                              ).then((value) {
+                                                if (value == true) {
+                                                  setState(() {
+                                                    _showDoneWidget = true;
+                                                  });
+                                                }
+                                              });
+                                            }
+                                          });
+                                        },
+                                        text:
 //                                  _checkOutProvider.paymentMethod == 2
 //                                      ? '${AppLocalizations.of(context).trans('finish')}'
 //                                      :
-                            '${AppLocalizations.of(context).trans('pay')}'),
-                      ),
-                    ),
+                                            '${AppLocalizations.of(context).trans('pay')}'),
+                              ),
+                            ))
                   ],
                 ),
               ),
@@ -1000,7 +1013,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   zip_code: zipController.text)
               .then((result) {
             if (result == true) {
-              // _cartProvider.resetAllProductsInCart();
+               _cartProvider.resetAllProductsInCart();
               setState(() {
                 _activeCurrentStep += 1;
               });
@@ -1035,65 +1048,47 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return WillPopScope(
-      onWillPop: ()async{
-       if( Provider.of<CheckOutProvider>(context)
-           .checkOutProviderStage !=
-           GetCheckOutProviderStage.LOADING || _activeCurrentStep != 1){
-         SystemNavigator.pop();
-       }
+      onWillPop: () async {
+        if (Provider.of<CheckOutProvider>(context).checkOutProviderStage !=
+                GetCheckOutProviderStage.LOADING ||
+            _activeCurrentStep != 1) {
+          SystemNavigator.pop();
+        }
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
-//        leading: IconButton(onPressed: (){
-//          if(_showDoneWidget==true){
-//            Navigator.pushAndRemoveUntil(
-//                context,
-//                PageRouteBuilder(
-//                  pageBuilder:
-//                      (context, animation1, animation2) =>
-//                      NavigationHome(),
-//                  transitionDuration:const Duration(seconds: 0),
-//                ),
-//                    (Route<dynamic> route) => false);
-//          }
-//          if(_activeCurrentStep !=0 &&_showDoneWidget == false){
-//            backToPreviousStep();
-//          }else {
-//            if(_showDoneWidget == false){
-//              Navigator.of(context).pop();
-//            }
-//
-//          }
-//        },  icon:const ImageIcon(
-//              AssetImage('images/back.png'),
-//            ),),
-          leading: Consumer<ChangeIndex>(
-            builder: (context, changeIndex, child) => IconButton(
-              onPressed: Provider.of<CheckOutProvider>(context)
-                          .checkOutProviderStage ==
-                      GetCheckOutProviderStage.LOADING
-                  ? null
-                  : () {
-                      if (_showDoneWidget) {
-                        changeIndex.changeIndexFunction(0);
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  NavigationHome(),
-                              transitionDuration: const Duration(seconds: 0),
-                            ),
-                            (Route<dynamic> route) => false);
-                      } else {
-                          Navigator.of(context).pop();
-                      }
-                    },
-              icon: const ImageIcon(
-                AssetImage('images/back.png'),
-              ),
-            ),
-          ),
+          leading: _activeCurrentStep == 1
+              ? const SizedBox()
+              : Consumer<ChangeIndex>(
+                  builder: (context, changeIndex, child) => IconButton(
+                    onPressed: Provider.of<CheckOutProvider>(context)
+                                .checkOutProviderStage ==
+                            GetCheckOutProviderStage.LOADING
+                        ? null
+                        : () {
+                            if (_showDoneWidget) {
+                              changeIndex.changeIndexFunction(0);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (context, animation1, animation2) =>
+                                            NavigationHome(),
+                                    transitionDuration:
+                                        const Duration(seconds: 0),
+                                  ),
+                                  (Route<dynamic> route) => false);
+                            } else {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      size: 18,
+                    ),
+                  ),
+                ),
           title: Text(
             '${AppLocalizations.of(context).trans('checkout')}',
             style: Theme.of(context)
@@ -1120,7 +1115,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: Stepper(
                       type: StepperType.horizontal,
                       steps: steps(),
-                     onStepContinue: null,
+                      onStepContinue: null,
                       onStepTapped: null,
                       // onStepCancel takes us to the previous step
                       //onStepCancel: backToPreviousStep,

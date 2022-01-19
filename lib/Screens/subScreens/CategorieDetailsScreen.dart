@@ -172,8 +172,10 @@ class _CategorieDetailsScreenState extends State<CategorieDetailsScreen> {
                                       productId: homeProvider
                                           .getCategorieDetails[index].id,
                                       titleContent: '',
-                                      title: homeProvider.getCategorieDetails
+                                      price: homeProvider.getCategorieDetails
                                           [index].price,
+                                      priceBeforeDiscount: homeProvider.getCategorieDetails
+                                      [index].price,
                                       imgUrl: homeProvider.getCategorieDetails
                                           [index].image,
                                       subTitle: homeProvider.getCategorieDetails

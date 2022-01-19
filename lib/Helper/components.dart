@@ -85,7 +85,8 @@ Widget defaultShowTime({BuildContext context, String textTime}) {
 
 Widget defaultTextInCard(
     {BuildContext context,
-    String title = '80\$',
+    String price = '80\$',
+      String priceBeforeDiscount,
     String subTitle = 'Sheer Beauty EDT',
     String titleContent = ''}) {
   return Expanded(
@@ -93,15 +94,45 @@ Widget defaultTextInCard(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         titleContent == ''
-            ? Text(
-                title,
-                style: Theme.of(context).textTheme.headline4.copyWith(
-                    color: Colors.black87, fontWeight: FontWeight.bold),
-              )
+            ?  price==priceBeforeDiscount || priceBeforeDiscount ==''?Text(
+          price,
+          style: Theme.of(context)
+              .textTheme
+              .headline4
+              .copyWith(
+              color: Colors.black87,
+              fontWeight:
+              FontWeight.bold),
+        ):Row(
+          children: [
+            Text(
+              price,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(
+                  color: Colors.black87,
+                  fontWeight:
+                  FontWeight.bold),
+            ),
+            const SizedBox(width: 18,),
+            Text(
+              '$priceBeforeDiscount \$',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(
+                  color: secondaryColor,
+                  decoration: TextDecoration.lineThrough,
+                  fontWeight:
+                  FontWeight.bold),
+            ),
+          ],
+        )
             : Row(
                 children: [
                   Text(
-                    title,
+                    price,
                     style: Theme.of(context).textTheme.headline4.copyWith(
                         color: Colors.black87, fontWeight: FontWeight.bold),
                   ),
@@ -167,7 +198,8 @@ Widget defaultCard(
         @required BuildContext context,
         @required int productId,
         Size media,
-        String title,
+        String price,
+        String priceBeforeDiscount='',
         String subTitle,
         String imgUrl = '',
         String titleContent,
@@ -213,7 +245,8 @@ Widget defaultCard(
             defaultTextInCard(
                 context: context,
                 subTitle: subTitle,
-                title: '$title \$',
+                price: '$price \$',
+                priceBeforeDiscount: priceBeforeDiscount,
                 titleContent: titleContent),
             favIconUrl == ''
                 ? const SizedBox()

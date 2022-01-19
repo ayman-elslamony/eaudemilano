@@ -31,6 +31,8 @@ class ProductView {
     json['similar_products'].forEach((v) {
     similarProducts.add( SimilarProducts.fromJson(v));
     });
+    }else{
+      similarProducts = [];
     }
   }
 

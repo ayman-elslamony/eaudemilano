@@ -5,6 +5,8 @@ import 'package:eaudemilano/Provider/FavouriteProvider.dart';
 import 'package:eaudemilano/Provider/HomeProvider.dart';
 import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Provider/ViewProductProvider.dart';
+import 'package:eaudemilano/Provider/changeIndexPage.dart';
+import 'package:eaudemilano/Screens/mainScreen/NavigationHome.dart';
 
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
@@ -231,15 +233,41 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  '${viewProduct.productView.productDetails.price}\$',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline4
-                                                      .copyWith(
-                                                          color: Colors.black87,
+                                            viewProduct.productView.productDetails.priceBeforeDiscount==viewProduct.productView.productDetails.price?
+                                            Text(
+                                              '${viewProduct.productView.productDetails.price}\$',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline4
+                                                  .copyWith(
+                                                  color: Colors.black87,
+                                                  fontWeight:
+                                                  FontWeight.bold),
+                                            ):Row(
+                                                  children: [
+                                                    Text(
+                                                      '${viewProduct.productView.productDetails.price}\$',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline4
+                                                          .copyWith(
+                                                              color: Colors.black87,
+                                                              fontWeight:
+                                                                  FontWeight.bold),
+                                                    ),
+                                                    const SizedBox(width: 25,),
+                                                    Text(
+                                                      '${viewProduct.productView.productDetails.priceBeforeDiscount}\$',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .headline4
+                                                          .copyWith(
+                                                          color: secondaryColor,
+                                                          decoration: TextDecoration.lineThrough,
                                                           fontWeight:
-                                                              FontWeight.bold),
+                                                          FontWeight.bold),
+                                                    ),
+                                                  ],
                                                 ),
                                                 const SizedBox(
                                                   height: 4,
@@ -440,32 +468,9 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                 child: MaterialButton(
                                                   onPressed: viewProduct
                                                               .currentCount ==
-                                                          0 ? null
+                                                          0 || viewProduct.productView.productDetails.productInCart.sizeId == ''? null
                                                       : () async {
-                                                          if (viewProduct.productView.productDetails.productInCart.sizeId == '') {
-                                                            Fluttertoast
-                                                                .showToast(
-                                                              msg: AppLocalizations.of(
-                                                                              context)
-                                                                          .locale
-                                                                          .languageCode ==
-                                                                      "en"
-                                                                  ? 'Please Select Size of product'
-                                                                  : 'من فضلك اختر حجم المنتج',
-                                                              toastLength: Toast
-                                                                  .LENGTH_LONG,
-                                                              gravity:
-                                                                  ToastGravity
-                                                                      .CENTER,
-                                                              timeInSecForIosWeb:
-                                                                  5,
-                                                              backgroundColor:
-                                                                  Colors.red,
-                                                              textColor:
-                                                                  Colors.black,
-                                                              fontSize: 16.0,
-                                                            );
-                                                          }else if(viewProduct
+                                                           if(viewProduct
                                                               .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
                                                           ){
                                                             Fluttertoast
@@ -522,7 +527,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                               .currentCount ==
                                                           0|| viewProduct
                                                       .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
-
+||viewProduct.productView.productDetails.productInCart.sizeId == ''
                                                       ? secondaryColor
                                                       : primeColor,
                                                 ),
@@ -608,10 +613,14 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                         .similarProducts[index]
                                                         .id,
                                                     titleContent: '',
-                                                    title: viewProduct
+                                                    price: viewProduct
                                                         .productView
                                                         .similarProducts[index]
                                                         .price,
+                                                    priceBeforeDiscount: viewProduct
+                                                        .productView
+                                                        .similarProducts[index]
+                                                        .priceBeforeDiscount,
                                                     subTitle: viewProduct
                                                         .productView
                                                         .similarProducts[index]
@@ -640,6 +649,23 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                       ],
                     ),
                   ),
+          ),
+          bottomNavigationBar: Consumer<ChangeIndex>(
+            builder: (context, changeIndex, child) =>bottomNavigationBar(
+                context: context,
+                onTap: (index){
+                  setState(() {
+                    changeIndex.index=index;
+                  });
+                  Navigator.pushAndRemoveUntil(context, PageRouteBuilder(
+                    pageBuilder:
+                        (context, animation1, animation2) =>
+                        NavigationHome(),
+                    transitionDuration: Duration(seconds: 0),
+                  ),(Route<dynamic> route) => false);
+                },
+                currentIndex: changeIndex.index
+            ),
           ),
         ),
       ),

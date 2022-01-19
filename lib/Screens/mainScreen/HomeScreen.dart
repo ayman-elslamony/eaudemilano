@@ -402,7 +402,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           : defaultCard(
                         productId: homeProvider.getSomeBestSelling[index].id,
                               titleContent: '',
-                              title: homeProvider.getSomeBestSelling[index].price,
+                              priceBeforeDiscount:homeProvider.getSomeBestSelling[index].priceBeforeDiscount ,
+                              price: homeProvider.getSomeBestSelling[index].price,
                               subTitle:
                                   homeProvider.getSomeBestSelling[index].title,
                               context: context,

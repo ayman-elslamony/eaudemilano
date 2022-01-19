@@ -235,7 +235,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             productId: searchResult
                                                 .getSearchResult[index].id,
                                               titleContent: '',
-                                              title: searchResult
+                                              price: searchResult
                                                   .getSearchResult[index].price,
                                               imgUrl: searchResult
                                                   .getSearchResult[index].image,

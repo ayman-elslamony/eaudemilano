@@ -5,10 +5,12 @@ import 'package:eaudemilano/Helper/Helper.dart';
 import 'package:eaudemilano/Helper/components.dart';
 import 'package:eaudemilano/Models/AllBestSellingModel.dart';
 import 'package:eaudemilano/Models/AllCategoriesModel.dart';
+import 'package:eaudemilano/Models/AllOrdersModel.dart';
 import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
 import 'package:eaudemilano/Models/CategorieDetailsModel.dart';
+import 'package:eaudemilano/Models/OrderDetailsModel.dart';
 import 'package:eaudemilano/Models/PopularCategoriesModel.dart';
 import 'package:eaudemilano/Models/ProductViewModel.dart';
 import 'package:eaudemilano/Models/SettingInformation.dart';
@@ -24,6 +26,7 @@ enum GetPopularCategoriesStageStage { ERROR, LOADING, DONE }
 enum GetSomeBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllBestSellingStage { ERROR, LOADING, DONE }
 enum GetAllOrdersStage { ERROR, LOADING, DONE }
+enum GetOrderDetailsStage { ERROR, LOADING, DONE }
 enum GetSettingInformationStage { ERROR, LOADING, DONE }
 
 class HomeProvider extends ChangeNotifier {
@@ -347,13 +350,14 @@ if(enableNotify) {
   }
 
   GetAllOrdersStage allOrdersStage;
-  AllBestSelling _allOrders;
-  AllBestSelling get getAllOrders => _allOrders;
+  List<AllOrders> _allOrders=[];
+  List<AllOrders> get getAllOrders => _allOrders;
 
   Future<void> getAllOrdersFunction({context, locale}) async {
     this.allOrdersStage = GetAllOrdersStage.LOADING;
     String url = '$domain/api/user/orders';
     await getUserToken();
+    print(_token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -371,8 +375,13 @@ if(enableNotify) {
       var responseJson = response.data;
       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
-//        _allBestSelling = AllBestSelling.fromJson(responseJson['data']);
-//        print(_allBestSelling.bestSellingContent.length.toString());
+        if (responseJson['data'] != null) {
+          _allOrders = <AllOrders>[];
+          responseJson['data']['data'].forEach((v) {
+        _allOrders.add( AllOrders.fromJson(v));
+      });
+    }
+        print(_allOrders.length.toString());
         this.allOrdersStage = GetAllOrdersStage.DONE;
         notifyListeners();
       } else {
@@ -384,6 +393,56 @@ if(enableNotify) {
       }
     } catch (e) {
       this.allOrdersStage = GetAllOrdersStage.ERROR;
+      notifyListeners();
+      print(e);
+      throw e;
+    }
+  }
+
+
+  GetOrderDetailsStage orderDetailsStage;
+  List<OrderDetails> _orderDetails=[];
+  List<OrderDetails> get getOrderDetails => _orderDetails;
+  Future<void> getOrderDetailsFunction({context, locale,int idOfOrder}) async {
+    this.orderDetailsStage = GetOrderDetailsStage.LOADING;
+    String url = '$domain/api/user/orders/$idOfOrder';
+    await getUserToken();
+    print(_token);
+    var headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'api_password': apiPassword,
+      'Authorization': 'Bearer $_token',
+      'language': locale.toString()
+    };
+    try {
+      Dio dio = Dio();
+      Response response = await dio.get(url,
+          options: Options(
+              followRedirects: false,
+              validateStatus: (status) => true,
+              headers: headers));
+      var responseJson = response.data;
+      print(responseJson);
+      if (response.statusCode == 200 && responseJson["status"] == true) {
+        if (responseJson['data'] != null) {
+          _orderDetails = <OrderDetails>[];
+          responseJson['data'].forEach((v) {
+            _orderDetails.add( OrderDetails.fromJson(v));
+      });
+    }
+        print(_orderDetails.length.toString());
+        this.orderDetailsStage = GetOrderDetailsStage.DONE;
+        notifyListeners();
+      } else {
+        print('D');
+        this.orderDetailsStage = GetOrderDetailsStage.ERROR;
+        var errors = responseJson['message'];
+        showAlertDialog(context, content: '$errors');
+        notifyListeners();
+      }
+    } catch (e) {
+      this.orderDetailsStage = GetOrderDetailsStage.ERROR;
       notifyListeners();
       print(e);
       throw e;

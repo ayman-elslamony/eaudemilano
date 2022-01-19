@@ -132,18 +132,19 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             child: Consumer<FavouriteProvider>(
               builder: (context, favouriteProvider, child) => favouriteProvider
                   .allProductsInFavouriteStage ==
-                  GetAllProductsInFavouriteStage.LOADING
+                  GetAllProductsInFavouriteStage.DONE
                   && favouriteProvider
                   .getAllProductsInFavourite.products.isEmpty
                   ? Center(
                 child: Row(
                   children: [
                     Expanded(
-                        child: Text(
-                          '${AppLocalizations.of(context).trans('no_products')}',
+                        child:Text(
+                          AppLocalizations.of(context).locale.languageCode == "en"
+                              ?'There are no products in ${AppLocalizations.of(context).trans('favourite')}':'لايوجد منتجات فى ${AppLocalizations.of(context).trans('favourite')} ',
                           style: Theme.of(context).textTheme.headline3,
                           textAlign: TextAlign.center,
-                        )),
+                        ),),
                   ],
                 ),
               )
@@ -154,18 +155,18 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return favouriteProvider
-                                  .allProductsInFavouriteStage ==
-                                  GetAllProductsInFavouriteStage.LOADING
-                                  ? loadingCard(media: media): Padding(
+                              return  Padding(
                                 padding:  const EdgeInsets.only(top:12.0),
-                                child: defaultCard(
+                                child: favouriteProvider
+                                    .allProductsInFavouriteStage ==
+                                    GetAllProductsInFavouriteStage.LOADING
+                                    ? loadingCard(media: media):defaultCard(
                                   productId: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.id,
                                   titleContent: '',
                                   imgUrl: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.image,
-                                  title: favouriteProvider.getAllProductsInFavourite
+                                  price: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.price,
                                   subTitle: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.title,

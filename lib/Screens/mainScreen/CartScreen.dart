@@ -153,18 +153,36 @@ class _CartScreenState extends State<CartScreen> {
               ),
               child:   cartProvider.allProductsInCartStage ==
                   GetAllProductsInCartStage.DONE && cartProvider.getAllProductsInCart.specificProduct.isEmpty
-                  ? Center(
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Text(
-                          '${AppLocalizations.of(context).trans('no_products')}',
-                          style: Theme.of(context).textTheme.headline3,
-                          textAlign: TextAlign.center,
-                        )),
-                  ],
-                ),
-              )
+                  ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context).locale.languageCode == "en"
+                            ?'There are no products in ${AppLocalizations.of(context).trans('cart')}':'لايوجد منتجات فى ${AppLocalizations.of(context).trans('cart')} ',
+                        style: Theme.of(context).textTheme.headline3,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 10,),
+                      Consumer<ChangeIndex>(
+                        builder: (context, changeIndex, child) => InkWell(
+                          onTap: () {
+                            changeIndex.changeIndexFunction(0);
+                          },
+                          child: Text(
+                              AppLocalizations.of(context).locale.languageCode == "en"
+                                  ?'Go to Shopping':'اذهب للتسوق',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(
+                                height: 0.7,
+                                color: primeColor,
+                              )),
+                        ),
+                      )
+                    ],
+                  )
                   : SingleChildScrollView(
                 child: Column(
                   children: [
@@ -179,7 +197,7 @@ class _CartScreenState extends State<CartScreen> {
                               GetAllProductsInCartStage.LOADING?loadingCard(media: media):defaultCard(
                             productId: cartProvider.getAllProductsInCart.specificProduct[index].product.id,
                               titleContent: cartProvider.getAllProductsInCart.specificProduct[index].quantity,
-                              title: cartProvider.getAllProductsInCart.specificProduct[index].price,
+                              price: cartProvider.getAllProductsInCart.specificProduct[index].price,
                               subTitle: cartProvider.getAllProductsInCart.specificProduct[index].product.title,
                               imgUrl: cartProvider.getAllProductsInCart.specificProduct[index].product.image,
                               context: context, currentIndex: index, media: media,

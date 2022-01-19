@@ -38,7 +38,7 @@ class PaymentWebView extends StatefulWidget {
 class _PaymentWebViewState extends State<PaymentWebView> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
-
+  int position = 1 ;
   var _locale;
 
   @override
@@ -50,7 +50,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
-//  String successfulUrl = '';
+  String successfulUrl = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,26 +73,17 @@ class _PaymentWebViewState extends State<PaymentWebView> {
               .headline3
               .copyWith(fontWeight: FontWeight.bold),
         ),
-actions: [
 
-  defaultTextButton(
-    context: context,
-    textKey: 'finish',
-    textColor: Colors.white,
-    function: (){
-      Navigator.of(context).pop(true);
-    },
-  ),
-    const SizedBox(width: 8,),
-],
       ),
       // We're using a Builder here so we have a context that is below the Scaffold
       // to allow calling Scaffold.of(context) so we can show a snackbar.
-      body: Stack(
+      body: IndexedStack(
+        index: position,
         children: [
           Builder(builder: (BuildContext context) {
             return WebView(
               initialUrl: '${widget.url}',
+
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController webViewController) {
                 _controller.complete(webViewController);
@@ -113,16 +104,39 @@ actions: [
               },
               onPageStarted: (String url) {
                 print('Page started loading: $url');
+                setState(() {
+                  position = 1;
+                });
               },
               onPageFinished: (String url) {
                 print('Page finished loading: $url');
-//                setState(() {
-//                  successfulUrl = url;
-//                });
+
+//                defaultTextButton(
+//                  context: context,
+//                  textKey: 'finish',
+//                  textColor: Colors.white,
+//                  function: (){
+//                    Navigator.of(context).pop(true);
+//                  },
+//                );
+                if(url.contains('api/payment_operation?operation=success')){
+                  Navigator.of(context).pop(true);
+                  setState(() {
+                    successfulUrl = url;
+                    position = 0;
+                  });
+                }
+                  setState(() {
+                    position = 0;
+                  });
+
               },
               gestureNavigationEnabled: true,
             );
           }),
+          Center(
+            child: loaderApp(),
+          )
 //          successfulUrl.contains('api/payment_operation?operation=success')
 //              ? Column(
 //                mainAxisAlignment: MainAxisAlignment.center,
