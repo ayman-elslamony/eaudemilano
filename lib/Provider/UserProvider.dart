@@ -72,7 +72,6 @@ class UserDataProvider extends ChangeNotifier {
             validateStatus: (status) => true,
             headers: headers));
     var responseJson = response.data;
-     print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         Helper.saveUserLoggedInSharedPreferences(true);
         Helper.saveUserIdInSharedPreferences(responseJson["user"]["id"]);
@@ -86,7 +85,6 @@ class UserDataProvider extends ChangeNotifier {
         this.stage = UserDataProviderStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.stage = UserDataProviderStage.ERROR;
         var errors = responseJson['message'];
 //        var errors = responseJson['errors']??responseJson['message'];
@@ -106,7 +104,6 @@ class UserDataProvider extends ChangeNotifier {
      } catch (e) {
        this.stage = UserDataProviderStage.ERROR;
        notifyListeners();
-       print(e);
        throw e;
      }
   }
@@ -134,14 +131,11 @@ class UserDataProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-        print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         return true;
       }
       return false;
     } catch (e) {
-      print(e);
       return false;
     }
   }
@@ -185,7 +179,7 @@ class UserDataProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-          print(responseJson);
+
       if (response.statusCode == 200 && responseJson["status"] == true) {
 
        // if(responseJson["message"]== "تم تسجيل عضوية بنجاح برجاء فحص البريد الألكتروني لتاكيد عضويتك" ){
@@ -193,7 +187,6 @@ class UserDataProvider extends ChangeNotifier {
 
        // }
         bool isVerfied = await verifyUser(context: context,locale: locale,token: responseJson['user']["api_token"],codeVerification: responseJson['user']["code"]);
-         print('uuuuuuuuuuu');
          if(isVerfied==true){
            Helper.saveUserLoggedInSharedPreferences(true);
         Helper.saveUserIdInSharedPreferences(
@@ -231,7 +224,6 @@ class UserDataProvider extends ChangeNotifier {
 
 
       } else {
-        print('D');
         this.stage = UserDataProviderStage.ERROR;
         var errors = responseJson['message'];
 //        String finalError = '';
@@ -248,7 +240,6 @@ class UserDataProvider extends ChangeNotifier {
     } catch (e) {
       this.stage = UserDataProviderStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
 
@@ -273,7 +264,6 @@ class UserDataProvider extends ChangeNotifier {
     if (token == '') {
       token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
     }
-    print(token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -299,7 +289,6 @@ class UserDataProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         Helper.saveUsernameInSharedPreferences(
             responseJson['user']["name"]);
@@ -309,9 +298,7 @@ class UserDataProvider extends ChangeNotifier {
             responseJson['user']["mobile"]);
         Helper.saveUserTokenInSharedPreferences(
             responseJson['user']["api_token"]);
-            if(responseJson['user']["api_token"]==token){
-              print('Is Ok');
-            }
+
         await Provider.of<UserDataProvider>(context, listen: false)
             .getUserData();
         await showAlertDialog(context,
@@ -324,7 +311,6 @@ class UserDataProvider extends ChangeNotifier {
         this.updateUserDataStage = GetUpdateUserDataStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.updateUserDataStage = GetUpdateUserDataStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context,
@@ -334,7 +320,6 @@ class UserDataProvider extends ChangeNotifier {
     } catch (e) {
       this.updateUserDataStage = GetUpdateUserDataStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
 
@@ -388,7 +373,6 @@ class UserDataProvider extends ChangeNotifier {
     } catch (e) {
       this.stage = UserDataProviderStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
     notifyListeners();

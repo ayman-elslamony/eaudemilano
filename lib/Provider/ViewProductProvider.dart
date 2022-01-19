@@ -37,7 +37,6 @@ class ViewProductProvider extends ChangeNotifier {
     _currentCount = 0;
     String url = '$domain/api/view-product/$id';
     await getUserToken();
-    print(_token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -53,15 +52,10 @@ class ViewProductProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _productView = ProductView.fromJson(responseJson['data']);
-          print('64654');
-          print(_productView.productDetails.productInCart.runtimeType);
-          print(_productView.productDetails.productInCart.sizeName);
-          if (_productView.productDetails.productInCart.quantity!='0') {
-            print('554');
+           if (_productView.productDetails.productInCart.quantity!='0') {
             for (int i = 0; i < _productView.productDetailsSizes.length; i++) {
               if (_productView.productDetailsSizes[i].sizeId ==
                   _productView.productDetails.productInCart.sizeId) {
@@ -75,11 +69,9 @@ class ViewProductProvider extends ChangeNotifier {
             isFavourite = true;
           }
         }
-        print(_productView.productDetails.id.toString());
         this.getProductViewStage = GetProductViewStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.getProductViewStage = GetProductViewStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -88,7 +80,6 @@ class ViewProductProvider extends ChangeNotifier {
     } catch (e) {
       this.getProductViewStage = GetProductViewStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -117,8 +108,6 @@ class ViewProductProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         return true;
       } else {
@@ -129,7 +118,6 @@ class ViewProductProvider extends ChangeNotifier {
     } catch (e) {
       isFavourite = !isFavourite;
       notifyListeners();
-      print(e);
       return false;
     }
   }
@@ -163,8 +151,6 @@ class ViewProductProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         showAlertDialog(context, content: responseJson['message']);
         Provider.of<CartProvider>(context, listen: false)
@@ -179,7 +165,6 @@ class ViewProductProvider extends ChangeNotifier {
         this.addProductToCartStage = GetAddProductToCartStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
         this.addProductToCartStage = GetAddProductToCartStage.ERROR;
@@ -188,7 +173,6 @@ class ViewProductProvider extends ChangeNotifier {
     } catch (e) {
       this.addProductToCartStage = GetAddProductToCartStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -197,8 +181,6 @@ class ViewProductProvider extends ChangeNotifier {
     int index,
   ) {
     //idOfSelectedSizeProduct = _productView.productDetailsSizes[index].sizeId;
-    print(' _productView.productDetails.productInCart[0].sizeId');
-    print( _productView.productDetails.productInCart.sizeId);
     if(_productView.productDetailsSizes[index].isSelected==true){
       _productView.productDetails.productInCart.sizeId='';
     }else {

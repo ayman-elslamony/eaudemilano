@@ -136,8 +136,15 @@ Widget defaultTextInCard(
                     style: Theme.of(context).textTheme.headline4.copyWith(
                         color: Colors.black87, fontWeight: FontWeight.bold),
                   ),
+  Text(
+  ' x ',
+  textDirection: AppLocalizations.of(context).locale.languageCode == "en"
+  ? TextDirection.ltr : TextDirection.ltr,
+  style: Theme.of(context).textTheme.headline4.copyWith(
+  color: Colors.black87, fontWeight: FontWeight.bold),
+  ),
                   Text(
-                    ' x $titleContent',
+                    titleContent,
                     style: Theme.of(context).textTheme.headline4.copyWith(
                         color: Colors.black87, fontWeight: FontWeight.bold),
                   )

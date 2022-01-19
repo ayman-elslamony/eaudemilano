@@ -40,8 +40,6 @@ class CheckOutProvider extends ChangeNotifier {
   MyOrder get myOrder => _myOrder;
   static int _areaId=1;
   setAreaId(val){
-    print('dgdg');
-    print(val);
     _areaId = val;
   }
   Future<bool> sendUserData({
@@ -62,7 +60,6 @@ class CheckOutProvider extends ChangeNotifier {
     if (token == '') {
       token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
     }
-    print(token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -91,15 +88,12 @@ class CheckOutProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         _myOrder =MyOrder.fromJson(responseJson["data"]);
-        print(_myOrder.details.length);
         this.checkOutProviderStage = GetCheckOutProviderStage.DONE;
         notifyListeners();
         return true;
       } else {
-        print('D');
         this.checkOutProviderStage = GetCheckOutProviderStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -109,7 +103,6 @@ class CheckOutProvider extends ChangeNotifier {
     } catch (e) {
       this.checkOutProviderStage = GetCheckOutProviderStage.ERROR;
       notifyListeners();
-      print(e);
       return false;
     }
   }
@@ -125,7 +118,6 @@ class CheckOutProvider extends ChangeNotifier {
     if (token == '') {
       token = Helper.token ?? await Helper.getUserTokenInSharedPreferences();
     }
-    print(token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -147,7 +139,6 @@ class CheckOutProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         _directLink = responseJson["link"];
        await showDialog(
@@ -186,7 +177,6 @@ class CheckOutProvider extends ChangeNotifier {
         notifyListeners();
         return true;
       } else {
-        print('D');
         this.directLinkStage = GetDirectLinkStage.ERROR;
         var errors = responseJson['message'];
        showAlertDialog(context,content: errors);
@@ -196,7 +186,6 @@ class CheckOutProvider extends ChangeNotifier {
     } catch (e) {
       this.directLinkStage = GetDirectLinkStage.ERROR;
       notifyListeners();
-      print(e);
       return false;
     }
   }

@@ -54,8 +54,6 @@ class CartProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _allProductsInCart =
@@ -67,12 +65,10 @@ class CartProvider extends ChangeNotifier {
                   totalProducts: 0
               );
         }
-        print(_allProductsInCart.specificProduct.length.toString());
         await getTotalPrice();
         this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -81,7 +77,6 @@ class CartProvider extends ChangeNotifier {
     } catch (e) {
       this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
 
@@ -89,17 +84,13 @@ class CartProvider extends ChangeNotifier {
 
 
   Future<void> removeFavouriteProductInCart({int id})async {
-    print(id);
 
     if(_allProductsInCart!=null){
       if(_allProductsInCart.specificProduct.isNotEmpty){
-    print('1');
     for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
-      print('2');
       if (_allProductsInCart.specificProduct[i].product.id == id) {
         _allProductsInCart.specificProduct[i].favorite = 'no';
         notifyListeners();
-        print('3');
       }
     }
   }}
@@ -127,16 +118,12 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
 //
-      print(productIndex);
         _allProductsInCart.specificProduct.removeAt(productIndex);
         await getTotalPrice();
         notifyListeners();
       } else {
-        print('D');
         _allProductsInCart.specificProduct[productIndex].enableLoader = false;
         notifyListeners();
         if(responseJson['message'] !=null) {
@@ -147,7 +134,6 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
       _allProductsInCart.specificProduct[productIndex].enableLoader = false;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -169,8 +155,6 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['message'] != null) {
           showAlertDialog(context, content: responseJson['message']);
@@ -178,11 +162,9 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
               AllProductsInCart(specificProduct: [],totalProducts: 0,);
           _totalPrice=0;
         }
-        print(_allProductsInCart.specificProduct.length.toString());
         this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -191,7 +173,6 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
     } catch (e) {
       this.allProductsInCartStage = GetAllProductsInCartStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -241,8 +222,6 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print('responseJson');
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         return true;
     }
@@ -254,7 +233,6 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
     } catch (e) {
       checkIsFavourite(index);
       notifyListeners();
-      print(e);
       return false;
     }
   }

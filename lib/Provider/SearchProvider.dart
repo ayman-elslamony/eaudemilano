@@ -41,8 +41,6 @@ class SearchProvider extends ChangeNotifier {
                 validateStatus: (status) => true,
                 headers: headers));
         var responseJson = response.data;
-        print('responseJson');
-        print(responseJson['data']);
         if (response.statusCode == 200 && responseJson["status"] == true) {
           if (responseJson['data'] != null) {
             _searchResult = <SearchModel>[];
@@ -52,12 +50,10 @@ class SearchProvider extends ChangeNotifier {
           }else{
             _searchResult = [];
           }
-          print(_searchResult.length.toString());
 
           this.searchResultStage = GetSearchResultStage.DONE;
           notifyListeners();
         } else {
-          print('D');
           this.searchResultStage = GetSearchResultStage.ERROR;
           var errors = responseJson['message'];
           // showAlertDialog(context, content: '$errors');
@@ -68,7 +64,6 @@ class SearchProvider extends ChangeNotifier {
         this.searchResultStage = GetSearchResultStage.ERROR;
         _searchResult = [];
         notifyListeners();
-        print(e);
         throw e;
       }
     }

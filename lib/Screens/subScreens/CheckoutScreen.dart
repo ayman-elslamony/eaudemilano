@@ -141,7 +141,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 //            groupValue: radioTilePaymentResult,
 //            onChanged: (value) {
 //              setState(() {
-//                print(value);
+
 //                radioTilePaymentResult = value;
 //              });
 //            }, //  <-- leading Checkbox
@@ -359,8 +359,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 .toList();
                           },
                           onSelected: (val) {
-                            print('val');
-                            print(val);
                             for (var element
                                 in homeProvider.getSettingInformation.areas) {
                               if (element.name == val) {
@@ -970,7 +968,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Future<void> goToNextStep() async {
     if (_activeCurrentStep < (stepList().length - 1)) {
-      print(_activeCurrentStep);
       if (_activeCurrentStep == 1) {
 //        _checkOutProvider.setPaymentMethod(radioTilePaymentResult);
 //        if (radioTilePaymentResult == 1) {
@@ -996,7 +993,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             provinceController.text.isNotEmpty &&
             telephoneController.text.isNotEmpty &&
             emailAddressController.text.isNotEmpty) {
-          print('efgegerg');
           form.save();
           String address =
               '${countryRegionController.text}-${provinceController.text}-${cityController.text}';

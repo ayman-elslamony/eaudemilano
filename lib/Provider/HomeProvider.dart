@@ -97,7 +97,6 @@ if(enableNotify) {
                 validateStatus: (status) => true,
                 headers: headers));
         var responseJson = response.data;
-        print(responseJson);
         if (response.statusCode == 200 && responseJson["status"] == true) {
           if (responseJson['data'] != null) {
             _allCategories = <Categorie>[];
@@ -106,11 +105,9 @@ if(enableNotify) {
                   .add(Categorie.fromJson(v));
             });
           }
-          print(_allCategories.length.toString());
           this.allCategoriesStage = GetAllCategoriesStage.DONE;
           notifyListeners();
         } else {
-          print('D');
           this.allCategoriesStage = GetAllCategoriesStage.ERROR;
           var errors = responseJson['message'];
           showAlertDialog(context, content: '$errors');
@@ -119,7 +116,6 @@ if(enableNotify) {
       } catch (e) {
         this.allCategoriesStage = GetAllCategoriesStage.ERROR;
         notifyListeners();
-        print(e);
         throw e;
       }
     }
@@ -137,17 +133,11 @@ if(enableNotify) {
     pageNumber = 1;
   }
   Future<void> getCategorieDetailsFunction({context, locale, int id, currentPage = 1}) async {
-    print(pageNumber);
-    print(currentPage);
     if (currentPage == 1) {
       this.categorieDetailsStage = GetCategorieDetailsStage.LOADING;
       _CategorieDetails=[];
       _temporaryCategorieDetails = [];
     }
-    print('_temporaryCategorieDetailssssssssssss');
-    print(_temporaryCategorieDetails.length);
-    print('_CategorieDetailsssssssss');
-    print(_CategorieDetails.length);
     String url = '$domain/api/categories/$id?page=$currentPage';
     await getUserToken();
     var headers = {
@@ -165,7 +155,6 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         final int lastPage = responseJson["data"]["last_page"];
         _temporaryCategorieDetails = _CategorieDetails;
@@ -176,13 +165,10 @@ if(enableNotify) {
          if(pageNumber < lastPage) {
            pageNumber++;
          }
-         print('_temporaryCategorieDetails');
-         print(_temporaryCategorieDetails.length);
          _CategorieDetails = _temporaryCategorieDetails;
         this.categorieDetailsStage = GetCategorieDetailsStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         _CategorieDetails=[];
         this.categorieDetailsStage = GetCategorieDetailsStage.ERROR;
         notifyListeners();
@@ -190,7 +176,6 @@ if(enableNotify) {
     } catch (e) {
       this.categorieDetailsStage = GetCategorieDetailsStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -223,7 +208,6 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-       print(responseJson['data']);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _allPopularCategories = <PopularCategories>[];
@@ -231,12 +215,9 @@ if(enableNotify) {
             _allPopularCategories.add( PopularCategories.fromJson(v));
           });
         }
-         print(
-            _allPopularCategories.length.toString());
         this.allPopularCategoriesStage = GetPopularCategoriesStageStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.allPopularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -245,7 +226,7 @@ if(enableNotify) {
     } catch (e) {
       this.allPopularCategoriesStage = GetPopularCategoriesStageStage.ERROR;
       notifyListeners();
-      print(e);
+
       throw e;
     }
   }
@@ -276,7 +257,6 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-       print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _someBestSelling = <SomeBestSelling>[];
@@ -286,11 +266,9 @@ if(enableNotify) {
         }else{
           _someBestSelling = [];
         }
-         print(_someBestSelling.length.toString());
-        this.someBestSellingStage = GetSomeBestSellingStage.DONE;
+          this.someBestSellingStage = GetSomeBestSellingStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.someBestSellingStage = GetSomeBestSellingStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -299,7 +277,6 @@ if(enableNotify) {
     } catch (e) {
       this.someBestSellingStage = GetSomeBestSellingStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -328,14 +305,12 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-       print(responseJson);
+
       if (response.statusCode == 200 && responseJson["status"] == true) {
           _allBestSelling = AllBestSelling.fromJson(responseJson['data']);
-         print(_allBestSelling.bestSellingContent.length.toString());
         this.allBestSellingStage = GetAllBestSellingStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.allBestSellingStage = GetAllBestSellingStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -344,7 +319,7 @@ if(enableNotify) {
     } catch (e) {
       this.allBestSellingStage = GetAllBestSellingStage.ERROR;
       notifyListeners();
-      print(e);
+
       throw e;
     }
   }
@@ -357,7 +332,7 @@ if(enableNotify) {
     this.allOrdersStage = GetAllOrdersStage.LOADING;
     String url = '$domain/api/user/orders';
     await getUserToken();
-    print(_token);
+
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -373,7 +348,6 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _allOrders = <AllOrders>[];
@@ -381,11 +355,9 @@ if(enableNotify) {
         _allOrders.add( AllOrders.fromJson(v));
       });
     }
-        print(_allOrders.length.toString());
         this.allOrdersStage = GetAllOrdersStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.allOrdersStage = GetAllOrdersStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -394,7 +366,6 @@ if(enableNotify) {
     } catch (e) {
       this.allOrdersStage = GetAllOrdersStage.ERROR;
       notifyListeners();
-      print(e);
       throw e;
     }
   }
@@ -407,7 +378,6 @@ if(enableNotify) {
     this.orderDetailsStage = GetOrderDetailsStage.LOADING;
     String url = '$domain/api/user/orders/$idOfOrder';
     await getUserToken();
-    print(_token);
     var headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -423,7 +393,6 @@ if(enableNotify) {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
-      print(responseJson);
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
           _orderDetails = <OrderDetails>[];
@@ -431,11 +400,9 @@ if(enableNotify) {
             _orderDetails.add( OrderDetails.fromJson(v));
       });
     }
-        print(_orderDetails.length.toString());
         this.orderDetailsStage = GetOrderDetailsStage.DONE;
         notifyListeners();
       } else {
-        print('D');
         this.orderDetailsStage = GetOrderDetailsStage.ERROR;
         var errors = responseJson['message'];
         showAlertDialog(context, content: '$errors');
@@ -444,7 +411,7 @@ if(enableNotify) {
     } catch (e) {
       this.orderDetailsStage = GetOrderDetailsStage.ERROR;
       notifyListeners();
-      print(e);
+
       throw e;
     }
   }
@@ -453,8 +420,7 @@ if(enableNotify) {
 
   int get focusOnSpecificWidget => _focusOnSpecificWidget;
   focusOnSpecificWidgetFunction(index,_){
-  print('cdfhj');
-  print(index);
+
   _focusOnSpecificWidget = index;
    notifyListeners();
 }
@@ -485,19 +451,15 @@ if(enableNotify) {
                 validateStatus: (status) => true,
                 headers: headers));
         var responseJson = response.data;
-        print('Iam');
-        print(responseJson);
         if (response.statusCode == 200 && responseJson["status"] == true) {
           if (responseJson['data'] != null) {
             _settingInformation = SettingInformation.fromJson(responseJson['data']);
           }
-          print(_settingInformation.areas.length.toString());
           if(enableNotify == true){
             this.settingInformationStage = GetSettingInformationStage.DONE;
             notifyListeners();
           }
         } else {
-          print('D');
           var errors = responseJson['message'];
           showAlertDialog(context, content: '$errors');
           if(enableNotify == true){
@@ -510,7 +472,6 @@ if(enableNotify) {
           this.settingInformationStage = GetSettingInformationStage.ERROR;
           notifyListeners();
         }
-        print(e);
         throw e;
       }
     }

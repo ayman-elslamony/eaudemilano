@@ -44,8 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void _submit() async {
 
     final form = formKey.currentState;
-    print(form.validate());
-    print(emailController.text);
 
     if (form.validate()==true && emailController.text.isNotEmpty&& passwordController.text.isNotEmpty) {
       form.save();

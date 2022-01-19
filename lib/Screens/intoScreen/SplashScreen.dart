@@ -33,7 +33,6 @@ class _SplashScreenState extends State<SplashScreen>
     Provider.of<UserDataProvider>(context,listen: false).getUserData().then((_){
           Timer(Duration(milliseconds: 1000), () async {
       navigateAndFinish(context, LoginScreen());
-      debugPrint(Helper.token.toString());
       if (Helper.token != null){
         Navigator.push(context, PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) => NavigationHome(),

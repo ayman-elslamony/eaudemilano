@@ -34,8 +34,6 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
   @override
   void initState() {
     super.initState();
-    print('vdv');
-    print(widget.productId);
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     Provider.of<ViewProductProvider>(context, listen: false)

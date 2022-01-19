@@ -89,27 +89,27 @@ class _PaymentWebViewState extends State<PaymentWebView> {
                 _controller.complete(webViewController);
               },
               onProgress: (int progress) {
-                print("WebView is loading (progress : $progress%)");
+//                print("WebView is loading (progress : $progress%)");
               },
               javascriptChannels: <JavascriptChannel>{
                 _toasterJavascriptChannel(context),
               },
               navigationDelegate: (NavigationRequest request) {
                 if (request.url.startsWith('https://www.youtube.com/')) {
-                  print('blocking navigation to $request}');
+                  //print('blocking navigation to $request}');
                   return NavigationDecision.prevent;
                 }
-                print('allowing navigation to $request');
+//                print('allowing navigation to $request');
                 return NavigationDecision.navigate;
               },
               onPageStarted: (String url) {
-                print('Page started loading: $url');
+//                print('Page started loading: $url');
                 setState(() {
                   position = 1;
                 });
               },
               onPageFinished: (String url) {
-                print('Page finished loading: $url');
+//                print('Page finished loading: $url');
 
 //                defaultTextButton(
 //                  context: context,

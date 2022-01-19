@@ -75,12 +75,8 @@ class ProductDetails {
     description = json['description'];
     image = json['image'];
     favorite=json['favorite'];
-    print('product_in_cart');
-    print(json['product_in_cart'].runtimeType);
     if (json['product_in_cart'] != null) {
       json['product_in_cart'].forEach((v) {
-        print('v');
-        print(v);
         productInCart=ProductInCart.fromJson(v);
       });
     }
@@ -96,7 +92,6 @@ class ProductInCart {
   ProductInCart({this.id, this.sizeId='', this.sizeName='6644', this.quantity='0'});
 
   ProductInCart.fromJson(Map<String, dynamic> json) {
-    print('dgdg');
     id = json['id'];
     sizeId = json['size_id']??'';
     sizeName = json['size_name']??'';

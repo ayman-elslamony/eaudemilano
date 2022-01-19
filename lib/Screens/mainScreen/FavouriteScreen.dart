@@ -168,6 +168,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                       .products[index].productDetails.image,
                                   price: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.price,
+                                  priceBeforeDiscount: favouriteProvider.getAllProductsInFavourite
+                                      .products[index].productDetails.priceBeforeDiscount,
                                   subTitle: favouriteProvider.getAllProductsInFavourite
                                       .products[index].productDetails.title,
                                   context: context,
