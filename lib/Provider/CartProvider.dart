@@ -22,19 +22,27 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  GetAllProductsInCartStage allProductsInCartStage;
-  AllProductsInCart _allProductsInCart=AllProductsInCart(specificProduct: [],totalProducts: 0,currentPage: 0);
+  int pageNumber = 1;
+  int get nextPage => pageNumber;
+  void resetPageNumber() {
+    pageNumber = 1;
+  }
 
-   void resetAllProductsInCart() {
-    _allProductsInCart = AllProductsInCart(specificProduct: [],totalProducts: 0,currentPage: 0);
+  GetAllProductsInCartStage allProductsInCartStage;
+  AllProductsInCart _allProductsInCart =
+      AllProductsInCart(specificProduct: [], totalProducts: 0, currentPage: 0);
+
+  void resetAllProductsInCart() {
+    _allProductsInCart = AllProductsInCart(
+        specificProduct: [], totalProducts: 0, currentPage: 0);
     notifyListeners();
   }
 
   AllProductsInCart get getAllProductsInCart => _allProductsInCart;
-  Future<void> getAllProductsInCartFunction({context, locale,bool enableLoading=false}) async {
-
+  Future<void> getAllProductsInCartFunction(
+      {context, locale, bool enableLoading = false, currentPage = 1}) async {
     this.allProductsInCartStage = GetAllProductsInCartStage.LOADING;
-    if(enableLoading){
+    if (enableLoading) {
       notifyListeners();
     }
     String url = '$domain/api/user/cart';
@@ -56,14 +64,14 @@ class CartProvider extends ChangeNotifier {
       var responseJson = response.data;
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
+          final int lastPage = responseJson["data"]["last_page"];
+          if (pageNumber < lastPage) {
+            pageNumber++;
+          }
+          _allProductsInCart = AllProductsInCart.fromJson(responseJson['data']);
+        } else {
           _allProductsInCart =
-              AllProductsInCart.fromJson(responseJson['data']);
-        }else{
-          _allProductsInCart =
-              AllProductsInCart(
-                  specificProduct: [],
-                  totalProducts: 0
-              );
+              AllProductsInCart(specificProduct: [], totalProducts: 0);
         }
         await getTotalPrice();
         this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
@@ -79,27 +87,25 @@ class CartProvider extends ChangeNotifier {
       notifyListeners();
       throw e;
     }
-
   }
 
-
-  Future<void> removeFavouriteProductInCart({int id})async {
-
-    if(_allProductsInCart!=null){
-      if(_allProductsInCart.specificProduct.isNotEmpty){
-    for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
-      if (_allProductsInCart.specificProduct[i].product.id == id) {
-        _allProductsInCart.specificProduct[i].favorite = 'no';
-        notifyListeners();
+  Future<void> removeFavouriteProductInCart({int id}) async {
+    if (_allProductsInCart != null) {
+      if (_allProductsInCart.specificProduct.isNotEmpty) {
+        for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
+          if (_allProductsInCart.specificProduct[i].product.id == id) {
+            _allProductsInCart.specificProduct[i].favorite = 'no';
+            notifyListeners();
+          }
+        }
       }
     }
-  }}
-
   }
 
-
-Future<void> removeProductFromCart({context, locale,int productIndex})async{
-    String url = '$domain/api/user/remove-from-cart/${_allProductsInCart.specificProduct[productIndex].id}';
+  Future<void> removeProductFromCart(
+      {context, locale, int productIndex}) async {
+    String url =
+        '$domain/api/user/remove-from-cart/${_allProductsInCart.specificProduct[productIndex].id}';
     _allProductsInCart.specificProduct[productIndex].enableLoader = true;
     notifyListeners();
     await getUserToken();
@@ -126,7 +132,7 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       } else {
         _allProductsInCart.specificProduct[productIndex].enableLoader = false;
         notifyListeners();
-        if(responseJson['message'] !=null) {
+        if (responseJson['message'] != null) {
           showAlertDialog(context, content: '${responseJson['message']}');
         }
       }
@@ -137,7 +143,8 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       throw e;
     }
   }
-  Future<void> removeAllProductsCart({context, locale})async{
+
+  Future<void> removeAllProductsCart({context, locale}) async {
     String url = '$domain/api/user/remove-cart';
     await getUserToken();
     var headers = {
@@ -158,9 +165,11 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['message'] != null) {
           showAlertDialog(context, content: responseJson['message']);
-          _allProductsInCart =
-              AllProductsInCart(specificProduct: [],totalProducts: 0,);
-          _totalPrice=0;
+          _allProductsInCart = AllProductsInCart(
+            specificProduct: [],
+            totalProducts: 0,
+          );
+          _totalPrice = 0;
         }
         this.allProductsInCartStage = GetAllProductsInCartStage.DONE;
         notifyListeners();
@@ -177,15 +186,12 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
     }
   }
 
-
-
-
-  double _totalPrice=0;
+  double _totalPrice = 0;
   double get totalPrice => _totalPrice;
 
-  Future<void>  getTotalPrice()async{
-    _totalPrice=0;
-    if(_allProductsInCart !=null) {
+  Future<void> getTotalPrice() async {
+    _totalPrice = 0;
+    if (_allProductsInCart != null) {
       if (_allProductsInCart.specificProduct.isNotEmpty) {
         for (int i = 0; i < _allProductsInCart.specificProduct.length; i++) {
           _totalPrice +=
@@ -194,15 +200,18 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       }
     }
   }
-  checkIsFavourite(int index){
-    if(_allProductsInCart.specificProduct[index].favorite=='no'){
-      _allProductsInCart.specificProduct[index].favorite='yes';
-    }else{
-      _allProductsInCart.specificProduct[index].favorite='no';
+
+  checkIsFavourite(int index) {
+    if (_allProductsInCart.specificProduct[index].favorite == 'no') {
+      _allProductsInCart.specificProduct[index].favorite = 'yes';
+    } else {
+      _allProductsInCart.specificProduct[index].favorite = 'no';
     }
   }
-  Future<bool> addToFavouriteOrDelete({context, locale,int index})async{
-    String url = '$domain/api/user/add-to-favorite/${_allProductsInCart.specificProduct[index].product.id}';
+
+  Future<bool> addToFavouriteOrDelete({context, locale, int index}) async {
+    String url =
+        '$domain/api/user/add-to-favorite/${_allProductsInCart.specificProduct[index].product.id}';
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -224,8 +233,7 @@ Future<void> removeProductFromCart({context, locale,int productIndex})async{
       var responseJson = response.data;
       if (response.statusCode == 200 && responseJson["status"] == true) {
         return true;
-    }
-    else {
+      } else {
         checkIsFavourite(index);
         notifyListeners();
         return false;

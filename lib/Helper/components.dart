@@ -85,86 +85,93 @@ Widget defaultShowTime({BuildContext context, String textTime}) {
 
 Widget defaultTextInCard(
     {BuildContext context,
-    String price = '80\$',
-      String priceBeforeDiscount,
-    String subTitle = 'Sheer Beauty EDT',
+    String price,
+    String priceBeforeDiscount,
+    String productName,
+    String productSize,
     String titleContent = ''}) {
   return Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        Text(productName,
+            style: Theme.of(context)
+                .textTheme
+                .headline4
+                .copyWith(color: Colors.black87,fontWeight: FontWeight.bold)),
+        const SizedBox(
+          height: 4,
+        ),
+        productSize==null?const SizedBox():const SizedBox(
+          height: 4,
+        ),
+        productSize==null?const SizedBox():Text(productSize,
+            style: Theme.of(context)
+                .textTheme
+                .headline5
+                .copyWith(color: Colors.grey[800])),
         titleContent == ''
-            ?  price==priceBeforeDiscount || priceBeforeDiscount ==''?Text(
-          price,
-          style: Theme.of(context)
-              .textTheme
-              .headline4
-              .copyWith(
-              color: Colors.black87,
-              fontWeight:
-              FontWeight.bold),
-        ):Row(
-          children: [
-            Text(
-              price,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  .copyWith(
-                  color: Colors.black87,
-                  fontWeight:
-                  FontWeight.bold),
-            ),
-            const SizedBox(width: 18,),
-            Text(
-              '$priceBeforeDiscount \$',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  .copyWith(
-                  color: secondaryColor,
-                  decoration: TextDecoration.lineThrough,
-                  fontWeight:
-                  FontWeight.bold),
-            ),
-          ],
-        )
+            ? price == priceBeforeDiscount || priceBeforeDiscount == ''
+                ? Text(
+                    price,
+                    style: Theme.of(context).textTheme.headline4.copyWith(
+                        color: Colors.black87, fontWeight: FontWeight.bold),
+                  )
+                : Row(
+                    children: [
+                      Text(
+                        price,
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                            color: primeColor, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        '$priceBeforeDiscount \$',
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                            color: secondaryColor,
+                            decoration: TextDecoration.lineThrough,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  )
             : Row(
                 children: [
                   Text(
                     price,
                     style: Theme.of(context).textTheme.headline4.copyWith(
-                        color: Colors.black87, fontWeight: FontWeight.bold),
+                        color: primeColor, fontWeight: FontWeight.bold),
                   ),
-  Text(
-  ' x ',
-  textDirection: AppLocalizations.of(context).locale.languageCode == "en"
-  ? TextDirection.ltr : TextDirection.ltr,
-  style: Theme.of(context).textTheme.headline4.copyWith(
-  color: Colors.black87, fontWeight: FontWeight.bold),
-  ),
+                  Text(
+                    ' x ',
+                    textDirection:
+                        AppLocalizations.of(context).locale.languageCode == "en"
+                            ? TextDirection.ltr
+                            : TextDirection.ltr,
+                    style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: primeColor, fontWeight: FontWeight.bold),
+                  ),
                   Text(
                     titleContent,
                     style: Theme.of(context).textTheme.headline4.copyWith(
-                        color: Colors.black87, fontWeight: FontWeight.bold),
+                        color: primeColor, fontWeight: FontWeight.bold),
                   )
                 ],
               ),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(subTitle,
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                .copyWith(color: Colors.grey[800])),
+
       ],
     ),
   );
 }
 
-Widget addFavouriteAndRemoveInCard(
-    {String favIconUrl, Function onFavPressed, Function onDeletePressed ,bool isEnabledReload=false,}) {
+Widget addFavouriteAndRemoveInCard({
+  String favIconUrl,
+  Function onFavPressed,
+  Function onDeletePressed,
+  bool isEnabledReload = false,
+}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 18),
     child: Column(
@@ -184,17 +191,21 @@ Widget addFavouriteAndRemoveInCard(
         const SizedBox(
           height: 5.0,
         ),
-        isEnabledReload? loaderApp(loaderMinSize: true,):InkWell(
-          onTap: onDeletePressed,
-          child: const Padding(
-            padding:  EdgeInsets.all(8.0),
-            child:  ImageIcon(
-              AssetImage('images/delete.png'),
-              size: 17,
-              color: Color(0xFF7D3030),
-            ),
-          ),
-        ),
+        isEnabledReload
+            ? loaderApp(
+                loaderMinSize: true,
+              )
+            : InkWell(
+                onTap: onDeletePressed,
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: ImageIcon(
+                    AssetImage('images/delete.png'),
+                    size: 17,
+                    color: Color(0xFF7D3030),
+                  ),
+                ),
+              ),
       ],
     ),
   );
@@ -206,23 +217,29 @@ Widget defaultCard(
         @required int productId,
         Size media,
         String price,
-        String priceBeforeDiscount='',
-        String subTitle,
+        String priceBeforeDiscount = '',
+        String productName,
+        String productSize,
         String imgUrl = '',
         String titleContent,
         String favIconUrl = '',
         bool justEnableDeleteIcon = false,
         Function onFavPressed,
-          bool isEnabledReload=false,
+        bool isEnabledReload = false,
         Function onDeletePressed}) =>
     InkWell(
       onTap: () {
-        navigateTo(context, ViewProductScreen(
-          productId: productId,
-        ));
+        navigateTo(
+            context,
+            ViewProductScreen(
+              productId: productId,
+            ));
       },
       child: Card(
-        margin: const EdgeInsets.only(right: 5.0,left: 5.0,),
+        margin: const EdgeInsets.only(
+          right: 5.0,
+          left: 5.0,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -251,7 +268,8 @@ Widget defaultCard(
             ),
             defaultTextInCard(
                 context: context,
-                subTitle: subTitle,
+                productName: productName,
+                productSize: productSize,
                 price: '$price \$',
                 priceBeforeDiscount: priceBeforeDiscount,
                 titleContent: titleContent),
@@ -264,22 +282,27 @@ Widget defaultCard(
                     favIconUrl: favIconUrl),
             justEnableDeleteIcon == true
                 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18,vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 12),
                     child: Column(
 //    crossAxisAlignment: CrossAxisAlignment.start,
 //    mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        isEnabledReload? loaderApp(loaderMinSize: true,):InkWell(
-                          onTap: onDeletePressed,
-                          child: const Padding(
-                            padding:  EdgeInsets.all(8.0),
-                            child:  ImageIcon(
-                              AssetImage('images/delete.png'),
-                              size: 18,
-                              color: Color(0xFF7D3030),
-                            ),
-                          ),
-                        ),
+                        isEnabledReload
+                            ? loaderApp(
+                                loaderMinSize: true,
+                              )
+                            : InkWell(
+                                onTap: onDeletePressed,
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: ImageIcon(
+                                    AssetImage('images/delete.png'),
+                                    size: 18,
+                                    color: Color(0xFF7D3030),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   )
@@ -289,24 +312,26 @@ Widget defaultCard(
       ),
     );
 
-
-
-Widget loadingCard({Size media}){
+Widget loadingCard({Size media}) {
   return Shimmer.fromColors(
     child: Card(
-      margin: const EdgeInsets.only(right: 5.0,left: 5.0,),
+      margin: const EdgeInsets.only(
+        right: 5.0,
+        left: 5.0,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
       child: SizedBox(
         width: media.width,
-        height: media.height*0.15,
+        height: media.height * 0.15,
       ),
     ),
     baseColor: Colors.grey[300],
     highlightColor: Colors.grey[100],
   );
 }
+
 Widget subtitleOfHomeScreen(
     {Function function,
     BuildContext context,
@@ -371,7 +396,7 @@ Widget bottomNavigationBar(
     @required int currentIndex,
     @required Function onTap}) {
   return Container(
-    decoration:const  BoxDecoration(
+    decoration: const BoxDecoration(
       color: Colors.transparent,
       borderRadius: BorderRadius.only(
         topRight: Radius.circular(12),
@@ -388,7 +413,7 @@ Widget bottomNavigationBar(
 //                    ],
     ),
     child: ClipRRect(
-      borderRadius:const BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         topRight: Radius.circular(12),
         topLeft: Radius.circular(12),
       ),
@@ -406,11 +431,10 @@ Widget bottomNavigationBar(
             label: '',
             activeIcon: Container(
               height: 53,
-              decoration:const  BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: Colors.white, width: 2))),
-              child:const  ImageIcon(
+              decoration: const BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
+              child: const ImageIcon(
                 AssetImage('images/home.png'),
                 size: 25,
               ),
@@ -427,11 +451,10 @@ Widget bottomNavigationBar(
             ),
             activeIcon: Container(
               height: 53,
-              decoration:const  BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: Colors.white, width: 2))),
-              child:const  ImageIcon(
+              decoration: const BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
+              child: const ImageIcon(
                 AssetImage('images/shoppingCart.png'),
                 size: 25,
               ),
@@ -449,9 +472,8 @@ Widget bottomNavigationBar(
             activeIcon: Container(
               height: 53,
               decoration: const BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: Colors.white, width: 2))),
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
                 AssetImage('images/search.png'),
                 size: 25,
@@ -462,17 +484,16 @@ Widget bottomNavigationBar(
             label: '',
             icon: const SizedBox(
               height: 53,
-              child:  ImageIcon(
+              child: ImageIcon(
                 AssetImage('images/favouriteGrey.png'),
                 size: 25,
               ),
             ),
             activeIcon: Container(
               height: 53,
-              decoration:const  BoxDecoration(
-                  border: Border(
-                      top: BorderSide(
-                          color: Colors.white, width: 2))),
+              decoration: const BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.white, width: 2))),
               child: const ImageIcon(
                 AssetImage('images/favourite.png'),
                 size: 25,
@@ -487,14 +508,13 @@ Widget bottomNavigationBar(
         currentIndex: currentIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
-        selectedIconTheme:const  IconThemeData(size: 25),
-        unselectedIconTheme:
-        const  IconThemeData(color: Colors.grey, size: 25),
+        selectedIconTheme: const IconThemeData(size: 25),
+        unselectedIconTheme: const IconThemeData(color: Colors.grey, size: 25),
 // selectedItemColor: Theme.of(context).primaryColor,
-        selectedLabelStyle:const  TextStyle(
+        selectedLabelStyle: const TextStyle(
           fontSize: 0,
         ),
-        unselectedLabelStyle:const  TextStyle(
+        unselectedLabelStyle: const TextStyle(
           fontSize: 0,
         ),
       ),
@@ -521,34 +541,34 @@ Widget bottomNavigationBar(
 //),
 //),
 
-Widget defaultFormField({
-  TextEditingController controller,
-  @required TextInputType type,
-  Function onSubmit,
-  Function onChange,
-  Function onTap,
-  bool isPassword = false,
-  @required Function validate,
-  String label,
-  String hintText,
-  IconData prefix,
-  IconData suffix,
-  Color suffixColor,
-  Function suffixPressed,
-  bool isClickable = true,
-  bool readOnly = false,
-  bool removeContainer=false,
-  Widget suffixWidget,
-  bool autoFocus=false
-}) =>
+Widget defaultFormField(
+        {TextEditingController controller,
+        @required TextInputType type,
+        Function onSubmit,
+        Function onChange,
+        Function onTap,
+        bool isPassword = false,
+        @required Function validate,
+        String label,
+        String hintText,
+        IconData prefix,
+        IconData suffix,
+        Color suffixColor,
+        Function suffixPressed,
+        bool isClickable = true,
+        bool readOnly = false,
+        bool removeContainer = false,
+        Widget suffixWidget,
+        bool autoFocus = false}) =>
     SizedBox(
       height: 55.0,
       child: InkWell(
         onTap: isClickable == false ? onTap : null,
         child: Container(
           width: double.infinity,
-          padding:
-          removeContainer? const EdgeInsets.all(0.0):const EdgeInsets.only(top: 15, bottom: 12, left: 5, right: 5),
+          padding: removeContainer
+              ? const EdgeInsets.all(0.0)
+              : const EdgeInsets.only(top: 15, bottom: 12, left: 5, right: 5),
           decoration: BoxDecoration(
             color: const Color(0xFF8C8C8C),
             borderRadius: BorderRadius.circular(15),
@@ -561,7 +581,6 @@ Widget defaultFormField({
             enabled: isClickable,
             onFieldSubmitted: onSubmit,
             onChanged: onChange,
-
             onTap: onTap ?? () {},
             validator: validate,
             cursorColor: primeColor,
@@ -579,7 +598,9 @@ Widget defaultFormField({
                   const TextStyle(color: Color(0xFF4F4F4F), fontSize: 14),
               suffixIcon: suffix != null
                   ? IconButton(
-                      padding: removeContainer?const EdgeInsets.all(0.0):const EdgeInsets.only(bottom: 7),
+                      padding: removeContainer
+                          ? const EdgeInsets.all(0.0)
+                          : const EdgeInsets.only(bottom: 7),
                       onPressed: suffixPressed,
                       icon: Icon(
                         suffix,
@@ -587,18 +608,18 @@ Widget defaultFormField({
                       ),
                     )
                   : null,
-              suffix: suffixWidget == null ?null:suffixWidget,
+              suffix: suffixWidget == null ? null : suffixWidget,
               fillColor: const Color(0xFF8C8C8C),
               filled: true,
               errorStyle: const TextStyle(color: Color(0xFF4F4F4F)),
-              floatingLabelStyle: const TextStyle(color: Color(0xFF4F4F4F)),
+              //floatingLabelStyle: const TextStyle(color: Color(0xFF4F4F4F)),
               contentPadding: const EdgeInsets.only(
                   bottom: 10, right: 15, left: 15, top: 12),
               border: OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(10),
               ),
-              suffixIconColor: primeColor,
+              // suffixIconColor: primeColor,
             ),
             style: TextStyle(
               fontFamily: 'Lato',
@@ -620,10 +641,9 @@ Widget myDivider({double height = 30}) => Divider(
 
 void navigateTo(context, Widget widget) => Navigator.push(
       context,
-  PageRouteBuilder(
-    pageBuilder: (context,animation1, animation2) => widget,
-    transitionDuration:
-    const Duration(milliseconds: 1000),
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => widget,
+        transitionDuration: const Duration(milliseconds: 1000),
       ),
     );
 
@@ -634,9 +654,8 @@ void navigateAndFinish(
     Navigator.pushAndRemoveUntil(
       context,
       PageRouteBuilder(
-        pageBuilder: (context,animation1, animation2) => widget,
-        transitionDuration:
-        const Duration(milliseconds: 1000),
+        pageBuilder: (context, animation1, animation2) => widget,
+        transitionDuration: const Duration(milliseconds: 1000),
       ),
       (route) {
         return false;
@@ -657,14 +676,12 @@ void showToast({
       fontSize: 16.0,
     );
 
-Widget loaderApp({bool loaderMinSize=false}) {
-  return  SpinKitSpinningLines(
+Widget loaderApp({bool loaderMinSize = false}) {
+  return SpinKitSpinningLines(
     color: Colors.black87,
     lineWidth: 4,
-    size: loaderMinSize?35:60,
+    size: loaderMinSize ? 35 : 60,
   );
-
-
 }
 
 showAlertDialog(BuildContext context,

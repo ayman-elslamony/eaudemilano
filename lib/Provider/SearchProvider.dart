@@ -20,6 +20,9 @@ class SearchProvider extends ChangeNotifier {
   List<SearchModel> _searchResult=[];
   String _searchKey='';
   List<SearchModel> get getSearchResult => _searchResult;
+  void resetSearchList(){
+    _searchResult=[];
+  }
   Future<void> getSearchResultFunction({context, locale,String text}) async {
 
     if(_searchKey != text){

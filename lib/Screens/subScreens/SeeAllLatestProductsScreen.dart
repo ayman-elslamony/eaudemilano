@@ -13,35 +13,35 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class SeeAllBestSellingScreen extends StatefulWidget {
+class SeeAllLatestProductsScreen extends StatefulWidget {
   @override
-  _SeeAllBestSellingScreenState createState() =>
-      _SeeAllBestSellingScreenState();
+  _SeeAllLatestProductsScreenState createState() =>
+      _SeeAllLatestProductsScreenState();
 }
 
-class _SeeAllBestSellingScreenState extends State<SeeAllBestSellingScreen> {
+class _SeeAllLatestProductsScreenState extends State<SeeAllLatestProductsScreen> {
   String _locale;
-  RefreshController _refreshControllerAllBestSellingScreen;
+  RefreshController _refreshController ;
   @override
   void initState() {
     print(Helper.token);
-    _refreshControllerAllBestSellingScreen =
+    _refreshController =
         RefreshController(initialRefresh: false);
 
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     Provider.of<HomeProvider>(context, listen: false)
-        .getAllBestSellingFunction(context: context, locale: _locale);
+        .getAllLatestProductsFunction(context: context, locale: _locale);
     super.initState();
   }
 
   int nextPage;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+
+
   void _onRefresh() async {
     await Provider.of<HomeProvider>(context, listen: false)
-        .getAllBestSellingFunction(context: context, locale: _locale);
+        .getAllLatestProductsFunction(context: context, locale: _locale);
     await Future.delayed(Duration(milliseconds: 1000));
 
     _refreshController.refreshCompleted();
@@ -53,8 +53,8 @@ class _SeeAllBestSellingScreenState extends State<SeeAllBestSellingScreen> {
     nextPage = Provider.of<HomeProvider>(context, listen: false).nextPage;
     if (nextPage != null) {
       Provider.of<HomeProvider>(context, listen: false)
-          .getAllBestSellingFunction(
-              context: context, locale: _locale, currentPage: nextPage);
+          .getAllLatestProductsFunction(
+          context: context, locale: _locale, currentPage: nextPage);
       if (mounted) {
         setState(() {});
         _refreshController.loadComplete();
@@ -155,32 +155,32 @@ class _SeeAllBestSellingScreenState extends State<SeeAllBestSellingScreen> {
                         padding: const EdgeInsets.only(
                           top: 12,
                         ),
-                        child: homeProvider.allBestSellingStage ==
-                                GetAllBestSellingStage.LOADING
+                        child: homeProvider.allLatestProductsStage ==
+                            GetAllLatestProductsStage.LOADING
                             ? loadingCard(media: media)
                             : defaultCard(
-                                productId: homeProvider.getAllBestSelling
-                                    .bestSellingContent[index].id,
-                                titleContent: '',
-                                priceBeforeDiscount: homeProvider
-                                    .getAllBestSelling
-                                    .bestSellingContent[index]
-                                    .priceBeforeDiscount,
-                                price: homeProvider.getAllBestSelling
-                                    .bestSellingContent[index].price,
-                                imgUrl: homeProvider.getAllBestSelling
-                                    .bestSellingContent[index].image,
-                                productName: homeProvider.getAllBestSelling
-                                    .bestSellingContent[index].title,
-                                context: context,
-                                currentIndex: index,
-                                media: media),
+                            productId: homeProvider.getAllLatestProducts
+                                .bestSellingContent[index].id,
+                            titleContent: '',
+                            priceBeforeDiscount: homeProvider
+                                .getAllLatestProducts
+                                .bestSellingContent[index]
+                                .priceBeforeDiscount,
+                            price: homeProvider.getAllLatestProducts
+                                .bestSellingContent[index].price,
+                            imgUrl: homeProvider.getAllLatestProducts
+                                .bestSellingContent[index].image,
+                            productName: homeProvider.getAllLatestProducts
+                                .bestSellingContent[index].title,
+                            context: context,
+                            currentIndex: index,
+                            media: media),
                       ),
-                      itemCount: homeProvider.allBestSellingStage ==
-                              GetAllBestSellingStage.LOADING
+                      itemCount: homeProvider.allLatestProductsStage ==
+                          GetAllLatestProductsStage.LOADING
                           ? 5
                           : homeProvider
-                              .getAllBestSelling.bestSellingContent.length,
+                          .getAllLatestProducts.bestSellingContent.length,
                     ),
                   ),
                   const SizedBox(

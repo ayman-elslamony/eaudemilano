@@ -24,8 +24,8 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
-//    Provider.of<SearchProvider>(context, listen: false)
-//        .disableWriteInSearchFunction();
+    Provider.of<SearchProvider>(context, listen: false)
+        .resetSearchList();
     super.initState();
   }
 
@@ -237,9 +237,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                               titleContent: '',
                                               price: searchResult
                                                   .getSearchResult[index].price,
+                                              priceBeforeDiscount: searchResult
+                                                  .getSearchResult[index].priceBeforeDiscount,
                                               imgUrl: searchResult
                                                   .getSearchResult[index].image,
-                                              subTitle: searchResult
+                                              productName: searchResult
                                                   .getSearchResult[index].title,
                                               context: context,
                                               currentIndex: index,

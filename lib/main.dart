@@ -23,7 +23,6 @@ import 'Screens/mainScreen/NavigationHome.dart';
 
 const domain = "https://home-sleem.com/milano";
 const apiPassword = "123456";
-const photosPreUrl = "https://wekala.greencodet.com/storage/";
 
 //Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //  await Firebase.initializeApp();

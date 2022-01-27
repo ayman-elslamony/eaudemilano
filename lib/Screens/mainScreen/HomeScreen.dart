@@ -11,6 +11,7 @@ import 'package:eaudemilano/Provider/LocaleProvider.dart';
 import 'package:eaudemilano/Screens/subScreens/ProfileScreen.dart';
 import 'package:eaudemilano/Screens/subScreens/SeeAllBestSellingScreen.dart';
 import 'package:eaudemilano/Screens/subScreens/SeeAllCategoriesScreen.dart';
+import 'package:eaudemilano/Screens/subScreens/SeeAllLatestProductsScreen.dart';
 import 'package:eaudemilano/Screens/subScreens/ViewProductScreen.dart';
 import 'package:eaudemilano/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -28,35 +29,41 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  RefreshController _refreshControllerHomeScreen ;
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  RefreshController _refreshControllerHomeScreen;
   String _locale;
-
+  AnimationController controller;
   @override
   void initState() {
     super.initState();
-    _refreshControllerHomeScreen =
-        RefreshController(initialRefresh: false);
+    // controller = AnimationController(
+    //   duration: Duration(),
+    //   vsync: this,
+    // );
+    _refreshControllerHomeScreen = RefreshController(initialRefresh: false);
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     Provider.of<HomeProvider>(context, listen: false)
         .getHomeData(context: context, locale: _locale);
   }
+
   void _onRefresh() async {
     Provider.of<HomeProvider>(context, listen: false)
         .onRefresh(context: context, locale: _locale);
     _refreshControllerHomeScreen.refreshCompleted();
   }
+
   createCard(
       {double width,
       double height,
       bool isFocusCard = true,
       String urlImage,
       String productPrice,
-        Function onTap,
+      Function onTap,
       String productName}) {
     return AnimatedSize(
       curve: Curves.fastOutSlowIn,
+      vsync: this,
       duration: const Duration(seconds: 1),
       child: InkWell(
         onTap: onTap,
@@ -206,7 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 12.0, top: 8.0,right: 12.0),
+                        padding: const EdgeInsets.only(
+                            left: 12.0, top: 8.0, right: 12.0),
                         child: Row(
                           children: [
                             Text(
@@ -217,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(
                         width: media.width,
-                        height:22,
+                        height: 22,
                         child: Center(
                           child: MediaQuery.removePadding(
                             context: context,
@@ -256,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               navigateTo(context, SeeAllCategoriesScreen());
                             },
                             child: Padding(
@@ -323,14 +331,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         )
                       : CarouselSlider.builder(
-                          itemCount: homeProvider.getAllPopularCategories.length,
+                          itemCount:
+                              homeProvider.getAllPopularCategories.length,
                           itemBuilder: (context, index) => createCard(
-                            onTap: (){
-                              navigateTo(context, ViewProductScreen(
-                                productId: homeProvider
-                                    .getAllPopularCategories[index].product.id,
-                              ));
-                            },
+                              onTap: () {
+                                navigateTo(
+                                    context,
+                                    ViewProductScreen(
+                                      productId: homeProvider
+                                          .getAllPopularCategories[index]
+                                          .product
+                                          .id,
+                                    ));
+                              },
                               productName: homeProvider
                                   .getAllPopularCategories[index].product.title,
                               productPrice: homeProvider
@@ -362,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 8,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 12.0,right: 12.0),
+                    padding: const EdgeInsets.only(left: 12.0, right: 12.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -391,31 +404,129 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  ListView.builder(
+                  homeProvider.someBestSellingStage ==
+                      GetSomeBestSellingStage.DONE && homeProvider.getSomeBestSelling.isEmpty
+                      ?Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12),
+                        child: Center(child:  Text(
+                    AppLocalizations.of(context).locale.languageCode == "en"
+                          ? 'There are no products yet'
+                          : 'لا توجد منتجات بعد',
+                          style: Theme.of(context).textTheme.headline4
+                              .copyWith(
+                            color: primeColor,),
+                    textAlign: TextAlign.center,
+                  ),
+                  ),
+                      ):ListView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) => Padding(
+                      padding:
+                      const EdgeInsets.only(top: 10.0, left: 8, right: 8),
+                      child: homeProvider.someBestSellingStage ==
+                          GetSomeBestSellingStage.LOADING
+                          ? loadingCard(media: media)
+                          : defaultCard(
+                          productId:
+                          homeProvider.getSomeBestSelling[index].id,
+                          titleContent: '',
+                          priceBeforeDiscount: homeProvider
+                              .getSomeBestSelling[index]
+                              .priceBeforeDiscount,
+                          price:
+                          homeProvider.getSomeBestSelling[index].price,
+                          productName:
+                          homeProvider.getSomeBestSelling[index].title,
+                          context: context,
+                          imgUrl:
+                          homeProvider.getSomeBestSelling[index].image,
+                          currentIndex: index,
+                          media: media),
+                    ),
+                    itemCount: homeProvider.someBestSellingStage ==
+                        GetSomeBestSellingStage.LOADING
+                        ? 1
+                        : homeProvider.getSomeBestSelling.length,
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${AppLocalizations.of(context).trans('latest_products')}',
+                          style: Theme.of(context).textTheme.headline3,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            navigateTo(context, SeeAllLatestProductsScreen());
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 8.0),
+                            child: Text(
+                              '${AppLocalizations.of(context).trans('see_all')}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4
+                                  .copyWith(
+                                  color: primeColor,
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  homeProvider.someLatestProductsStage ==
+                      GetSomeLatestProductsStage.DONE && homeProvider.getSomeLatestProducts.isEmpty
+                      ?Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0,vertical: 12),
+                    child: Center(child:  Text(
+                      AppLocalizations.of(context).locale.languageCode == "en"
+                          ? 'There are no products yet'
+                          : 'لا توجد منتجات بعد',
+                      style: Theme.of(context).textTheme.headline4
+                          .copyWith(
+                        color: primeColor,),
+                      textAlign: TextAlign.center,
+                    ),
+                    ),
+                  ):ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.only(top: 10.0,left: 8,right: 8),
-                      child: homeProvider.someBestSellingStage ==
-                              GetSomeBestSellingStage.LOADING
+                      padding:
+                      const EdgeInsets.only(top: 10.0, left: 8, right: 8),
+                      child: homeProvider.someLatestProductsStage ==
+                          GetSomeLatestProductsStage.LOADING
                           ? loadingCard(media: media)
                           : defaultCard(
-                        productId: homeProvider.getSomeBestSelling[index].id,
-                              titleContent: '',
-                              priceBeforeDiscount:homeProvider.getSomeBestSelling[index].priceBeforeDiscount ,
-                              price: homeProvider.getSomeBestSelling[index].price,
-                              subTitle:
-                                  homeProvider.getSomeBestSelling[index].title,
-                              context: context,
-                              imgUrl:
-                                  homeProvider.getSomeBestSelling[index].image,
-                              currentIndex: index,
-                              media: media),
+                          productId:
+                          homeProvider.getSomeLatestProducts[index].id,
+                          titleContent: '',
+                          priceBeforeDiscount: homeProvider
+                              .getSomeLatestProducts[index]
+                              .priceBeforeDiscount,
+                          price:
+                          homeProvider.getSomeLatestProducts[index].price,
+                          productName:
+                          homeProvider.getSomeLatestProducts[index].title,
+                          context: context,
+                          imgUrl:
+                          homeProvider.getSomeLatestProducts[index].image,
+                          currentIndex: index,
+                          media: media),
                     ),
-                    itemCount: homeProvider.someBestSellingStage ==
-                            GetSomeBestSellingStage.LOADING
-                        ? 5
-                        : homeProvider.getSomeBestSelling.length,
+                    itemCount: homeProvider.someLatestProductsStage ==
+                        GetSomeLatestProductsStage.LOADING
+                        ? 1
+                        : homeProvider.getSomeLatestProducts.length,
                   ),
                   SizedBox(
                     height: 10.0,

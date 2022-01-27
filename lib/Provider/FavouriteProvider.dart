@@ -23,18 +23,26 @@ class FavouriteProvider extends ChangeNotifier {
     }
   }
 
+  int pageNumber = 1;
+  int get nextPage => pageNumber;
+  void resetPageNumber() {
+    pageNumber = 1;
+  }
+
   GetAllProductsInFavouriteStage allProductsInFavouriteStage;
-  AllProductsInFavourite _allProductsInFavourite=AllProductsInFavourite(products: []);
+  AllProductsInFavourite _allProductsInFavourite =
+      AllProductsInFavourite(products: []);
 
-  AllProductsInFavourite get getAllProductsInFavourite => _allProductsInFavourite;
+  AllProductsInFavourite get getAllProductsInFavourite =>
+      _allProductsInFavourite;
 
-  Future<void> getAllProductsInFavouriteFunction({context, locale,bool enableLoading=false}) async {
-
+  Future<void> getAllProductsInFavouriteFunction(
+      {context, locale, bool enableLoading = false, currentPage = 1}) async {
     this.allProductsInFavouriteStage = GetAllProductsInFavouriteStage.LOADING;
-    if(enableLoading){
+    if (enableLoading) {
       notifyListeners();
     }
-    String url = '$domain/api/user/favorite';
+    String url = '$domain/api/user/favorite?page=$currentPage';
     await getUserToken();
     var headers = {
       'Accept': 'application/json',
@@ -51,16 +59,20 @@ class FavouriteProvider extends ChangeNotifier {
               validateStatus: (status) => true,
               headers: headers));
       var responseJson = response.data;
+      pageNumber = currentPage;
       if (response.statusCode == 200 && responseJson["status"] == true) {
         if (responseJson['data'] != null) {
-          _allProductsInFavourite = AllProductsInFavourite.fromJson(responseJson['data']);
-        }else{
+          final int lastPage = responseJson["data"]["last_page"];
+          if (pageNumber < lastPage) {
+            pageNumber++;
+          }
+          _allProductsInFavourite =
+              AllProductsInFavourite.fromJson(responseJson['data']);
+        } else {
           _allProductsInFavourite = AllProductsInFavourite(
-            products:[],
-            currentPage: 0,
-            totalProducts: 0
-          );
+              products: [], currentPage: 0, totalProducts: 0);
         }
+
         this.allProductsInFavouriteStage = GetAllProductsInFavouriteStage.DONE;
         notifyListeners();
       } else {
@@ -76,16 +88,18 @@ class FavouriteProvider extends ChangeNotifier {
     }
   }
 
-
-  checkIsFavourite(int index){
-    if(_allProductsInFavourite.products[index].productDetails.enableLoader == false ){
-      _allProductsInFavourite.products[index].productDetails.enableLoader = true;
-    }else{
-      _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+  checkIsFavourite(int index) {
+    if (_allProductsInFavourite.products[index].productDetails.enableLoader ==
+        false) {
+      _allProductsInFavourite.products[index].productDetails.enableLoader =
+          true;
+    } else {
+      _allProductsInFavourite.products[index].productDetails.enableLoader =
+          false;
     }
   }
 
-  Future<bool> removeFromFavourite({context, locale,int index,int id})async{
+  Future<bool> removeFromFavourite({context, locale, int index, int id}) async {
     _allProductsInFavourite.products[index].productDetails.enableLoader = true;
     notifyListeners();
     String url = '$domain/api/user/add-to-favorite/$id';
@@ -109,14 +123,15 @@ class FavouriteProvider extends ChangeNotifier {
         _allProductsInFavourite.products.removeAt(index);
         notifyListeners();
         return true;
-      }
-      else {
-        _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+      } else {
+        _allProductsInFavourite.products[index].productDetails.enableLoader =
+            false;
         notifyListeners();
         return false;
       }
     } catch (e) {
-      _allProductsInFavourite.products[index].productDetails.enableLoader = false;
+      _allProductsInFavourite.products[index].productDetails.enableLoader =
+          false;
       notifyListeners();
       return false;
     }

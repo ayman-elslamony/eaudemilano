@@ -1,4 +1,4 @@
-class SomeBestSelling {
+class SomeProducts {
   int  id;
   String  title;
   String  priceBeforeDiscount;
@@ -6,7 +6,7 @@ class SomeBestSelling {
   String  image;
   String  size;
 
-SomeBestSelling(
+SomeProducts(
       {this.id,
         this.title,
         this.priceBeforeDiscount,
@@ -14,7 +14,7 @@ SomeBestSelling(
         this.image,
         this.size});
 
-SomeBestSelling.fromJson(Map<String, dynamic> json) {
+SomeProducts.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     priceBeforeDiscount = json['price_before_discount'];

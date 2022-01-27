@@ -17,10 +17,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var mobileController = TextEditingController();
-  var passwordController = TextEditingController();
+//  var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   var _locale;
-  bool isPassword = true;
+//  bool isPassword = true;
   bool _nameValidator = false;
   bool _emailValidator = false;
   bool _mobileValidator = false;
@@ -36,17 +36,17 @@ class _UpdateProfileState extends State<UpdateProfile> {
      mobileController.text = Helper.userPhone;
   }
 
-  void changePasswordVisibility() {
-    setState(() {
-      isPassword = !isPassword;
-    });
-  }
+//  void changePasswordVisibility() {
+//    setState(() {
+//      isPassword = !isPassword;
+//    });
+//  }
 
   void _submit() async {
     final form = formKey.currentState;
     if (form.validate() &&
         emailController.text.isNotEmpty &&
-        passwordController.text.isNotEmpty &&
+//        passwordController.text.isNotEmpty &&
         mobileController.text.isNotEmpty) {
       form.save();
       Provider.of<UserDataProvider>(context, listen: false).UpdateProfile(
@@ -55,7 +55,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
         name: nameController.text,
         phone: mobileController.text,
         email: emailController.text,
-        password: passwordController.text,
+      //  password: passwordController.text,
       );
     }
   }
@@ -105,7 +105,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 child: Column(
                   children: [
                     SizedBox(
-                      height: media.height * 0.05,
+                      height: media.height * 0.055,
                     ),
                     Container(
                       padding: EdgeInsets.all(20),
@@ -128,7 +128,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                       ),
                     ),
                     const SizedBox(
-                      height: 40,
+                      height: 70,
                     ),
                     defaultFormField(
                       label:
@@ -263,58 +263,58 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     const SizedBox(
                       height: 15.0,
                     ),
-                    defaultFormField(
-                      validate: (val) {
-                        if (val == null || val.isEmpty) {
-                          setState(() {
-                            _passwordValidator = true;
-                          });
-                        } else {
-                          setState(() {
-                            _passwordValidator = false;
-                          });
-                        }
-                        return null;
-                      },
-                      onTap: () {
-                        setState(() {
-                          _passwordValidator = false;
-                        });
-                      },
-                      label:
-                          '${AppLocalizations.of(context).trans('password')}',
-                      isPassword: isPassword,
-                      suffixPressed: changePasswordVisibility,
-                      suffix: isPassword == true
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      suffixColor: Colors.black87,
-                      controller: passwordController,
-                      type: TextInputType.text,
-                    ),
-                    _passwordValidator
-                        ? Align(
-                            alignment: AppLocalizations.of(context)
-                                        .locale
-                                        .languageCode ==
-                                    "en"
-                                ? Alignment.centerRight
-                                : Alignment.centerRight,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8.0, right: 8.0),
-                              child: Text(
-                                AppLocalizations.of(context)
-                                    .locale
-                                    .languageCode ==
-                                    "en"
-                                    ? 'Enter password to confirm edit':'ادخل كلمة المرور لتأكيد التعديل',
-                                style: TextStyle(
-                                    color: Colors.red[300], fontSize: 11),
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
+//                    defaultFormField(
+//                      validate: (val) {
+//                        if (val == null || val.isEmpty) {
+//                          setState(() {
+//                            _passwordValidator = true;
+//                          });
+//                        } else {
+//                          setState(() {
+//                            _passwordValidator = false;
+//                          });
+//                        }
+//                        return null;
+//                      },
+//                      onTap: () {
+//                        setState(() {
+//                          _passwordValidator = false;
+//                        });
+//                      },
+//                      label:
+//                          '${AppLocalizations.of(context).trans('password')}',
+//                      isPassword: isPassword,
+//                      suffixPressed: changePasswordVisibility,
+//                      suffix: isPassword == true
+//                          ? Icons.visibility
+//                          : Icons.visibility_off,
+//                      suffixColor: Colors.black87,
+//                      controller: passwordController,
+//                      type: TextInputType.text,
+//                    ),
+//                    _passwordValidator
+//                        ? Align(
+//                            alignment: AppLocalizations.of(context)
+//                                        .locale
+//                                        .languageCode ==
+//                                    "en"
+//                                ? Alignment.centerRight
+//                                : Alignment.centerRight,
+//                            child: Padding(
+//                              padding:
+//                                  const EdgeInsets.only(left: 8.0, right: 8.0),
+//                              child: Text(
+//                                AppLocalizations.of(context)
+//                                    .locale
+//                                    .languageCode ==
+//                                    "en"
+//                                    ? 'Enter password to confirm edit':'ادخل كلمة المرور لتأكيد التعديل',
+//                                style: TextStyle(
+//                                    color: Colors.red[300], fontSize: 11),
+//                              ),
+//                            ),
+//                          )
+//                        : const SizedBox(),
                     const SizedBox(
                       height: 50.0,
                     ),

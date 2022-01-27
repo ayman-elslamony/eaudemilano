@@ -141,38 +141,6 @@ class CheckOutProvider extends ChangeNotifier {
       var responseJson = response.data;
       if (response.statusCode == 200 && responseJson["status"] == true) {
         _directLink = responseJson["link"];
-       await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(25.0))),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
-              title: const SizedBox(),
-              content: Text(
-                responseJson['message'],
-                textAlign: TextAlign.center,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline3
-                    .copyWith(color: Colors.black87, fontWeight: FontWeight.bold),
-              ),
-              actions: [
-                FlatButton(
-                  child: Text(
-                    AppLocalizations.of(context).trans("ok"),
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold),
-                  ),
-                  onPressed:
-                      () async{
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          },
-        );
         this.directLinkStage = GetDirectLinkStage.DONE;
         notifyListeners();
         return true;

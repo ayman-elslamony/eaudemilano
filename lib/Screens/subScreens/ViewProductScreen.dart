@@ -231,42 +231,57 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                            viewProduct.productView.productDetails.priceBeforeDiscount==viewProduct.productView.productDetails.price?
-                                            Text(
-                                              '${viewProduct.productView.productDetails.price}\$',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline4
-                                                  .copyWith(
-                                                  color: Colors.black87,
-                                                  fontWeight:
-                                                  FontWeight.bold),
-                                            ):Row(
-                                                  children: [
-                                                    Text(
-                                                      '${viewProduct.productView.productDetails.price}\$',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline4
-                                                          .copyWith(
-                                                              color: Colors.black87,
-                                                              fontWeight:
-                                                                  FontWeight.bold),
-                                                    ),
-                                                    const SizedBox(width: 25,),
-                                                    Text(
-                                                      '${viewProduct.productView.productDetails.priceBeforeDiscount}\$',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .headline4
-                                                          .copyWith(
-                                                          color: secondaryColor,
-                                                          decoration: TextDecoration.lineThrough,
-                                                          fontWeight:
-                                                          FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
+                                            viewProduct.getProductPriceStage == GetProductPriceStage.DONE? viewProduct
+                                                            .productView
+                                                            .productDetails
+                                                            .priceBeforeDiscount ==
+                                                        viewProduct
+                                                            .productView
+                                                            .productDetails
+                                                            .price
+                                                    ? Text(
+                                                        '${viewProduct.productView.productDetails.price}\$',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .copyWith(
+                                                                color: primeColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                      )
+                                                    : Row(
+                                                        children: [
+                                                          Text(
+                                                            '${viewProduct.productView.productDetails.price}\$',
+                                                            style: Theme.of(context)
+                                                                .textTheme
+                                                                .headline4
+                                                                .copyWith(
+                                                                color: primeColor,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 8,
+                                                          ),
+                                                          Text(
+                                                            '${viewProduct.productView.productDetails.priceBeforeDiscount}\$',
+                                                            style: Theme.of(context).textTheme.headline6.copyWith(
+                                                                color: secondaryColor,
+                                                                decoration: TextDecoration.lineThrough,
+                                                                fontWeight: FontWeight.bold),
+                                                          ),
+                                                        ],
+                                                      ):const Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                                        child: SpinKitWave(
+                                color: primeColor,
+                                type: SpinKitWaveType.center,
+                                size: 18,
+                              ),
+                                                      ),
                                                 const SizedBox(
                                                   height: 4,
                                                 ),
@@ -275,10 +290,9 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                         .productDetails.title,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .headline6
+                                                        .headline5
                                                         .copyWith(
-                                                            color: Colors
-                                                                .grey[800])),
+                                                            color: Colors.black87,fontWeight: FontWeight.bold)),
                                               ],
                                             ),
                                             const Spacer(),
@@ -356,7 +370,7 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                             child: MaterialButton(
                                               onPressed: () {
                                                 viewProduct
-                                                    .selectProductSize(index);
+                                                    .selectProductSize(context: context,locale: _locale,index: index);
                                               },
                                               child: Text(
                                                 viewProduct
@@ -378,14 +392,14 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                               ),
                                               border: Border.all(
                                                   color: secondaryColor),
-                                              color:
-                                              viewProduct
-                                                  .productView
-                                                  .productDetailsSizes[index]
-                                                    .isSelected ==
-                                                          true
-                                                      ? const Color(0xFF8C8C8C)
-                                                      : Colors.transparent,
+                                              color: viewProduct
+                                                          .productView
+                                                          .productDetailsSizes[
+                                                              index]
+                                                          .isSelected ==
+                                                      true
+                                                  ? const Color(0xFF8C8C8C)
+                                                  : Colors.transparent,
                                             ),
                                           ),
                                         ),
@@ -465,36 +479,46 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                             : Container(
                                                 child: MaterialButton(
                                                   onPressed: viewProduct
-                                                              .currentCount ==
-                                                          0 || viewProduct.productView.productDetails.productInCart.sizeId == ''? null
+                                                                  .currentCount ==
+                                                              0 ||
+                                                          viewProduct
+                                                                  .productView
+                                                                  .productDetails
+                                                                  .productInCart
+                                                                  .sizeId ==
+                                                              ''
+                                                      ? null
                                                       : () async {
-                                                           if(viewProduct
-                                                              .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
-                                                          ){
+                                                          if (viewProduct
+                                                                  .currentCount ==
+                                                              int.parse(viewProduct
+                                                                  .productView
+                                                                  .productDetails
+                                                                  .productInCart
+                                                                  .quantity)) {
                                                             Fluttertoast
                                                                 .showToast(
                                                               msg: AppLocalizations.of(
-                                                                  context)
-                                                                  .locale
-                                                                  .languageCode ==
-                                                                  "en"
+                                                                              context)
+                                                                          .locale
+                                                                          .languageCode ==
+                                                                      "en"
                                                                   ? 'This quantity Of Product already exists'
                                                                   : 'هذه الكمية موجودة بالفعل',
                                                               toastLength: Toast
                                                                   .LENGTH_LONG,
                                                               gravity:
-                                                              ToastGravity
-                                                                  .CENTER,
+                                                                  ToastGravity
+                                                                      .CENTER,
                                                               timeInSecForIosWeb:
-                                                              5,
+                                                                  5,
                                                               backgroundColor:
-                                                              Colors.red,
+                                                                  Colors.red,
                                                               textColor:
-                                                              Colors.black,
+                                                                  Colors.black,
                                                               fontSize: 16.0,
                                                             );
-                                                          }
-                                                          else {
+                                                          } else {
                                                             await viewProduct.addProductToCart(
                                                                 locale: _locale,
                                                                 context:
@@ -522,10 +546,21 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                                     12.0,
                                                   ),
                                                   color: viewProduct
-                                                              .currentCount ==
-                                                          0|| viewProduct
-                                                      .currentCount == int.parse(viewProduct.productView.productDetails.productInCart.quantity)
-||viewProduct.productView.productDetails.productInCart.sizeId == ''
+                                                                  .currentCount ==
+                                                              0 ||
+                                                          viewProduct
+                                                                  .currentCount ==
+                                                              int.parse(viewProduct
+                                                                  .productView
+                                                                  .productDetails
+                                                                  .productInCart
+                                                                  .quantity) ||
+                                                          viewProduct
+                                                                  .productView
+                                                                  .productDetails
+                                                                  .productInCart
+                                                                  .sizeId ==
+                                                              ''
                                                       ? secondaryColor
                                                       : primeColor,
                                                 ),
@@ -601,35 +636,39 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                                       itemBuilder: (context, index) => Padding(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
-                                        child:
-                                            viewProduct.getProductViewStage ==
-                                                    GetProductViewStage.LOADING
-                                                ? loadingCard(media: media)
-                                                : defaultCard(
-                                                    productId: viewProduct
-                                                        .productView
-                                                        .similarProducts[index]
-                                                        .id,
-                                                    titleContent: '',
-                                                    price: viewProduct
-                                                        .productView
-                                                        .similarProducts[index]
-                                                        .price,
-                                                    priceBeforeDiscount: viewProduct
-                                                        .productView
-                                                        .similarProducts[index]
-                                                        .priceBeforeDiscount,
-                                                    subTitle: viewProduct
-                                                        .productView
-                                                        .similarProducts[index]
-                                                        .title,
-                                                    context: context,
-                                                    imgUrl: viewProduct
-                                                        .productView
-                                                        .similarProducts[index]
-                                                        .image,
-                                                    currentIndex: index,
-                                                    media: media),
+                                        child: viewProduct
+                                                    .getProductViewStage ==
+                                                GetProductViewStage.LOADING
+                                            ? loadingCard(media: media)
+                                            : defaultCard(
+                                                productId: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                    .id,
+                                                titleContent: '',
+                                                price: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                    .price,
+                                                priceBeforeDiscount: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                    .priceBeforeDiscount,
+                                                productName: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                    .title,
+                                                productSize: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                .size,
+                                                context: context,
+                                                imgUrl: viewProduct
+                                                    .productView
+                                                    .similarProducts[index]
+                                                    .image,
+                                                currentIndex: index,
+                                                media: media),
                                       ),
                                       itemCount:
                                           viewProduct.getProductViewStage ==
@@ -649,21 +688,22 @@ class _ViewProductScreenState extends State<ViewProductScreen> {
                   ),
           ),
           bottomNavigationBar: Consumer<ChangeIndex>(
-            builder: (context, changeIndex, child) =>bottomNavigationBar(
+            builder: (context, changeIndex, child) => bottomNavigationBar(
                 context: context,
-                onTap: (index){
+                onTap: (index) {
                   setState(() {
-                    changeIndex.index=index;
+                    changeIndex.index = index;
                   });
-                  Navigator.pushAndRemoveUntil(context, PageRouteBuilder(
-                    pageBuilder:
-                        (context, animation1, animation2) =>
-                        NavigationHome(),
-                    transitionDuration: Duration(seconds: 0),
-                  ),(Route<dynamic> route) => false);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            NavigationHome(),
+                        transitionDuration: Duration(seconds: 0),
+                      ),
+                      (Route<dynamic> route) => false);
                 },
-                currentIndex: changeIndex.index
-            ),
+                currentIndex: changeIndex.index),
           ),
         ),
       ),

@@ -254,7 +254,7 @@ class UserDataProvider extends ChangeNotifier {
     name,
     email,
     phone,
-    password,
+ //   password,
     fcmToken,
   }) async {
     this.updateUserDataStage = GetUpdateUserDataStage.LOADING;
@@ -276,7 +276,7 @@ class UserDataProvider extends ChangeNotifier {
       'name': name,
       'email': email,
       'mobile': phone,
-      'password': password,
+   //   'password': password,
       'fcm_token': fcmToken,
     });
 

@@ -1026,13 +1026,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     nameController.text = Helper.userName;
     telephoneController.text = Helper.userPhone;
     emailAddressController.text = Helper.userEmail;
-    //Provider.of<HomeProvider>(context,listen: false).getSettingInformationFunction(context: context,locale: _locale,enableNotify: true);
-    surNameController.text = 'kamel';
-    streetNumberController.text = 'ahmed oraby street';
-    countryRegionController.text = 'Egypt';
-    zipController.text = '2050';
-    provinceController.text = 'mansoura';
-    cityController.text = 'mansoura';
     _locale =
         Provider.of<LocaleProvider>(context, listen: false).locale.languageCode;
     _checkOutProvider = Provider.of<CheckOutProvider>(context, listen: false);
