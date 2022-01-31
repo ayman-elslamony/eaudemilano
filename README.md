@@ -28,19 +28,19 @@ It is a store application that helps users to find products easily with the abil
 
 ## Screenshots
 <p>
-<img src="screenshoots/mobile-black (1).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (1).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (2).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (2).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (7).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (7).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (6).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (6).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (3).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (3).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (5).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (5).png" alt="Eau De Milano" width="180">
 &nbsp;
-<img src="screenshoots/mobile-black (4).png" alt="Eau De Milano" width="180">
+<img src="screenshots/mobile-black (4).png" alt="Eau De Milano" width="180">
 </p>
 
 #### Dependencies:
