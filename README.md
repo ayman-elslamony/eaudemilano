@@ -2,6 +2,15 @@
 
 It is a store application that helps users to find products easily with the ability to add to cart to buy them using the available payment methods.
 
+
+### Technologies:
+* provider as state management.
+* restful API as backend.
+* firebase.
+
+### For using app:
+ [google play](https://play.google.com/store/apps/details?id=com.ebtasm.eaudemilano)
+
 ## Features
 
 * Allow users to view popular products in the store.
